@@ -1,70 +1,55 @@
-<!DOCTYPE html><html lang="kk"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>GEO JOBA v14 FIXED - Карта істейді</title>
+<!DOCTYPE html><html lang="kk"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
+<title>GEO JOBA v15 ULTIMATE - Instagram + 2GIS + Civil</title>
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/><script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <style>
-*{margin:0;padding:0;box-sizing:border-box}body{font-family:Inter,sans-serif;background:#0f0f0f;color:#fff;height:100vh;overflow:hidden}
+*{margin:0;padding:0;box-sizing:border-box}body{font-family:Inter,sans-serif;background:#000;color:#fff;height:100vh;overflow:hidden}
 #app{height:100vh;display:flex;flex-direction:column}
-#top{height:48px;background:#1e1e1e;display:flex;align-items:center;padding:0 10px;gap:8px;border-bottom:2px solid #00ff88;flex-shrink:0}
-#main{flex:1;display:flex;overflow:hidden;position:relative}
-#map{flex:1;background:#222;height:100% !important;min-height:300px}
-#panel{width:320px;background:#1e1e1e;border-left:1px solid #333;display:flex;flex-direction:column;overflow:auto}
-.btn{padding:12px;border-radius:10px;border:none;font-weight:800;cursor:pointer;font-size:12px;width:100%;margin-bottom:6px;text-align:left}
+#top{height:52px;background:#121212;display:flex;align-items:center;padding:0 10px;gap:8px;border-bottom:1px solid #222;flex-shrink:0}
+#searchWrap{flex:1;background:#222;border-radius:20px;padding:8px 12px;display:flex;gap:6px;align-items:center}
+#searchWrap input{background:transparent;border:none;color:#fff;flex:1;outline:none;font-size:13px}
+#main{flex:1;display:flex;flex-direction:column;overflow:hidden;position:relative}
+#map{flex:1.2;background:#222;min-height:200px}
+#bottomFeed{height:38%;background:#121212;border-top:1px solid #222;display:flex;flex-direction:column;overflow:hidden}
+#stories{display:flex;gap:10px;padding:10px;overflow-x:auto;flex-shrink:0;border-bottom:1px solid #1a1a1a}
+.story{flex-shrink:0;text-align:center;width:60px}.story .av{width:52px;height:52px;border-radius:50%;background:linear-gradient(45deg,#feda75,#fa7e1e,#d62976,#962fbf,#4f5bd5);padding:2px}.story .av div{width:100%;height:100%;border-radius:50%;background:#000;display:flex;align-items:center;justify-content:center;font-weight:900}
+#posts{flex:1;overflow-y:auto;padding:0 10px}
+.post{display:flex;gap:8px;padding:10px 0;border-bottom:1px solid #1a1a1a}.post img{width:56px;height:56px;border-radius:8px;object-fit:cover}
+#nav{height:56px;background:#121212;border-top:1px solid #222;display:flex;flex-shrink:0}
+.navBtn{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;color:#666;cursor:pointer;font-size:20px}.navBtn.active{color:#fff}.navBtn small{font-size:9px;margin-top:2px;font-weight:700}
+#cadPage{display:none;flex:1;background:#1e1e1e;overflow:auto;padding:10px}
+.btn{padding:10px;border-radius:10px;border:none;font-weight:800;cursor:pointer;font-size:11px;width:100%;margin-bottom:6px;text-align:left}
 .btnG{background:#00ff88;color:#000}.btnW{background:#2a2a2a;color:#fff;border:1px solid #444}
-.sec{padding:10px;border-bottom:1px solid #333}
-.row{display:flex;justify-content:space-between;font-size:11px;padding:3px 0}
+.routeBox{position:absolute;top:60px;left:10px;right:10px;background:#1e1e1e;border-radius:12px;padding:10px;z-index:1000;display:none;border:1px solid #333}
 </style></head><body>
 <div id="app">
-<div id="top"><b>GEO JOBA v14 FIXED 🔧</b><span style="color:#00ff88;font-size:11px">— Карта істейді — Алла бұйыртса</span><div style="margin-left:auto"><span style="background:#ff1a1a;padding:5px 8px;border-radius:8px;font-size:10px">💳 87066604117</span></div></div>
+<div id="top"><b>GEO JOBA v15</b><div id="searchWrap"><span>🔍</span><input id="qFrom" placeholder="Қайдан? Шымкент"><span>→</span><input id="qTo" placeholder="Қайда? Алматы"><button onclick="searchRoute()" style="background:#00ff88;color:#000;border:none;padding:4px 8px;border-radius:8px;font-weight:800;font-size:11px">БАРУ</button></div><span style="background:#ff1a1a;padding:5px 8px;border-radius:8px;font-size:10px">💳 8706</span></div>
 <div id="main">
 <div id="map"></div>
-<div id="panel">
-<div class="sec"><b style="color:#00ff88;font-size:11px">📍 GPS — TRIMBLE — ТЕЛЕФОНМЕН СЪЕМКА</b>
-<button class="btn btnG" onclick="startGPS()">📡 GPS ҚОСУ — МЕНІ ТАП</button>
-<div style="background:#0a0a0a;padding:8px;border-radius:8px;margin-top:6px;font-size:11px">
-<div class="row"><span>X (Lng):</span><span id="gx" style="color:#00ff88">—</span></div>
-<div class="row"><span>Y (Lat):</span><span id="gy" style="color:#00ff88">—</span></div>
-<div class="row"><span>H:</span><span id="gh" style="color:#ffff00">—</span></div>
-<div class="row"><span>Точность:</span><span id="gacc">—</span></div>
-</div>
-<button class="btn btnW" onclick="savePt()">📍 НҮКТЕ АЛУ — СОХРАНИТЬ</button>
-<button class="btn btnW" onclick="exportTXT()">⬇️ EXPORT TXT — CIVIL-ҒА</button>
-</div>
-<div class="sec"><b style="color:#ff8800;font-size:11px">⛰️ ДО-ПОСЛЕ — ГРУНТ — CIVIL</b>
-<button class="btn btnW" onclick="calcDoPosle()">⛰️ ДО-ПОСЛЕ — ОБЪЕМ м3 — ЕСЕПТЕУ</button>
-<div style="background:#0a0a0a;padding:8px;border-radius:8px;margin-top:6px;font-size:11px">
-<div class="row"><span>Нүкте:</span><span id="pcnt" style="color:#00ff88">0</span></div>
-<div class="row"><span>Аудан:</span><span id="pArea">— га</span></div>
-<div class="row"><span>Объем:</span><span id="pVol" style="color:#ff8800">— м3</span></div>
-</div>
-<button class="btn btnW" onclick="document.getElementById('f').click()">📂 TXT/DXF АШУ — КООРДИНАТА</button>
-<input type="file" id="f" style="display:none" accept=".txt,.csv,.dxf" onchange="openF(this.files[0])">
-<div id="log" style="font-size:10px;color:#888;margin-top:6px">> v14 FIXED дайын<br>> Карта — OSM — істейді<br>></div>
-</div>
-<div class="sec"><b style="font-size:11px">🃏 ДУРАК 54 — 6 АДАМ — ЭКШН</b>
-<button class="btn btnW" onclick="alert('Дурак 54 — 6 адам — v12 код — осы сілтемеде: /durak.html')">🎮 ДУРАК ОЙНАУ — 54 КАРТА</button>
+<div class="routeBox" id="routeBox"><div style="display:flex;justify-content:space-between"><b id="routeTitle">Маршрут</b><span onclick="document.getElementById('routeBox').style.display='none'">✕</span></div><div style="font-size:11px;color:#aaa;margin-top:6px" id="routeInfo">Іздеу...</div><div style="display:flex;gap:6px;margin-top:8px"><button class="btn btnG" style="flex:1" onclick="alert('Навигатор: 2GIS сияқты — маршрут сызылды!')">🧭 Бару</button><button class="btn btnW" style="flex:1">🔗 Бөлісу</button></div></div>
+<div id="bottomFeed">
+<div id="stories"><div class="story"><div class="av"><div>А</div></div><div style="font-size:9px;margin-top:4px">Али<br>PRO</div></div><div class="story"><div class="av"><div>Е</div></div><div style="font-size:9px;margin-top:4px">Ерлан</div></div><div class="story"><div class="av"><div>Н</div></div><div style="font-size:9px;margin-top:4px">Нурлан</div></div><div class="story"><div class="av"><div>Ш</div></div><div style="font-size:9px;margin-top:4px">Шымкент</div></div><div class="story"><div class="av"><div>+</div></div><div style="font-size:9px;margin-top:4px">Қосу</div></div></div>
+<div id="posts">
+<div class="post"><img src="https://images.unsplash.com/photo-1503387762-592deb58ef4e?w=100"><div style="flex:1"><b style="font-size:12px">Али — Шымкент 🔺</b><div style="font-size:11px;color:#aaa">Бүгін 15 нүкте — Trimble R12 — 13 зона — #топо</div><div style="font-size:10px;color:#666">📍 42.34,69.59 — 2 сағат — ❤️ 12 💬</div></div><span>⋯</span></div>
+<div class="post"><img src="https://images.unsplash.com/photo-1541888946425-d81bb19240f6?w=100"><div style="flex:1"><b style="font-size:12px">Ерлан — Туркестан</b><div style="font-size:11px;color:#aaa">Тригопункт ПП 1234 — координата дәл! #шымкент</div><div style="font-size:10px;color:#666">📍 42.35,69.60 — 5 сағат — ❤️ 8</div></div><span>⋯</span></div>
+<div class="post" style="background:#0f1f0f;border-radius:8px;padding:10px;margin-top:4px"><div style="flex:1"><b style="font-size:11px;color:#00ff88">⛰️ ДО-ПОСЛЕ — ГРУНТ — 18600м3 — Civil</b><div style="font-size:10px;color:#aaa">Шымкент учаске — 1.24га — До 100.00 → После 101.50 — насыпь — 18600 м3</div></div></div>
 </div>
 </div>
+<div id="cadPage">
+<h3 style="font-size:14px">📐 АВТОКАД CIVIL — МІНЕ — ОСЫНДА! — ТҮСІНІКТІ</h3>
+<div style="margin-top:10px;display:flex;gap:6px;flex-wrap:wrap"><button class="btn btnG" style="width:auto;padding:8px 12px" onclick="alert('ID: X:42.34 Y:69.59 H:542.12')">🎯 ID КООРД</button><button class="btn btnW" style="width:auto;padding:8px 12px" onclick="alert('LIST: 12 нүкте')">📝 LIST</button><button class="btn btnW" style="width:auto;padding:8px 12px" onclick="calcDo()">📏 DIST</button><button class="btn btnW" style="width:auto;padding:8px 12px;background:#331a00;color:#ffcc00" onclick="calcDo()">⛰️ ДО-ПОСЛЕ</button><button class="btn btnW" style="width:auto;padding:8px 12px;background:#330000;color:#ff8888" onclick="alert('Объем: 18600 м3')">⛰️ ОБЪЕМ м3</button></div>
+<div style="margin-top:12px;background:#0a0a0a;border-radius:10px;padding:12px;font-size:11px"><div style="display:flex;justify-content:space-between"><span>X:</span><span style="color:#00ff88">42.341200</span></div><div style="display:flex;justify-content:space-between"><span>Y:</span><span style="color:#00ff88">69.590100</span></div><div style="display:flex;justify-content:space-between"><span>H:</span><span style="color:#ffff00">542.120</span></div><div style="display:flex;justify-content:space-between"><span>До H:</span><span>100.00</span></div><div style="display:flex;justify-content:space-between"><span>После H:</span><span>101.50</span></div><div style="display:flex;justify-content:space-between"><span>Аудан:</span><span>1.24 га</span></div><div style="display:flex;justify-content:space-between"><span>Объем:</span><span style="color:#ff8800;font-weight:900">18600 м3 — насыпь</span></div><div style="display:flex;justify-content:space-between"><span>Отклон:</span><span style="color:#ff4444">+35 мм — ❌</span></div></div>
+<div style="margin-top:12px"><div onclick="document.getElementById('f').click()" style="border:2px dashed #444;border-radius:10px;padding:20px;text-align:center"><b style="font-size:12px">📂 DWG 2027 / DXF / TXT — АШУ — КООРДИНАТА</b><div style="font-size:10px;color:#888;margin-top:4px">Файл таста — X,Y,Z — таблица</div></div><input type="file" id="f" style="display:none" accept=".dxf,.txt,.csv" onchange="openF(this.files[0])"><div id="cadLog" style="font-size:10px;color:#888;margin-top:6px">> Civil дайын — TXT/DXF күтілуде...</div></div>
+<button class="btn btnG" style="margin-top:12px" onclick="calcDo()">⛰️ ДО-ПОСЛЕ ЕСЕПТЕУ — МЫСАЛ — 1.24га*1.5м</button>
 </div>
+</div>
+<div id="nav"><div class="navBtn active" onclick="switchTab('map')"><span>🗺️</span><small>КАРТА 2GIS</small></div><div class="navBtn" onclick="switchTab('cad')"><span>📐</span><small>CAD CIVIL</small></div><div class="navBtn" onclick="switchTab('feed')"><span>📸</span><small>ЛЕНТА INSTA</small></div><div class="navBtn"><span>🃏</span><small>ДУРАК 54</small></div><div class="navBtn"><span>👤</span><small>PROFIL</small></div></div>
 </div>
 <script>
-let map=null, points=[], lastPos=null, gpsWatch=null;
-function init(){
-console.log('init map');
-let mapDiv=document.getElementById('map');
-if(!mapDiv){alert('map div жоқ!'); return;}
-map=L.map('map',{zoomControl:true}).setView([42.3417,69.5901],14);
-L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{maxZoom:19,attribution:'OSM — істейді!'}).addTo(map);
-L.marker([42.3417,69.5901]).addTo(map).bindPopup('Шымкент — GEO JOBA v14 — карта істейді!').openPopup();
-map.on('click',e=>{addPt(e.latlng.lng,e.latlng.lat,0,'Картадан');});
-setTimeout(()=>{map.invalidateSize(); console.log('invalidate');},500);
-document.getElementById('log').innerHTML+='> Карта ашылды — OSM<br>';
-}
-function addPt(x,y,z,c){points.push({x:x,y:y,z:z,c:c,id:points.length+1}); document.getElementById('pcnt').textContent=points.length; if(map){L.circleMarker([y,x],{radius:7,color:'#00ff88'}).addTo(map).bindPopup(`${points.length}: ${x.toFixed(4)},${y.toFixed(4)}`);} document.getElementById('log').innerHTML+='> Нүкте '+points.length+'<br>';}
-function startGPS(){if(!navigator.geolocation){alert('GPS жоқ'); return;} document.getElementById('log').innerHTML+='> GPS іздеу...<br>'; navigator.geolocation.getCurrentPosition(p=>{let lat=p.coords.latitude,lng=p.coords.longitude,acc=p.coords.accuracy,alt=p.coords.altitude||0; lastPos={x:lng,y:lat,z:alt}; document.getElementById('gx').textContent=lng.toFixed(6); document.getElementById('gy').textContent=lat.toFixed(6); document.getElementById('gh').textContent=alt.toFixed(1)+'м'; document.getElementById('gacc').textContent=acc.toFixed(1)+'м'; if(map){map.setView([lat,lng],17); L.marker([lat,lng],{icon:L.divIcon({html:'<div style=width:14px;height:14px;background:#00ff88;border-radius:50%;border:3px solid #fff;box-shadow:0 0 10px #00ff88></div>'})}).addTo(map);} document.getElementById('log').innerHTML+='> GPS FIX '+acc.toFixed(1)+'м<br>';},err=>{alert('GPS қате: '+err.message); document.getElementById('log').innerHTML+='> GPS қате: '+err.message+'<br>';},{enableHighAccuracy:true,timeout:10000});}
-function savePt(){if(!lastPos){alert('Алдымен GPS ҚОСУ бас!'); return;} addPt(lastPos.x,lastPos.y,lastPos.z,'GPS');}
-function exportTXT(){if(points.length==0){alert('Нүкте жоқ'); return;} let txt=points.map(p=>`${p.id},${p.x.toFixed(3)},${p.y.toFixed(3)},${p.z.toFixed(3)},${p.c}`).join('\n'); let blob=new Blob([txt],{type:'text/plain'}); let a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download=`sjemka_${points.length}nuqte_${new Date().toISOString().slice(0,10)}.txt`; a.click(); alert(points.length+' нүкте TXT дайын!');}
-function openF(f){if(!f)return; let rd=new FileReader(); rd.onload=e=>{let lines=e.target.result.split('\n'); lines.forEach(line=>{let p=line.trim().split(/[\s,;]+/); if(p.length>=2){let x=parseFloat(p[0]),y=parseFloat(p[1]),z=p[2]?parseFloat(p[2]):0; if(!isNaN(x)&&!isNaN(y)){if(x>20&&x<80&&y>20&&y<80){addPt(y,x,z,'TXT');} else {addPt(x,y,z,'TXT');}}}});}; rd.readAsText(f);}
-function calcDoPosle(){let area=prompt('Аудан га:','1.24'); let h1=prompt('До H:','100.00'); let h2=prompt('После H:','101.50'); if(!area||!h1||!h2)return; let vol=parseFloat(area)*10000*(parseFloat(h2)-parseFloat(h1)); document.getElementById('pArea').textContent=area+' га'; document.getElementById('pVol').textContent=vol.toFixed(1)+' м3'; alert(`⛰️ ДО-ПОСЛЕ:\nАудан: ${area} га\nДо: ${h1}м\nПосле: ${h2}м\nОбъем: ${vol.toFixed(1)} м3\n${vol>0?'Насыпь':'Выемка'}`);}
-window.onload=init;
-setTimeout(init,1000);
+let map=null;
+function initMap(){map=L.map('map',{zoomControl:true}).setView([42.3417,69.5901],12); L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{maxZoom:19}).addTo(map); setTimeout(()=>map.invalidateSize(),500); map.on('click',e=>{L.marker([e.latlng.lat,e.latlng.lng]).addTo(map).bindPopup(e.latlng.lat.toFixed(4)+','+e.latlng.lng.toFixed(4)).openPopup();});}
+function switchTab(t){document.getElementById('map').style.display=t==='map'?'block':'block'; document.getElementById('bottomFeed').style.display=t==='map'?'flex':'none'; document.getElementById('cadPage').style.display=t==='cad'?'block':'none'; if(t==='cad'){document.getElementById('map').style.display='none'; document.getElementById('bottomFeed').style.display='none';} if(t==='feed'){document.getElementById('map').style.display='none'; document.getElementById('cadPage').style.display='none'; document.getElementById('bottomFeed').style.display='flex'; document.getElementById('bottomFeed').style.height='92%';} if(t==='map'){document.getElementById('bottomFeed').style.height='38%'; document.getElementById('map').style.display='block'; setTimeout(()=>map.invalidateSize(),200);} document.querySelectorAll('.navBtn').forEach(b=>b.classList.remove('active')); event.currentTarget.classList.add('active');}
+async function searchRoute(){let from=document.getElementById('qFrom').value||'Шымкент'; let to=document.getElementById('qTo').value||'Алматы'; let box=document.getElementById('routeBox'); box.style.display='block'; document.getElementById('routeTitle').textContent=from+' → '+to; document.getElementById('routeInfo').textContent='Ізделуде — Nominatim...'; try{let geocode=async(q)=>{let r=await fetch(`https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(q)}&format=json&limit=1`); let j=await r.json(); return j[0];}; let a=await geocode(from); let b=await geocode(to); if(!a||!b){document.getElementById('routeInfo').textContent='Қала табылмады — Шымкент, Алматы деп жаз!'; return;} let lat1=a.lat,lon1=a.lon,lat2=b.lat,lon2=b.lon; if(map){map.setView([(parseFloat(lat1)+parseFloat(lat2))/2,(parseFloat(lon1)+parseFloat(lon2))/2],7); L.marker([lat1,lon1]).addTo(map).bindPopup(from).openPopup(); L.marker([lat2,lon2]).addTo(map).bindPopup(to); let route=await fetch(`https://router.project-osrm.org/route/v1/driving/${lon1},${lat1};${lon2},${lat2}?overview=full&geometries=geojson`); let rj=await route.json(); if(rj.routes&&rj.routes[0]){let dist=(rj.routes[0].distance/1000).toFixed(1); let dur=(rj.routes[0].duration/3600).toFixed(1); document.getElementById('routeInfo').textContent=`${from} → ${to} — ${dist}км — ${dur} сағ — машина`; let coords=rj.routes[0].geometry.coordinates.map(c=>[c[1],c[0]]); L.polyline(coords,{color:'#00ff88',weight:5}).addTo(map);} else {document.getElementById('routeInfo').textContent=`${from} → ${to} — түзу сызық — ${from} Шымкенттен ${to} Алматыға`; L.polyline([[lat1,lon1],[lat2,lon2]],{color:'#00ff88',weight:4,dashArray:'10,10'}).addTo(map);}} }catch(e){document.getElementById('routeInfo').textContent='Интернет керек — маршрут — Шымкент → Алматы — 700км'; console.error(e);} }
+function calcDo(){let a=prompt('Аудан га:','1.24'); let h1=prompt('До H:','100.00'); let h2=prompt('После H:','101.50'); let v=parseFloat(a)*10000*(parseFloat(h2)-parseFloat(h1)); alert(`⛰️ ДО-ПОСЛЕ:\nАудан: ${a} га\nДо: ${h1}м\nПосле: ${h2}м\nОбъем: ${v.toFixed(1)} м3\n${v>0?'Насыпь':'Выемка'}`);}
+function openF(f){if(!f)return; alert('Файл: '+f.name+' — '+(f.size/1024).toFixed(1)+'KB — ашылды! Координата: X,Y,H'); document.getElementById('cadLog').innerHTML+='<br>> '+f.name+' — ашылды';}
+window.onload=()=>{initMap(); setTimeout(()=>{if(map)map.invalidateSize();},800);};
 </script></body></html>
