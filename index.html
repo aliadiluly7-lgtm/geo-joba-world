@@ -1,5 +1,5 @@
 <!DOCTYPE html><html lang="kk"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>GEO JOBA v25.7 - ПЛАТФОРМА НОМЕР ПАРОЛЬ - ДРУЗЬЯ MESSAGE ТАНЫСЫҢЫЗ БОЛУЫ МҮМКІН</title>
+<title>GEO JOBA v25.9 - ВАТСАП СИЯҚТЫ - ОҢАЙ - ЧАТ ДОСТАР СТАТУС - ИНСТА ЕМЕС</title>
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
 <style>
 *{margin:0;padding:0;box-sizing:border-box}body{font-family:Inter,Roboto,sans-serif;background:#000;height:100vh;overflow:hidden}
@@ -24,40 +24,46 @@
 .navBtn{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;color:#5f6368;cursor:pointer;font-size:9px}.navBtn.active{color:#1a73e8;font-weight:700}.navBtn b{font-size:16px}
 .page{position:absolute;inset:0;display:none;background:#fff;z-index:1300;flex-direction:column}.page.active{display:flex}
 #alert{position:absolute;top:70px;right:10px;background:#d93025;color:#fff;padding:6px 10px;border-radius:12px;font-weight:800;font-size:10px;z-index:1200;display:none}
-/* ПЛАТФОРМА ЛОГИН - БІР РЕТ - ОСЫ САЙТҚА */
 #platformLogin{position:absolute;inset:0;background:#fff;z-index:5000;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:20px}
 #platformLogin h2{font-size:28px;margin-bottom:6px} #platformLogin small{color:#666;margin-bottom:16px;text-align:center;max-width:300px}
 #platformLogin input{width:100%;max-width:300px;padding:12px;border:1px solid #dbdbdb;border-radius:8px;background:#fafafa;margin-bottom:8px;font-size:13px;outline:none}
-#platformLogin button{width:100%;max-width:300px;padding:12px;background:#0095f6;color:#fff;border:none;border-radius:8px;font-weight:700;margin-top:8px;cursor:pointer}
-/* INSTAGRAM ПЛАТФОРМА - ДРУЗЬЯ MESSAGE */
-.instaTop{height:48px;background:#fff;border-bottom:1px solid #dbdbdb;display:flex;align-items:center;justify-content:space-between;padding:0 12px}
-.instaLogo{font-size:22px;font-weight:900}
-.instaStories{height:90px;background:#fff;display:flex;gap:12px;padding:10px 12px;overflow:auto;border-bottom:1px solid #efefef}
-.story{display:flex;flex-direction:column;align-items:center;gap:4px;min-width:62px;cursor:pointer}
-.storyRing{width:58px;height:58px;border-radius:50%;background:linear-gradient(45deg,#feda75,#fa7e1e,#d62976,#962fbf,#4f5bd5);padding:2px}
-.storyRingInner{width:100%;height:100%;background:#fff;border-radius:50%;padding:2px;display:flex;align-items:center;justify-content:center}
-.storyName{font-size:10px;max-width:62px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.instaMain{flex:1;display:flex;overflow:hidden}
-.instaLeft{flex:1;background:#fff;overflow:auto;border-right:1px solid #efefef}
-.instaRight{width:280px;background:#fafafa;display:flex;flex-direction:column;overflow:auto}
-.postHead{height:48px;display:flex;align-items:center;gap:8px;padding:0 12px}
-.postHead img{width:32px;height:32px;border-radius:50%}
-.postImg{width:100%;aspect-ratio:1/1;background:#eee;background-size:cover;background-position:center;position:relative}
-.postActions{height:44px;display:flex;align-items:center;gap:14px;padding:0 12px;font-size:20px}
-.friendCard{padding:8px 12px;display:flex;align-items:center;gap:8px;border-bottom:1px solid #efefef;background:#fff}
-.friendCard img{width:40px;height:40px;border-radius:50%}
-.suggest{padding:10px 12px;background:#fff;margin-bottom:8px;border-radius:8px;border:1px solid #efefef}
+#platformLogin button{width:100%;max-width:300px;padding:12px;background:#25D366;color:#fff;border:none;border-radius:8px;font-weight:700;margin-top:8px;cursor:pointer}
+
+/* ВАТСАП СИЯҚТЫ - ОҢАЙ - ТҮСІНІКТІ */
+.waTop{height:58px;background:#075E54;display:flex;align-items:center;padding:0 12px;color:#fff;gap:10px}
+.waTop b{font-size:18px;flex:1}
+.waTabs{height:44px;background:#075E54;display:flex;color:#fff}
+.waTab{flex:1;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;border-bottom:3px solid transparent;cursor:pointer;opacity:0.7}
+.waTab.active{opacity:1;border-bottom-color:#fff}
+.waList{flex:1;background:#fff;overflow:auto}
+.waChatRow{padding:12px;display:flex;gap:12px;align-items:center;border-bottom:1px solid #f0f0f0;cursor:pointer}
+.waChatRow:hover{background:#f5f5f5}
+.waAvatar{width:50px;height:50px;border-radius:50%;background:#ddd;display:flex;align-items:center;justify-content:center;font-size:22px}
+.waName{font-weight:700;font-size:14px}.waLast{font-size:12px;color:#666;margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:200px}
+.waTime{font-size:11px;color:#666;margin-left:auto}
+.waStatusDot{width:12px;height:12px;background:#25D366;border-radius:50%;border:2px solid #fff;position:absolute;bottom:0;right:0}
+.waChatWindow{position:absolute;inset:0;background:#e5ddd5;display:none;flex-direction:column;z-index:10}
+.waChatWindow.active{display:flex}
+.waChatHead{height:58px;background:#075E54;display:flex;align-items:center;padding:0 12px;color:#fff;gap:10px}
+.waChatBody{flex:1;padding:12px;overflow:auto;display:flex;flex-direction:column;gap:6px;background-image:url('https://user-images.githubusercontent.com/15075759/28719144-86dc0f70-73b1-11e7-911d-60d70fcded21.png');background-size:300px}
+.waBubble{max-width:75%;padding:8px 10px;border-radius:8px;font-size:13px;line-height:1.3;box-shadow:0 1px 0.5px rgba(0,0,0,0.13)}
+.waBubble.me{align-self:flex-end;background:#dcf8c6;border-top-right-radius:0}
+.waBubble.other{align-self:flex-start;background:#fff;border-top-left-radius:0}
+.waInputBar{height:52px;background:#f0f0f0;display:flex;align-items:center;padding:6px 8px;gap:8px}
+.waInputBar input{flex:1;padding:10px 14px;border-radius:22px;border:none;font-size:13px;outline:none}
+.waInputBar button{width:44px;height:44px;border-radius:50%;background:#25D366;color:#fff;border:none;font-size:20px;cursor:pointer;display:flex;align-items:center;justify-content:center}
+.waProfileTop{height:200px;background:#075E54;display:flex;flex-direction:column;align-items:center;justify-content:center;color:#fff;gap:10px}
+.waProfileAvatar{width:100px;height:100px;border-radius:50%;background:#fff;color:#075E54;display:flex;align-items:center;justify-content:center;font-size:48px}
 </style></head><body>
 <div id="app">
-<!-- ПЛАТФОРМАҒА КІРУ - БІР РЕТ - НОМЕР ПАРОЛЬ - ОСЫ САЙТҚА - ИНСТАГРАМҒА ЖЕКЕ ЕМЕС -->
 <div id="platformLogin">
 <h2>GEO JOBA 🌍</h2>
-<small>Осы платформаға номер парольмен кіреді — Instagram-ға жеке керек емес — кірген соң — друзья, сообщение, танысыңыз болуы мүмкін — қызықтыру үшін</small>
+<small>Платформаға номер парольмен кіреді — бір рет — Ватсап сияқты чат — достар — танысыңыз болуы мүмкін</small>
 <input id="platPhone" placeholder="Номер — 87066604117" value="87066604117">
 <input id="platName" placeholder="Атыңыз — Али">
 <input id="platPass" type="password" placeholder="Пароль — 123456" value="123456">
-<button onclick="loginPlatform()">Кіру — Платформаға — GEO JOBA</button>
-<div style="font-size:10px;color:#8e8e8e;margin-top:10px;text-align:center;max-width:300px">Кез келген номер/пароль өтеді — тест — 87066604117 / Али / 123456 — кірген соң — барлық жерде — осы аккаунт — Instagram бетінде де — жеке пароль керек емес</div>
+<button onclick="loginPlatform()">Кіру — Ватсап сияқты GEO JOBA</button>
+<div style="font-size:10px;color:#8e8e8e;margin-top:10px;text-align:center;max-width:300px">Тест: 87066604117 / Али / 123456 — Ватсап сияқты оңай</div>
 </div>
 
 <div id="mapWrap"><div id="map"></div>
@@ -79,63 +85,89 @@
 <div class="sCard cur" id="cardCur"><div class="sNum" id="curSpeed">0</div><div class="sLabel">КМ/САҒ</div></div>
 </div>
 <div id="goBox"><button id="goBtn" onclick="startNav()">🚀 ЖОЛҒА</button></div>
-<div id="bottomInfo"><b style="font-size:10px" id="routeInfo">v25.7 — Платформа номер пароль — Друзья Message — Қызықтыру</b><span style="font-size:8px;color:#5f6368" id="routeStat">Камера: 0 — Тек ЖОЛ</span></div>
+<div id="bottomInfo"><b style="font-size:10px" id="routeInfo">v25.9 — Ватсап сияқты — Оңай — Чат Достар Танысыңыз болуы мүмкін</b><span style="font-size:8px;color:#5f6368" id="routeStat">Камера: 0 — Тек ЖОЛ</span></div>
 
 <div class="page" id="page-cad" style="background:#2b2b2b"><div style="color:#fff;padding:12px"><b>📐 CAD — AutoCAD 2025</b><button class="mini btnG" onclick="showMap()" style="margin-top:10px">→ Картаға</button></div></div>
 <div class="page" id="page-line" style="background:#fff"><div style="padding:12px"><b>📏 LINE</b><button class="mini btnG" onclick="showMap()" style="margin-top:10px">→ Картаға</button></div></div>
 
-<!-- INSTAGRAM — ПЛАТФОРМА ІШІНДЕ — ЖЕКЕ ПАРОЛЬ ЖОҚ — ОСЫ ПЛАТФОРМА АРҚЫЛЫ — ДРУЗЬЯ MESSAGE -->
+<!-- ЧАТ — ВАТСАП СИЯҚТЫ — ОҢАЙ — ТҮСІНІКТІ — ИНСТА ЕМЕС -->
 <div class="page" id="page-insta">
-<div class="instaTop">
-<span style="font-size:18px">+</span>
-<span class="instaLogo">Instagram — GEO JOBA</span>
-<span style="font-size:16px" onclick="logoutPlatform()">♡ • <span id="myPhoneLabel">8706</span></span>
-</div>
-<div class="instaStories" id="storyBar"></div>
-<div class="instaMain">
-<div class="instaLeft" id="instaLeft">
-<div class="postHead"><img id="myAvatar"><div><div style="font-weight:700;font-size:12px" id="myNameLabel">Али</div><div style="font-size:10px" id="myPhoneLabel2">87066604117 — платформада</div></div><div style="margin-left:auto;font-size:10px;background:#efefef;padding:4px 8px;border-radius:12px" id="friendsCount">Друзей: 0</div></div>
-<div class="postImg" style="background-image:url('https://images.unsplash.com/photo-1518005020951-eccb494ad742?w=600');display:flex;align-items:flex-end;justify-content:center;padding:10px"><div style="background:rgba(255,255,255,0.9);padding:8px 12px;border-radius:12px;font-weight:700;font-size:13px;text-align:center">Qajet Taxi - халықтың жобасы!<br>Цифрлық тәуелсіздікке ұмтылу ✅<br><small>GEO JOBA платформа — друзья — сообщение</small></div></div>
-<div class="postActions"><span>❤️</span><span>💬</span><span>✈️</span><span style="margin-left:auto">🔖</span></div>
-<div style="padding:6px 12px;font-size:12px"><b id="myNameLabel3">Али</b> Платформаға кірдім — номер парольмен — Instagram-ға жеке керек емес — достарымды қосамын — #геодезия #шымкент</div>
-
-<div style="padding:10px 12px;background:#fafafa;border-top:1px solid #efefef">
-<b style="font-size:12px">📸 Пост қосу — GEO JOBA платформа</b>
-<div style="display:flex;gap:6px;margin-top:6px"><input id="postText" placeholder="Не жаңалық? — учаске — Бадам 10 соток" style="flex:1;padding:8px;border:1px solid #dbdbdb;border-radius:6px;font-size:11px"><button class="mini btnG" onclick="addPost()">Пост</button></div>
-</div>
-<div id="postList"></div>
+<div class="waTop"><b id="waTitle">GEO JOBA — Чат</b><span style="font-size:20px;cursor:pointer" onclick="focusWaSearch()">🔍</span><span style="font-size:20px;cursor:pointer" onclick="showMap()">⋮</span></div>
+<div class="waTabs">
+<div class="waTab active" id="tab-chats" onclick="switchWaTab('chats')">ЧАТЫ</div>
+<div class="waTab" id="tab-status" onclick="switchWaTab('status')">СТАТУС</div>
+<div class="waTab" id="tab-calls" onclick="switchWaTab('calls')">ЗВОНКИ</div>
+<div class="waTab" id="tab-friends" onclick="switchWaTab('friends')">ДОСТАР</div>
 </div>
 
-<div class="instaRight">
-<div style="padding:10px 12px;background:#fff;border-bottom:1px solid #efefef"><b style="font-size:12px">👥 Менің достарым — Друзья</b><div style="font-size:10px;color:#8e8e8e">Бір бірін сақтаса — осы платформадан — друзья таста — досың деп — Келе беру керек</div></div>
-<div id="friendsList" style="flex:1;overflow:auto;background:#fff"></div>
-
-<div style="padding:10px 12px;background:#fff;border-top:1px solid #efefef;margin-top:8px"><b style="font-size:12px">🔍 Танысыңыз болуы мүмкін — Друзьяның друзьясы</b><div style="font-size:10px;color:#8e8e8e">Осы сайтқа қызықтыруымыз керек барлығын — достарыңның достары</div></div>
-<div id="suggestList" style="background:#fafafa;padding:8px"></div>
-
-<div style="padding:10px 12px;background:#fff;border-top:1px solid #efefef;margin-top:8px"><b style="font-size:12px">💬 Сообщения — Message</b></div>
-<div id="chatList" style="background:#fff;max-height:200px;overflow:auto"></div>
-<div style="display:flex;gap:6px;padding:8px;background:#fff;border-top:1px solid #efefef"><input id="chatTo" placeholder="Кімге? — номер" style="width:80px;padding:6px;border:1px solid #dbdbdb;border-radius:6px;font-size:10px"><input id="chatMsg" placeholder="Сообщение..." style="flex:1;padding:6px;border:1px solid #dbdbdb;border-radius:6px;font-size:10px"><button class="mini btnG" onclick="sendMsg()">Жіберу</button></div>
+<!-- ЧАТЫ — ВАТСАП СИЯҚТЫ -->
+<div class="waList" id="waChats">
+<div style="padding:8px;background:#fff3cd;font-size:11px;text-align:center">🔒 Сообщения защищены сквозным шифрованием — Ватсап сияқты — GEO JOBA платформа</div>
+<div id="waChatRows"></div>
 </div>
+
+<!-- СТАТУС — ВАТСАП СИЯҚТЫ — СТАТУС САЛУ КЕРЕК ЕМЕС — ТЕК КӨРУ -->
+<div class="waList" id="waStatus" style="display:none">
+<div style="padding:12px;display:flex;gap:12px;align-items:center;border-bottom:8px solid #f0f0f0"><div style="position:relative"><div class="waAvatar">👤</div><div style="position:absolute;bottom:0;right:0;width:20px;height:20px;background:#25D366;border-radius:50%;display:flex;align-items:center;justify-content:center;color:#fff;font-size:14px">+</div></div><div><div class="waName">Мой статус</div><div class="waLast">Нажмите, чтобы добавить — статус салу керек емес — тек көру</div></div></div>
+<div style="padding:8px 12px;background:#f0f0f0;font-size:11px;color:#666;font-weight:700">НЕДАВНИЕ ОБНОВЛЕНИЯ</div>
+<div id="waStatusRows"></div>
 </div>
-<div style="height:40px;background:#fff;border-top:1px solid #dbdbdb;display:flex;justify-content:space-around;align-items:center;font-size:18px"><span>⌂</span><span>▶️</span><span>✈️</span><span>🔍</span><span>👤</span></div>
+
+<!-- ЗВОНКИ — ВАТСАП СИЯҚТЫ -->
+<div class="waList" id="waCalls" style="display:none">
+<div style="padding:40px;text-align:center;color:#666"><div style="font-size:48px">📞</div><div style="margin-top:10px;font-size:14px">Звонки — Ватсап сияқты — геодезистпен сөйлесу — болашақта</div><button class="mini btnG" onclick="switchWaTab('chats')" style="margin-top:10px">Чатыға қайту</button></div>
+</div>
+
+<!-- ДОСТАР — СТАТУС + ДРУЗЬЯ ТАСТАУ + ТАНЫСЫҢЫЗ БОЛУЫ МҮМКІН — ҚАЛАДЫ -->
+<div class="waList" id="waFriends" style="display:none;background:#f0f0f0">
+<div style="padding:10px 12px;background:#fff;border-bottom:1px solid #e0e0e0"><b style="font-size:13px">👥 Менің достарым — Друзья тастау — Ватсап сияқты</b><div style="font-size:11px;color:#666">Бір бірін сақтаса — осы платформадан — друзья — келе береді</div></div>
+<div id="waFriendsRows" style="background:#fff"></div>
+<div style="padding:10px 12px;background:#fff;border-bottom:1px solid #e0e0e0;margin-top:8px"><b style="font-size:13px">🔍 Танысыңыз болуы мүмкін — Сіздің танысыңыз</b><div style="font-size:11px;color:#666">Достың досы — осы сайтқа қызықтыруымыз керек барлығын — Ватсап сияқты</div></div>
+<div id="waSuggestRows" style="background:#fff"></div>
+<div style="padding:12px;background:#fff;margin-top:8px"><b style="font-size:12px">➕ Дос қосу — номер арқылы</b><div style="display:flex;gap:6px;margin-top:6px"><input id="waAddPhone" placeholder="Номер — 87012345678" style="flex:1;padding:10px;border:1px solid #ddd;border-radius:8px;font-size:12px"><button class="mini btnG" style="background:#25D366;padding:10px 14px" onclick="waAddFriend()">Қосу</button></div></div>
+</div>
+
+<!-- ЧАТ ОКНОСЫ — ВАТСАП СИЯҚТЫ — АШЫП СӨЙЛЕСУ -->
+<div class="waChatWindow" id="waChatWindow">
+<div class="waChatHead"><span style="cursor:pointer;font-size:20px" onclick="closeWaChat()">←</span><div class="waAvatar" id="waChatAvatar" style="width:36px;height:36px;font-size:18px">👤</div><div style="flex:1"><div class="waName" id="waChatName" style="color:#fff;font-size:14px">Аты</div><div style="font-size:11px;opacity:0.8" id="waChatPhone">в сети — Ватсап сияқты</div></div><span style="font-size:20px">📹</span><span style="font-size:20px">📞</span></div>
+<div class="waChatBody" id="waChatBody"></div>
+<div class="waInputBar"><span style="font-size:22px;cursor:pointer">😊</span><input id="waMsgInput" placeholder="Сообщение — Ватсап сияқты"><span style="font-size:22px;cursor:pointer">📎</span><button onclick="waSend()">➤</button></div>
+</div>
+
 </div>
 
 <div class="page" id="page-game" style="background:#000"><div style="padding:12px;color:#fff"><b>🎮 GAME</b><button class="mini btnG" onclick="showMap()" style="margin-top:10px">→ Картаға</button></div></div>
-<div class="page" id="page-profile" style="background:#fff"><div style="padding:12px"><b>👤 PROFILE — Платформа</b><div id="profileInfo" style="margin-top:8px;background:#f1f3f4;padding:10px;border-radius:10px;font-size:11px"></div><div style="display:flex;gap:6px;margin-top:8px"><button class="mini btnR" onclick="logoutPlatform()">Шығу — Платформадан</button><button class="mini btnW" onclick="showMap()">→ Картаға</button></div><div id="camList" style="margin-top:8px;background:#f1f3f4;padding:10px;border-radius:10px;font-size:10px;max-height:150px;overflow:auto"></div></div></div>
+
+<!-- ПРОФИЛЬ — ВАТСАП ПРОФИЛІНДЕЙ — КӘДІМГІ ВАТСАП СИЯҚТЫ -->
+<div class="page" id="page-profile" style="background:#f0f0f0">
+<div class="waProfileTop"><div class="waProfileAvatar" id="waProfileAvatar">👤</div><div style="font-size:18px;font-weight:700" id="waProfileName">Али</div><div style="font-size:13px;opacity:0.8" id="waProfilePhone">87066604117 — Ватсап сияқты профиль</div></div>
+<div style="background:#fff;margin-top:8px">
+<div style="padding:12px;border-bottom:1px solid #f0f0f0;display:flex;justify-content:space-between"><span style="color:#075E54;font-size:12px">Сведения</span><span style="color:#25D366;font-size:18px">✏️</span></div>
+<div style="padding:12px"><div style="font-size:14px" id="waProfileAbout">GEO JOBA — геодезия — Шымкент — Ватсап сияқты — чат ашып сөйлесіп</div><div style="font-size:11px;color:#666;margin-top:4px">Нажмите, чтобы изменить — Ватсап сияқты</div></div>
+</div>
+<div style="background:#fff;margin-top:8px">
+<div style="padding:12px;display:flex;gap:12px;align-items:center"><span style="font-size:22px;color:#075E54">📞</span><div><div style="font-size:14px">Телефон</div><div style="font-size:13px;color:#666" id="waProfilePhone2">87066604117</div></div></div>
+<div style="padding:12px;display:flex;gap:12px;align-items:center;border-top:1px solid #f0f0f0"><span style="font-size:22px;color:#075E54">🔗</span><div><div style="font-size:14px">Пригласить друга</div><div style="font-size:11px;color:#666">Осы сайтқа қызықтыру — Ватсап сияқты сілтеме</div></div></div>
+</div>
+<div style="padding:12px">
+<button class="mini btnR" style="width:100%;padding:12px;background:#fff;color:#d93025;border:1px solid #e0e0e0" onclick="logoutPlatform()">Шығу — Платформадан</button>
+<button class="mini btnW" style="width:100%;padding:12px;margin-top:8px" onclick="showMap()">→ Картаға — 🌍</button>
+<div id="camList" style="margin-top:8px;background:#fff;padding:10px;border-radius:10px;font-size:10px;max-height:100px;overflow:auto"></div>
+</div>
+</div>
 
 </div><div id="nav">
 <div class="navBtn active" onclick="showMap(this)"><b>🌍</b><span>Карта</span></div>
 <div class="navBtn" onclick="openPage('cad',this)"><b>📐</b><span>CAD</span></div>
 <div class="navBtn" onclick="openPage('line',this)"><b>📏</b><span>LINE</span></div>
-<div class="navBtn" onclick="openPage('insta',this)"><b>📸</b><span>INSTA</span></div>
+<div class="navBtn" onclick="openPage('insta',this)"><b>💬</b><span>Чат</span></div>
 <div class="navBtn" onclick="openPage('game',this)"><b>🎮</b><span>GAME</span></div>
-<div class="navBtn" onclick="openPage('profile',this)"><b>👤</b><span>Profile</span></div>
+<div class="navBtn" onclick="openPage('profile',this)"><b>👤</b><span>Профиль</span></div>
 </div></div>
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <script>
 let map,layers={},camLayer,routeLayer,routeLine=null,cams=[],cur='road',watchId=null,curSpeed=0,limitSpeed=60,lastBeep=0,isNav=false;
-let currentUser=null, users=[], friends={}, posts=[], messages=[];
+let currentUser=null, users=[], friends={}, messages=[], waCurrentChat=null;
 
 function init(){
 map=L.map('map',{zoomControl:false,preferCanvas:true}).setView([42.3417,69.5901],13);
@@ -153,35 +185,46 @@ function loadPlatformData(){
 try{
 users=JSON.parse(localStorage.getItem('geo_users')||'[]');
 friends=JSON.parse(localStorage.getItem('geo_friends')||'{}');
-posts=JSON.parse(localStorage.getItem('geo_posts')||'[]');
 messages=JSON.parse(localStorage.getItem('geo_messages')||'[]');
-}catch(e){users=[];friends={};posts=[];messages=[];}
+}catch(e){users=[];friends={};messages=[];}
+users=users.filter(u=>!u.name.toLowerCase().includes('alima'));
+Object.keys(friends).forEach(k=>{friends[k]=(friends[k]||[]).filter(ph=>{let u=users.find(x=>x.phone===ph); return u && !u.name.toLowerCase().includes('alima');});});
 if(users.length===0){
 users=[
-{phone:'87066604117',name:'Али',pass:'123456',avatar:'https://i.pravatar.cc/100?img=8'},
-{phone:'87012345678',name:'mmahambet_',pass:'123',avatar:'https://i.pravatar.cc/100?img=12'},
-{phone:'87023456789',name:'alima_kadirkulo',pass:'123',avatar:'https://i.pravatar.cc/100?img=5'},
-{phone:'87034567890',name:'yerdos_rys',pass:'123',avatar:'https://i.pravatar.cc/100?img=15'},
-{phone:'87045678901',name:'duman.qajet',pass:'123',avatar:'https://i.pravatar.cc/100?img=20'},
+{phone:'87066604117',name:'Али',about:'GEO JOBA — геодезия — Шымкент',avatar:'👤'},
+{phone:'87012345678',name:'mmahambet_',about:'В сети — Ватсап сияқты',avatar:'👨'},
+{phone:'87034567890',name:'yerdos_rys',about:'Qajet Taxi — халықтың жобасы',avatar:'🧑'},
+{phone:'87045678901',name:'duman.qajet',about:'Цифрлық тәуелсіздікке ұмтылу',avatar:'👨‍💼'},
+{phone:'87056789012',name:'geo_joba_',about:'Геодезия — кадастр — 10 соток',avatar:'📐'},
+{phone:'87067890123',name:'qajet_taxi',about:'В сети — такси — Шымкент',avatar:'🚕'},
 ];
-friends={'87066604117':['87012345678'],'87012345678':['87066604117','87023456789'],'87023456789':['87012345678'],'87034567890':['87045678901'],'87045678901':['87034567890']};
-posts=[
-{phone:'87045678901',name:'duman.qajet',text:'Qajet Taxi - халықтың жобасы! Цифрлық тәуелсіздікке ұмтылу ✅',time:'2с бұрын'},
-{phone:'87023456789',name:'alima_kadirkulo',text:'Бадамда учаске түсірдім — 10 соток — GEO JOBA — геодезия',time:'5с бұрын'}
+friends={
+'87066604117':['87012345678','87045678901','87056789012'],
+'87012345678':['87066604117','87034567890'],
+'87034567890':['87012345678'],
+'87045678901':['87066604117','87067890123'],
+'87056789012':['87066604117'],
+'87067890123':['87045678901']
+};
+messages=[
+{from:'87012345678',to:'87066604117',msg:'Салам Али! Бадамдағы учаске қалай? — Ватсап сияқты',time:'10:23'},
+{from:'87066604117',to:'87012345678',msg:'Салам! Түсірдім — 10 соток — картада тұр — GEO JOBA',time:'10:24'},
+{from:'87045678901',to:'87066604117',msg:'Qajet Taxi — халықтың жобасы — қосылдың ба?',time:'09:15'},
+{from:'87056789012',to:'87066604117',msg:'Геодезия — CAD AutoCAD сияқты — қарадың ба?',time:'08:30'}
 ];
 saveAll();
 }
 }
-function saveAll(){localStorage.setItem('geo_users',JSON.stringify(users));localStorage.setItem('geo_friends',JSON.stringify(friends));localStorage.setItem('geo_posts',JSON.stringify(posts));localStorage.setItem('geo_messages',JSON.stringify(messages));}
+function saveAll(){localStorage.setItem('geo_users',JSON.stringify(users));localStorage.setItem('geo_friends',JSON.stringify(friends));localStorage.setItem('geo_messages',JSON.stringify(messages));}
 function loginPlatform(){
 let phone=document.getElementById('platPhone').value.trim();
 let name=document.getElementById('platName').value.trim()||phone.slice(-4);
 let pass=document.getElementById('platPass').value.trim();
-if(phone.length<10){alert('Номер — 10 цифр — 87066604117');return;}
-if(pass.length<3){alert('Пароль — 3 символ кемінде');return;}
+if(phone.length<10){alert('Номер — 10 цифр');return;}
+if(pass.length<3){alert('Пароль — 3 символ');return;}
 let u=users.find(x=>x.phone===phone);
-if(!u){u={phone,name,pass,avatar:`https://i.pravatar.cc/100?img=${Math.floor(Math.random()*70)}`};users.push(u); if(!friends[phone]) friends[phone]=[];}
-else{if(u.pass!==pass && users.length>0 && u.phone==='87066604117' && pass!=='123456'){alert('Пароль қате — тест 123456');return;} u.name=name||u.name;}
+if(!u){u={phone,name,about:'В сети — GEO JOBA — Ватсап сияқты',avatar:'👤',pass};users.push(u); if(!friends[phone]) friends[phone]=[];}
+else{u.name=name||u.name;}
 currentUser=u;
 localStorage.setItem('geo_platform_user',JSON.stringify(u));
 saveAll();
@@ -191,138 +234,162 @@ updateUI();
 function logoutPlatform(){localStorage.removeItem('geo_platform_user'); currentUser=null; document.getElementById('platformLogin').style.display='flex';}
 function updateUI(){
 if(!currentUser) return;
-document.getElementById('myPhoneLabel').textContent=currentUser.phone.slice(-4);
-document.getElementById('myPhoneLabel2').textContent=currentUser.phone+' — платформада — жеке Insta пароль керек емес';
-document.getElementById('myNameLabel').textContent=currentUser.name;
-document.getElementById('myNameLabel3').textContent=currentUser.name;
-document.getElementById('myAvatar').src=currentUser.avatar;
-document.getElementById('profileInfo').innerHTML=`<b>Аты:</b> ${currentUser.name}<br><b>Номер:</b> ${currentUser.phone}<br><b>Пароль:</b> ••••<br><b>Статус:</b> Платформада — GEO JOBA — номер парольмен кірдің — Instagram-ға жеке керек емес — барлық жерде осы аккаунт`;
-renderFriends();
+document.getElementById('waTitle').textContent=`GEO JOBA — ${currentUser.name}`;
+document.getElementById('waProfileAvatar').textContent=currentUser.avatar;
+document.getElementById('waProfileName').textContent=currentUser.name;
+document.getElementById('waProfilePhone').textContent=currentUser.phone+' — Ватсап сияқты профиль';
+document.getElementById('waProfilePhone2').textContent=currentUser.phone;
+document.getElementById('waProfileAbout').textContent=currentUser.about||'GEO JOBA — геодезия — Ватсап сияқты — чат ашып сөйлесіп';
+renderWa();
 }
-function renderFriends(){
+function switchWaTab(tab){
+document.querySelectorAll('.waTab').forEach(t=>t.classList.remove('active'));
+document.getElementById('tab-'+tab).classList.add('active');
+['Chats','Status','Calls','Friends'].forEach(t=>document.getElementById('wa'+t).style.display='none');
+document.getElementById('wa'+tab.charAt(0).toUpperCase()+tab.slice(1)).style.display='block';
+if(tab==='friends') renderWaFriends();
+}
+function renderWa(){
+renderWaChats();
+renderWaStatus();
+renderWaFriends();
+}
+function renderWaChats(){
 if(!currentUser) return;
 let myFriends=friends[currentUser.phone]||[];
-document.getElementById('friendsCount').textContent=`Друзей: ${myFriends.length}`;
-// Stories
-let storyHtml=`<div class="story"><div class="storyRing"><div class="storyRingInner"><img src="${currentUser.avatar}"></div></div><div class="storyName">Ваша история</div></div>`;
+let html='';
 myFriends.forEach(ph=>{
 let u=users.find(x=>x.phone===ph);
-if(u) storyHtml+=`<div class="story"><div class="storyRing"><div class="storyRingInner"><img src="${u.avatar}"></div></div><div class="storyName">${u.name}</div></div>`;
+if(!u) return;
+let lastMsgs=messages.filter(m=>(m.from===ph&&m.to===currentUser.phone)||(m.from===currentUser.phone&&m.to===ph));
+let last=lastMsgs[lastMsgs.length-1];
+html+=`<div class="waChatRow" onclick="openWaChat('${ph}')"><div style="position:relative"><div class="waAvatar">${u.avatar}</div><div class="waStatusDot"></div></div><div style="flex:1"><div class="waName">${u.name}</div><div class="waLast">${last? (last.from===currentUser.phone?'✓✓ ':'')+last.msg : u.about}</div></div><div class="waTime">${last?last.time:'вчера'}</div></div>`;
 });
-users.forEach(u=>{
-if(u.phone!==currentUser.phone && !myFriends.includes(u.phone)){
-storyHtml+=`<div class="story" onclick="addFriend('${u.phone}')"><div class="storyRing" style="background:#ddd"><div class="storyRingInner"><img src="${u.avatar}"></div></div><div class="storyName">${u.name}</div></div>`;
+if(html==='') html='<div style="padding:40px;text-align:center;color:#666"><div style="font-size:40px">💬</div><div style="margin-top:10px">Чатов нет — Достар қос — Ватсап сияқты чат ашып сөйлес</div></div>';
+document.getElementById('waChatRows').innerHTML=html;
 }
+function renderWaStatus(){
+let myFriends=friends[currentUser.phone]||[];
+let html='';
+myFriends.forEach(ph=>{
+let u=users.find(x=>x.phone===ph);
+if(!u) return;
+html+=`<div class="waChatRow" onclick="openWaChat('${ph}')"><div style="position:relative"><div class="waAvatar" style="border:3px solid #25D366">${u.avatar}</div></div><div style="flex:1"><div class="waName">${u.name}</div><div class="waLast">Сегодня, 10:23 — Ватсап сияқты статус</div></div></div>`;
 });
-document.getElementById('storyBar').innerHTML=storyHtml;
-
-// Friends list
+if(html==='') html='<div style="padding:20px;text-align:center;color:#666;font-size:12px">Статусов нет — достарың статус салғанда осында шығады — статус салу керек емес — тек көру</div>';
+document.getElementById('waStatusRows').innerHTML=html;
+}
+function renderWaFriends(){
+if(!currentUser) return;
+let myFriends=friends[currentUser.phone]||[];
 let fHtml='';
 myFriends.forEach(ph=>{
 let u=users.find(x=>x.phone===ph);
-if(u) fHtml+=`<div class="friendCard"><img src="${u.avatar}"><div style="flex:1"><div style="font-weight:700;font-size:12px">${u.name}</div><div style="font-size:10px;color:#8e8e8e">${u.phone} — досың — осы платформадан</div></div><button class="mini btnW" onclick="openChat('${u.phone}')">Сообщение</button><button class="mini btnR" onclick="removeFriend('${u.phone}')">✕</button></div>`;
+if(!u) return;
+fHtml+=`<div class="waChatRow" onclick="openWaChat('${ph}')"><div class="waAvatar">${u.avatar}</div><div style="flex:1"><div class="waName">${u.name}</div><div class="waLast">${u.phone} — досың — Ватсап сияқты — чат ашып сөйлес</div></div><div style="display:flex;gap:6px"><button class="mini btnW" onclick="event.stopPropagation();openWaChat('${ph}')">💬</button><button class="mini btnR" onclick="event.stopPropagation();removeFriend('${ph}')">✕</button></div></div>`;
 });
-if(fHtml==='') fHtml='<div style="padding:12px;font-size:11px;color:#8e8e8e">Достарың жоқ — төменде — танысыңыз болуы мүмкін — қос — бір бірін сақтаса — друзья — осы платформадан келе береді</div>';
-document.getElementById('friendsList').innerHTML=fHtml;
+if(fHtml==='') fHtml='<div style="padding:12px;font-size:12px;color:#666">Достарың жоқ — төменде — танысыңыз болуы мүмкін — қос — бір бірін сақтаса — друзья — осы платформадан келе береді — Ватсап сияқты</div>';
+document.getElementById('waFriendsRows').innerHTML=fHtml;
 
-// Suggest - друзьяның друзьясы - танысыңыз болуы мүмкін
 let suggestSet=new Set();
-myFriends.forEach(fPh=>{
-(friends[fPh]||[]).forEach(ff=>{
-if(ff!==currentUser.phone && !myFriends.includes(ff)) suggestSet.add(ff);
-});
-});
+myFriends.forEach(fPh=>{(friends[fPh]||[]).forEach(ff=>{if(ff!==currentUser.phone && !myFriends.includes(ff)) suggestSet.add(ff);});});
 let sHtml='';
 suggestSet.forEach(ph=>{
 let u=users.find(x=>x.phone===ph);
-if(u) sHtml+=`<div class="suggest"><div style="display:flex;align-items:center;gap:8px"><img src="${u.avatar}" style="width:36px;height:36px;border-radius:50%"><div style="flex:1"><div style="font-weight:700;font-size:12px">${u.name}</div><div style="font-size:10px;color:#8e8e8e">Танысыңыз болуы мүмкін — ${friends[ph]?.length||0} ортақ дос — досыңның досы — ${users.find(x=>friends[x.phone]?.includes(ph))?.name||''} арқылы</div></div><button class="mini btnG" onclick="addFriend('${u.phone}')">Друзья +</button></div></div>`;
+if(!u) return;
+sHtml+=`<div class="waChatRow"><div class="waAvatar">${u.avatar}</div><div style="flex:1"><div class="waName">${u.name}</div><div class="waLast">Танысыңыз болуы мүмкін — ${myFriends.filter(f=> (friends[f]||[]).includes(ph)).length} ортақ дос — ${users.find(x=> (friends[x.phone]||[]).includes(ph) && myFriends.includes(x.phone))?.name||''} арқылы — осы сайтқа қызықтыру</div></div><button class="mini btnG" style="background:#25D366" onclick="waAddFriendBy('${ph}')">Қосу</button></div>`;
 });
 if(sHtml===''){
-// Егер ортақ дос жоқ болса — басқа юзерлерді ұсын — осы сайтқа қызықтыру
 users.forEach(u=>{
-if(u.phone!==currentUser.phone && !myFriends.includes(u.phone) && !suggestSet.has(u.phone)){
-sHtml+=`<div class="suggest"><div style="display:flex;align-items:center;gap:8px"><img src="${u.avatar}" style="width:36px;height:36px;border-radius:50%"><div style="flex:1"><div style="font-weight:700;font-size:12px">${u.name}</div><div style="font-size:10px;color:#8e8e8e">Осы сайтқа қызықтыру — ${u.phone} — GEO JOBA-ға қосылған — танысыңыз болуы мүмкін</div></div><button class="mini btnG" onclick="addFriend('${u.phone}')">Друзья +</button></div></div>`;
+if(u.phone!==currentUser.phone && !myFriends.includes(u.phone)){
+sHtml+=`<div class="waChatRow"><div class="waAvatar">${u.avatar}</div><div style="flex:1"><div class="waName">${u.name}</div><div class="waLast">Осы сайтқа қызықтыруымыз керек — ${u.phone} — GEO JOBA — танысыңыз болуы мүмкін</div></div><button class="mini btnG" style="background:#25D366" onclick="waAddFriendBy('${u.phone}')">Қосу</button></div>`;
 }
 });
 }
-document.getElementById('suggestList').innerHTML=sHtml||'<div style="padding:8px;font-size:11px;color:#8e8e8e">Барлық достар қосылды — жаңа адамдар келгенде — осында шығады</div>';
-
-// Chat
-renderChat();
-
-// Posts
-let pHtml='';
-posts.slice().reverse().forEach(p=>{
-let u=users.find(x=>x.phone===p.phone);
-pHtml+=`<div style="border-top:1px solid #efefef;padding:10px 12px"><div style="display:flex;align-items:center;gap:8px"><img src="${u?.avatar||'https://i.pravatar.cc/100'}" style="width:32px;height:32px;border-radius:50%"><b style="font-size:12px">${p.name}</b><span style="font-size:10px;color:#8e8e8e;margin-left:auto">${p.time}</span></div><div style="font-size:12px;margin-top:6px">${p.text}</div></div>`;
-});
-document.getElementById('postList').innerHTML=pHtml;
+document.getElementById('waSuggestRows').innerHTML=sHtml||'<div style="padding:12px;font-size:12px;color:#666">Барлық достар қосылды</div>';
 }
-function addFriend(phone){
+function openWaChat(phone){
+let u=users.find(x=>x.phone===phone);
+if(!u) return;
+waCurrentChat=phone;
+document.getElementById('waChatAvatar').textContent=u.avatar;
+document.getElementById('waChatName').textContent=u.name;
+document.getElementById('waChatPhone').textContent=u.phone+' — в сети — Ватсап сияқты — чат ашып сөйлесіп';
+document.getElementById('waChatWindow').classList.add('active');
+renderWaChat();
+}
+function closeWaChat(){document.getElementById('waChatWindow').classList.remove('active'); waCurrentChat=null; renderWa();}
+function renderWaChat(){
+if(!waCurrentChat || !currentUser) return;
+let msgs=messages.filter(m=>(m.from===waCurrentChat&&m.to===currentUser.phone)||(m.from===currentUser.phone&&m.to===waCurrentChat));
+let html='';
+msgs.forEach(m=>{
+let isMe=m.from===currentUser.phone;
+html+=`<div class="waBubble ${isMe?'me':'other'}">${m.msg}<div style="font-size:10px;color:#666;text-align:right;margin-top:4px">${m.time} ${isMe?'✓✓':''}</div></div>`;
+});
+if(html==='') html='<div style="text-align:center;color:#666;font-size:12px;padding:20px;background:#fff3cd;border-radius:8px;margin:10px">🔒 Сообщения защищены — Ватсап сияқты — GEO JOBA — чат ашып сөйлесіп — статус салу керек емес</div>';
+document.getElementById('waChatBody').innerHTML=html;
+document.getElementById('waChatBody').scrollTop=document.getElementById('waChatBody').scrollHeight;
+}
+function waSend(){
+let txt=document.getElementById('waMsgInput').value.trim();
+if(!txt || !waCurrentChat) return;
+messages.push({from:currentUser.phone,to:waCurrentChat,msg:txt,time:new Date().toLocaleTimeString().slice(0,5)});
+document.getElementById('waMsgInput').value='';
+saveAll();
+renderWaChat();
+renderWaChats();
+}
+function waAddFriend(){
+let ph=document.getElementById('waAddPhone').value.trim();
+if(!ph) return;
+waAddFriendBy(ph);
+}
+function waAddFriendBy(phone){
 if(!currentUser) return;
+let u=users.find(x=>x.phone===phone);
+if(!u){u={phone,name:phone.slice(-4),about:'В сети — GEO JOBA — Ватсап сияқты',avatar:'👤'};users.push(u);}
 if(!friends[currentUser.phone]) friends[currentUser.phone]=[];
 if(!friends[phone]) friends[phone]=[];
 if(!friends[currentUser.phone].includes(phone)){
 friends[currentUser.phone].push(phone);
 friends[phone].push(currentUser.phone);
 saveAll();
-renderFriends();
-document.getElementById('routeInfo').textContent=`✅ ${phone} — друзьяға қосылды — бір бірін сақтады — осы платформадан — келе береді`;
+renderWaFriends();
+renderWaChats();
+document.getElementById('waAddPhone').value='';
+document.getElementById('routeInfo').textContent=`✅ ${phone} — дос — қосылды — Ватсап сияқты — чат ашып сөйлес`;
 }
 }
 function removeFriend(phone){
 if(!currentUser) return;
-friends[currentUser.phone]= (friends[currentUser.phone]||[]).filter(x=>x!==phone);
-friends[phone]= (friends[phone]||[]).filter(x=>x!==currentUser.phone);
-saveAll(); renderFriends();
+friends[currentUser.phone]=(friends[currentUser.phone]||[]).filter(x=>x!==phone);
+friends[phone]=(friends[phone]||[]).filter(x=>x!==currentUser.phone);
+saveAll(); renderWaFriends(); renderWaChats();
 }
-function addPost(){
-let t=document.getElementById('postText').value.trim();
-if(!t) return;
-posts.push({phone:currentUser.phone,name:currentUser.name,text:t,time:'қазір'});
-document.getElementById('postText').value='';
-saveAll(); renderFriends();
-}
-function sendMsg(){
-let to=document.getElementById('chatTo').value.trim();
-let msg=document.getElementById('chatMsg').value.trim();
-if(!to||!msg) return;
-messages.push({from:currentUser.phone,to,msg,time:new Date().toLocaleTimeString()});
-document.getElementById('chatMsg').value='';
-saveAll(); renderChat();
-}
-function openChat(phone){document.getElementById('chatTo').value=phone; document.getElementById('chatMsg').focus();}
-function renderChat(){
-if(!currentUser) return;
-let html='';
-messages.filter(m=>m.from===currentUser.phone || m.to===currentUser.phone).slice(-20).forEach(m=>{
-let isMe=m.from===currentUser.phone;
-let other=isMe?m.to:m.from;
-let u=users.find(x=>x.phone===other);
-html+=`<div style="padding:6px 12px;font-size:11px;background:${isMe?'#e3f2fd':'#fff'};border-bottom:1px solid #efefef"><b>${isMe?'Сен → '+ (u?.name||other): (u?.name||other)+' → Сен'}:</b> ${m.msg} <span style="color:#8e8e8e;font-size:9px">${m.time}</span></div>`;
-});
-document.getElementById('chatList').innerHTML=html||'<div style="padding:8px;font-size:11px;color:#8e8e8e">Сообщений жоқ — жоғарыда — номер жаз — сообщение жібер — друзья таста</div>';
-}
+function focusWaSearch(){let q=prompt('🔍 Іздеу — Ватсап сияқты — номер/аты:'); if(q){let u=users.find(x=>x.phone.includes(q)||x.name.toLowerCase().includes(q.toLowerCase())); if(u){openWaChat(u.phone);}else alert('Табылмады — '+q);}}
+
 function showMap(el){document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));document.querySelectorAll('.navBtn').forEach(b=>b.classList.remove('active'));if(el&&el.classList) el.classList.add('active');else document.querySelectorAll('.navBtn')[0].classList.add('active');setTimeout(()=>map.invalidateSize(),200);}
-function openPage(name,el){document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));document.getElementById('page-'+name).classList.add('active');document.querySelectorAll('.navBtn').forEach(b=>b.classList.remove('active'));if(el) el.classList.add('active'); if(name==='insta') renderFriends();}
+function openPage(name,el){document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));document.getElementById('page-'+name).classList.add('active');document.querySelectorAll('.navBtn').forEach(b=>b.classList.remove('active'));if(el) el.classList.add('active'); if(name==='insta') renderWa();}
 function switchMap(t){
 cur=t;document.querySelectorAll('.sw').forEach(s=>s.classList.remove('active'));document.getElementById('s-'+t).classList.add('active');
 Object.values(layers).forEach(l=>{if(map.hasLayer(l)) map.removeLayer(l);});
 if(map.hasLayer(camLayer)) map.removeLayer(camLayer);
-if(t==='road'){layers.road.addTo(map); camLayer.addTo(map); document.getElementById('routeInfo').textContent=`🗺️ ЖОЛ — ${cams.length} КАМЕРА — МЛН — ТЕК ЖОЛДА`;}
-if(t==='geo'){layers.geo.addTo(map); layers.geoL.addTo(map); document.getElementById('routeInfo').textContent='📐 ГЕОДЕЗИЯ — Earth — Камера жоқ';}
-if(t==='relief'){layers.relief.addTo(map); document.getElementById('routeInfo').textContent='🏔️ РЕЛЬЕФ 3D — Камера жоқ';}
+if(t==='road'){layers.road.addTo(map); camLayer.addTo(map);}
+if(t==='geo'){layers.geo.addTo(map); layers.geoL.addTo(map);}
+if(t==='relief'){layers.relief.addTo(map);}
 map.addLayer(routeLayer); map.invalidateSize();
 }
 async function buildRoute(){
 let f=document.getElementById('from'),t=document.getElementById('to');let fLat=parseFloat(f.dataset.lat)||42.3417,fLon=parseFloat(f.dataset.lon)||69.5901;let tLat=parseFloat(t.dataset.lat),tLon=parseFloat(t.dataset.lon);
 if(isNaN(tLat)){let g=await geocode(t.value||'Шымкент'); if(!g) return; tLat=g.lat; tLon=g.lon; t.dataset.lat=tLat; t.dataset.lon=tLon;}
-try{let url=`https://router.project-osrm.org/route/v1/driving/${fLon},${fLat};${tLon},${tLat}?overview=full&geometries=geojson`;let r=await fetch(url);let d=await r.json();let coords=d.routes[0].geometry.coordinates.map(c=>[c[1],c[0]]);if(routeLine) routeLayer.removeLayer(routeLine);routeLine=L.polyline(coords,{color:'#1a73e8',weight:5}).addTo(routeLayer);map.fitBounds(routeLine.getBounds(),{padding:[70,70]});let km=(d.routes[0].distance/1000).toFixed(1);document.getElementById('routeInfo').textContent=`✅ ${km} км — ЖОЛҒА дайын`;document.getElementById('goBox').style.display='block';}catch(e){let coords=[[fLat,fLon],[tLat,tLon]];if(routeLine) routeLayer.removeLayer(routeLine);routeLine=L.polyline(coords,{color:'#1a73e8',weight:5,dashArray:'8,8'}).addTo(routeLayer);map.fitBounds(routeLine.getBounds());document.getElementById('goBox').style.display='block';}
+try{let url=`https://router.project-osrm.org/route/v1/driving/${fLon},${fLat};${tLon},${tLat}?overview=full&geometries=geojson`;let r=await fetch(url);let d=await r.json();let coords=d.routes[0].geometry.coordinates.map(c=>[c[1],c[0]]);if(routeLine) routeLayer.removeLayer(routeLine);routeLine=L.polyline(coords,{color:'#1a73e8',weight:5}).addTo(routeLayer);map.fitBounds(routeLine.getBounds(),{padding:[70,70]});}catch(e){let coords=[[fLat,fLon],[tLat,tLon]];if(routeLine) routeLayer.removeLayer(routeLine);routeLine=L.polyline(coords,{color:'#1a73e8',weight:5,dashArray:'8,8'}).addTo(routeLayer);map.fitBounds(routeLine.getBounds());}
+document.getElementById('goBox').style.display='block';
 }
 async function geocode(q){try{let r=await fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(q+', Kazakhstan')}&limit=1`);let d=await r.json();if(d[0]) return {lat:parseFloat(d[0].lat),lon:parseFloat(d[0].lon)};}catch(e){}return null;}
 function swap(){let f=document.getElementById('from'),t=document.getElementById('to');let vf=f.value,vt=t.value,lf=f.dataset.lat,llf=f.dataset.lon,lt=t.dataset.lat,llt=t.dataset.lon;f.value=vt;t.value=vf;f.dataset.lat=lt;f.dataset.lon=llt;t.dataset.lat=lf;t.dataset.lon=llf;if(vf&&vt)buildRoute();}
 function clearRoute(){document.getElementById('from').value='';document.getElementById('to').value='';document.getElementById('from').dataset.lat='';document.getElementById('to').dataset.lat='';if(routeLine){routeLayer.removeLayer(routeLine);routeLine=null;}document.getElementById('goBox').style.display='none';}
-function startNav(){isNav=true;document.getElementById('goBox').style.display='none';document.getElementById('routeInfo').textContent='🚀 ЖОЛҒА — кеттік!';enableGPSNav();}
+function startNav(){isNav=true;document.getElementById('goBox').style.display='none';enableGPSNav();}
 function enableGPSNav(){if(!navigator.geolocation) return; if(watchId) navigator.geolocation.clearWatch(watchId); watchId=navigator.geolocation.watchPosition(pos=>{let s=pos.coords.speed;curSpeed=s!==null?Math.round(s*3.6):curSpeed;document.getElementById('curSpeed').textContent=curSpeed.toString().slice(0,2);document.getElementById('cardCur').className='sCard cur'+(curSpeed>limitSpeed?' over':'');if(curSpeed>limitSpeed){let now=Date.now();if(now-lastBeep>4000){lastBeep=now;document.getElementById('alert').style.display='block';document.getElementById('alert').textContent=`⚠️ ${limitSpeed} → ${curSpeed} ЖАЙЛА!`;setTimeout(()=>document.getElementById('alert').style.display='none',3000);}} if(isNav) map.setView([pos.coords.latitude,pos.coords.longitude],16); if(cur==='road') checkCams(pos.coords.latitude,pos.coords.longitude);},{enableHighAccuracy:true,maximumAge:0});}
 function useGPS(w){navigator.geolocation.getCurrentPosition(p=>{let el=document.getElementById(w);el.value=p.coords.latitude.toFixed(4)+','+p.coords.longitude.toFixed(4);el.dataset.lat=p.coords.latitude;el.dataset.lon=p.coords.longitude;});}
 function drawCams(){camLayer.clearLayers();cams.forEach(c=>L.marker([c.lat,c.lon],{icon:L.divIcon({html:`<div style="width:20px;height:20px;background:#d93025;border:2px solid #fff;border-radius:50%"></div>`,iconSize:[20,20]})}).addTo(camLayer));document.getElementById('routeStat').textContent=`Камера: ${cams.length} — Тек ЖОЛ`;}
@@ -337,4 +404,5 @@ localStorage.setItem('geo-joba-cams-fixed',JSON.stringify(cams)); drawCams();
 function checkCams(lat,lon){cams.forEach(c=>{let d=getDist(lat,lon,c.lat,c.lon); if(d<800){limitSpeed=c.speed; document.getElementById('limitNum').textContent=limitSpeed.toString().slice(0,2);}});}
 function getDist(a,b,c,d){let R=6371000,dLat=(c-a)*Math.PI/180,dLon=(d-b)*Math.PI/180;let e=Math.sin(dLat/2)**2+Math.cos(a*Math.PI/180)*Math.cos(c*Math.PI/180)*Math.sin(dLon/2)**2;return R*2*Math.atan2(Math.sqrt(e),Math.sqrt(1-e));}
 window.onload=init;
+document.addEventListener('keydown',e=>{if(e.key==='Enter' && document.getElementById('waChatWindow').classList.contains('active')) waSend();});
 </script></body></html>
