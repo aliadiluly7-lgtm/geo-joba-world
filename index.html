@@ -1,79 +1,78 @@
 <!DOCTYPE html>
 <html lang="kk"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
-<title>GEO JOBA v7.1 GAMES - Карта + Дурак + Нарды</title>
+<title>GEO JOBA v9.5 SOCIAL - Геодезисттер Инстаграмы</title>
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/><script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <style>
-*{margin:0;padding:0;box-sizing:border-box}html,body{height:100%;overflow:hidden;font-family:Inter,sans-serif;background:#0c0c0c}
-#map{position:absolute;inset:0;z-index:1}
-.glass{background:rgba(18,18,18,0.88);backdrop-filter:blur(14px);border:1px solid rgba(255,255,255,0.12);border-radius:16px;color:#fff}
-#topbar{position:absolute;top:8px;left:8px;right:8px;z-index:1000;display:flex;gap:6px;align-items:center}
-#logo{padding:8px 12px;font-weight:900;font-size:12px}#logo span{color:#00ff88}
-#searchBox{flex:1;display:flex;gap:6px;padding:7px 10px}#searchBox input{flex:1;background:transparent;border:none;color:#fff;outline:none;font-size:13px}
-#kaspiBtn{background:linear-gradient(135deg,#ff1a1a,#990000);padding:8px 12px;border-radius:12px;font-weight:900;font-size:11px;border:none;color:#fff;cursor:pointer}
-#leftPanel{position:absolute;left:8px;top:62px;bottom:86px;width:50px;z-index:1000;display:flex;flex-direction:column;gap:6px}
-.toolBtn{width:50px;height:50px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1px;cursor:pointer;font-size:17px}
-.toolBtn small{font-size:7px;font-weight:800}
-#rightPanel{position:absolute;right:8px;top:62px;z-index:1000;display:flex;flex-direction:column;gap:6px}
-.iconBtn{width:46px;height:46px;display:flex;align-items:center;justify-content:center;font-size:19px;cursor:pointer}
-#bottomBar{position:absolute;left:8px;right:8px;bottom:8px;z-index:1000;display:flex;flex-direction:column;gap:6px}
-#cmdBar{display:flex;gap:8px;padding:9px 12px}#cmdBar b{color:#00ff88;font-size:11px}#cmdBar input{flex:1;background:transparent;border:none;color:#00ff88;outline:none;font-family:monospace;font-size:13px}
-#gameFab{position:absolute;right:10px;bottom:78px;z-index:1000;width:62px;height:62px;border-radius:50%;background:linear-gradient(135deg,#ffcc00,#ff8800);display:flex;align-items:center;justify-content:center;font-size:28px;cursor:pointer;box-shadow:0 8px 24px rgba(255,200,0,0.4);animation:bounce 2s infinite}
-@keyframes bounce{0%,100%{transform:translateY(0)}50%{transform:translateY(-4px)}}
-#modal{position:fixed;inset:0;z-index:2000;background:rgba(0,0,0,0.78);display:none;align-items:center;justify-content:center;padding:10px}
-#modal.show{display:flex}
-.modalBox{width:100%;max-width:480px;max-height:92vh;overflow-y:auto;padding:16px}
-.tabs{display:flex;gap:6px;margin:10px 0}.tab{flex:1;padding:10px;border-radius:10px;text-align:center;cursor:pointer;background:rgba(255,255,255,0.06);font-weight:800;font-size:12px}.tab.active{background:#00ff88;color:#000}
-.card{width:52px;height:74px;background:#fff;color:#000;border-radius:8px;display:flex;flex-direction:column;align-items:center;justify-content:center;font-weight:900;font-size:16px;box-shadow:0 2px 8px rgba(0,0,0,0.3);cursor:pointer;border:2px solid transparent}.card.red{color:#d00}.card.selected{border-color:#00ff88;transform:translateY(-6px)}
-.board{width:100%;aspect-ratio:1.2;background:linear-gradient(#e6c28a,#c49a5a);border-radius:12px;display:grid;grid-template-columns:repeat(12,1fr);gap:2px;padding:8px}
-.point{height:60px;background:rgba(0,0,0,0.15);border-radius:4px;display:flex;flex-direction:column;align-items:center;justify-content:end;padding:2px;font-size:10px}
-.checker{width:18px;height:18px;border-radius:50%;margin:1px}.white{background:#fff;border:1px solid #000}.black{background:#111}
+*{margin:0;padding:0;box-sizing:border-box}html,body{height:100%;font-family:Inter,sans-serif;background:#000;color:#fff;overflow:hidden}
+#app{height:100%;display:flex;flex-direction:column}
+#top{height:52px;display:flex;align-items:center;justify-content:space-between;padding:0 12px;background:#121212;border-bottom:1px solid #222;z-index:10}
+#top b{font-weight:900;font-size:15px}#top b span{color:#00ff88}
+#content{flex:1;overflow-y:auto;position:relative}
+.tabPage{display:none;height:100%;overflow-y:auto;padding-bottom:70px}.tabPage.active{display:block}
+.glass{background:rgba(28,28,28,0.9);border:1px solid #2a2a2a;border-radius:14px}
+.post{margin:10px;background:#151515;border-radius:16px;overflow:hidden;border:1px solid #222}
+.postHead{display:flex;align-items:center;gap:10px;padding:10px}
+.avatar{width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,#00ff88,#0099ff);display:flex;align-items:center;justify-content:center;font-weight:900}
+.postImg{width:100%;aspect-ratio:1;background:#0a0a0a;object-fit:cover}
+.postAct{display:flex;gap:14px;padding:10px;font-size:18px}
+#bottomNav{position:fixed;bottom:0;left:0;right:0;height:60px;background:#121212;border-top:1px solid #222;display:flex;z-index:100}
+.navBtn{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;font-size:19px;cursor:pointer;color:#666}.navBtn.active{color:#fff}.navBtn small{font-size:9px;margin-top:2px;font-weight:700}
+#map{height:100%;width:100%}
+.cadDrop{margin:16px;border:2px dashed #333;border-radius:16px;padding:40px 20px;text-align:center;background:#0f0f0f}
+.btn{padding:11px 16px;border-radius:12px;border:none;font-weight:800;cursor:pointer}.btnGreen{background:#00ff88;color:#000}.btnWhite{background:#fff;color:#000}
+.chatItem{display:flex;gap:10px;padding:12px;border-bottom:1px solid #1a1a1a;cursor:pointer}.chatItem:hover{background:#1a1a1a}
+input,textarea{background:#1e1e1e;border:1px solid #333;border-radius:10px;color:#fff;padding:10px;width:100%;outline:none}
 </style></head><body>
-<div id="map"></div>
-<div id="topbar"><div id="logo" class="glass">GEO JOBA <span>v7.1 GAMES</span></div><div id="searchBox" class="glass"><span>🔍</span><input id="searchInput" placeholder="Тригопункт / коорд / Дурак"><span onclick="doSearch()" style="cursor:pointer">⏎</span></div><button id="kaspiBtn" onclick="openKaspi()">💳 KASPI</button></div>
-<div id="leftPanel"><div class="glass toolBtn">🖐️<small>PAN</small></div><div class="glass toolBtn" onclick="alert('Слойлар: Точка, Тригопункт, Достар')">🗂️<small>СЛОЙ</small></div><div class="glass toolBtn" onclick="openModal('settingsM')">⚙️<small>SET</small></div><div class="glass toolBtn" style="background:#ffcc00;color:#000" onclick="openGames()">🎮<small>ОЙЫН</small></div></div>
-<div id="rightPanel"><div class="glass iconBtn" onclick="doGeoloc()">📍</div><div class="glass iconBtn" onclick="map.zoomIn()">🔍+</div><div class="glass iconBtn" onclick="map.zoomOut()">🔍-</div><div class="glass iconBtn" onclick="openGames()">👥</div></div>
-<div id="bottomBar"><div id="cmdBar" class="glass"><b>CMD:</b><input id="cmdInput" placeholder="DURAK деп жазсаң ойын ашылады" onkeydown="if(event.key==='Enter'){let v=this.value.toLowerCase();if(v.includes('durak')||v.includes('нард')||v.includes('ойын'))openGames(); this.value=''}"><span style="font-size:9px;color:#666">v7.1</span></div></div>
-<div id="gameFab" onclick="openGames()">🎮</div>
-<div id="modal" onclick="if(event.target===this)closeM()"><div style="display:flex;flex-direction:column;gap:12px;width:100%;max-width:500px">
-<div id="gamesM" class="glass modalBox" style="display:none">
-<div style="display:flex;justify-content:space-between;align-items:center"><h3>🎮 GEO ОЙЫНДАР</h3><span onclick="closeM()" style="cursor:pointer">✕</span></div>
-<div style="font-size:11px;color:#aaa;margin:4px 0">Далада демалыс - картаның ішінде! Offline ✅</div>
-<div class="tabs"><div class="tab active" onclick="showGame('durak')" id="tab-durak">🃏 ДУРАК 6</div><div class="tab" onclick="showGame('nardy')" id="tab-nardy">🎲 НАРДЫ</div><div class="tab" onclick="showGame('mafia')" id="tab-mafia">🕵️ MAFIA</div></div>
-<div id="game-durak">
-<div style="display:flex;justify-content:space-between;font-size:11px;margin:6px 0"><span>Козырь: <b id="trump" style="color:#00ff88">♠️</b> | Колода: <span id="deckCnt">24</span></span><span>Ерлан 🤖</span></div>
-<div style="background:rgba(0,0,0,0.3);padding:8px;border-radius:10px"><div style="font-size:10px;color:#888">Соперник:</div><div id="enemyHand" style="display:flex;gap:4px;margin:4px 0"></div></div>
-<div style="background:rgba(0,255,136,0.08);padding:8px;border-radius:10px;margin:6px 0;min-height:90px"><div style="font-size:10px;color:#888">Стол:</div><div id="table" style="display:flex;flex-wrap:wrap;gap:6px;margin-top:4px"></div></div>
-<div style="background:rgba(255,255,255,0.06);padding:8px;border-radius:10px"><div style="font-size:10px;color:#888">Сенің қолың:</div><div id="myHand" style="display:flex;gap:5px;margin:6px 0;flex-wrap:wrap"></div>
-<div style="display:flex;gap:6px"><button onclick="takeCards()" style="flex:1;padding:9px;background:rgba(255,255,255,0.1);border:none;border-radius:8px;color:#fff;font-weight:700">🃏 АЛУ</button><button onclick="beat()" style="flex:1;padding:9px;background:#00ff88;border:none;border-radius:8px;color:#000;font-weight:800">БИТО ✅</button></div></div>
+<div id="app">
+<div id="top"><b>GEO JOBA <span>v9.5 SOCIAL</span></b><div style="display:flex;gap:8px"><span onclick="openKaspi()" style="background:#ff1a1a;padding:6px 10px;border-radius:10px;font-size:11px;font-weight:800;cursor:pointer">💳 KASPI</span><span>🔔</span></div></div>
+<div id="content">
+<div id="page-feed" class="tabPage active">
+<div style="padding:10px;display:flex;gap:8px"><input id="postText" placeholder="Даладан жаңалық? Фото + коорд..."><button class="btn btnWhite" onclick="addPost()">📸</button></div>
+<div style="padding:0 10px;display:flex;gap:6px;overflow-x:auto"><span class="glass" style="padding:6px 12px;font-size:11px;white-space:nowrap">#шымкент</span><span class="glass" style="padding:6px 12px;font-size:11px;white-space:nowrap">#топосъемка 🔥</span><span class="glass" style="padding:6px 12px;font-size:11px;white-space:nowrap">#trimble</span></div>
+<div id="feed"></div>
 </div>
-<div id="game-nardy" style="display:none">
-<div style="display:flex;justify-content:space-between;font-size:11px;margin:6px 0"><span>🎲 Сүйек: <b id="dice">-</b></span><span>Ход: Сен</span><button onclick="rollDice()" style="padding:6px 10px;background:#ffcc00;border:none;border-radius:8px;font-weight:800">🎲 ТАСТАУ</button></div>
-<div class="board" id="nardyBoard"></div>
+<div id="page-map" class="tabPage"><div id="map"></div></div>
+<div id="page-cad" class="tabPage" style="padding:10px">
+<h3 style="margin:10px 0">📐 CAD ПРОЕКТ — БӨЛЕК РЕЖИМ</h3>
+<div class="cadDrop" onclick="document.getElementById('fileIn').click()" id="dropZone"><div style="font-size:36px">📂</div><b>DWG / DXF / PDF лақтыр</b><div style="font-size:11px;color:#666;margin-top:6px">Drag & Drop — файлды осында таста, ашылады!</div><div style="font-size:10px;color:#00ff88;margin-top:8px">Сенің проект: Топосъемка.dxf, 1200 нүкте</div></div>
+<input type="file" id="fileIn" style="display:none" accept=".dxf,.dwg,.pdf,.kml" onchange="handleFile(this.files[0])">
+<div class="glass" style="padding:12px;margin-top:10px"><div style="display:flex;justify-content:space-between;font-size:12px"><span>Слойлар:</span><span style="color:#00ff88">3 актив</span></div><div style="margin-top:8px;display:flex;flex-direction:column;gap:6px;font-size:12px"><label><input type="checkbox" checked> Layer 0 — Точка (1240)</label><label><input type="checkbox" checked> Здание — Полигон (42)</label><label><input type="checkbox" checked> Горизонталь (320)</label></div></div>
+<div class="glass" style="padding:12px;margin-top:10px"><b style="font-size:12px">CMD:</b><input placeholder="DIST, AREA, LAYER..." style="margin-top:6px"><div style="font-size:11px;color:#aaa;margin-top:6px">DIST: 124.5м | AREA: 1.24 га</div></div>
+<div style="display:flex;gap:8px;margin-top:10px"><button class="btn btnWhite" style="flex:1">⬇️ DXF жүктеу</button><button class="btn btnGreen" style="flex:1">🗺️ Картаға жібер</button></div>
 </div>
-<div id="game-mafia" style="display:none">
-<div style="padding:20px;text-align:center"><div style="font-size:48px">🕵️</div><h4>MAFIA GEO</h4><p style="font-size:12px;color:#aaa;margin:8px 0">10 геодезист, 2 мафия!<br>Түнде 1 нүкте өшеді!</p><button onclick="alert('v7.2-де толық!')" style="padding:10px 16px;background:#ff0044;border:none;border-radius:10px;color:#fff;font-weight:800">ОЙЫН БАСТАУ</button></div>
+<div id="page-chat" class="tabPage">
+<div style="padding:10px;display:flex;gap:8px"><input placeholder="Группа іздеу..."><button class="btn btnGreen" onclick="createGroup()">+ Группа</button></div>
+<div id="chatList"><div class="chatItem"><div class="avatar" style="width:44px;height:44px">Ш</div><div style="flex:1"><b>Шымкент бригада 2026 👷‍♂️ 12 адам</b><div style="font-size:12px;color:#888">Ерлан: Дурак ойнаймыз ба? 🎮</div></div><div style="font-size:10px;color:#00ff88">online</div></div>
+<div class="chatItem" onclick="openGameChat()"><div class="avatar" style="width:44px;height:44px;background:linear-gradient(135deg,#ffcc00,#ff8800)">🎮</div><div style="flex:1"><b>Дурак бөлме #123 🃏</b><div style="font-size:12px;color:#888">Сен + Ерлан — ход сенде!</div></div><div style="background:#00ff88;color:#000;padding:2px 6px;border-radius:10px;font-size:10px;font-weight:800">ОЙНАУ</div></div>
+</div>
+<div style="position:sticky;bottom:0;background:#121212;padding:8px;display:flex;gap:6px;border-top:1px solid #222"><input placeholder="Хабарлама..."><button class="btn btnGreen">➤</button></div>
+</div>
+<div id="page-profile" class="tabPage" style="padding:16px">
+<div style="text-align:center;padding:20px"><div class="avatar" style="width:80px;height:80px;margin:0 auto;font-size:28px">А</div><h3 style="margin-top:10px">Али — Геодезист 🔺</h3><div style="font-size:12px;color:#888">Шымкент | 13 зона | PRO 💳</div><div style="display:flex;gap:20px;justify-content:center;margin-top:12px"><div><b>42</b><br><small style="color:#888">Пост</small></div><div><b>1240</b><br><small style="color:#888">Нүкте</small></div><div><b>12</b><br><small style="color:#888">Достар</small></div></div></div>
+<div class="glass" style="padding:12px"><b style="font-size:12px">Мои проекты:</b><div style="margin-top:8px;font-size:12px;display:flex;flex-direction:column;gap:6px"><div>📐 Шымкент_топо.dxf — 1.2 га — кеше</div><div>📐 Темирлан_участок.dxf — 0.8 га</div></div></div>
+<div style="display:flex;gap:8px;margin-top:12px"><button class="btn btnWhite" style="flex:1">📸 Фото қосу</button><button class="btn btnGreen" style="flex:1" onclick="shareProfile()">🔗 WhatsApp-та бөлісу</button></div>
 </div>
 </div>
-<div id="settingsM" class="glass modalBox" style="display:none"><h3>⚙️ Казахстан</h3><br><label style="font-size:11px">Зона 13 Шымкент</label><select style="width:100%;padding:10px;border-radius:10px;background:#222;color:#fff;margin:6px 0"><option>13 зона Шымкент</option></select><button onclick="closeM()" style="width:100%;margin-top:10px;padding:12px;background:#00ff88;color:#000;border:none;border-radius:12px;font-weight:800">САҚТАУ</button></div>
-<div id="kaspiM" class="glass modalBox" style="display:none"><h3>💳 KASPI 3000₸</h3><br><div style="text-align:center;padding:12px;background:#fff;color:#000;border-radius:12px;font-weight:900;font-size:20px">87066604117</div><p style="font-size:11px;color:#aaa;margin:8px 0">PRO: Карта + Дурак + Нарды + Offline</p><button onclick="navigator.clipboard.writeText('87066604117');alert('Көшірілді!')" style="width:100%;padding:11px;background:#fff;color:#000;border:none;border-radius:12px;font-weight:800">📋 КӨШІРУ</button></div>
-</div></div>
+<div id="bottomNav"><div class="navBtn active" onclick="switchTab('feed')"><span>🏠</span><small>ЛЕНТА</small></div><div class="navBtn" onclick="switchTab('map')"><span>🗺️</span><small>КАРТА</small></div><div class="navBtn" onclick="switchTab('cad')"><span>📐</span><small>CAD</small></div><div class="navBtn" onclick="switchTab('chat')"><span>💬</span><small>ЧАТ</small></div><div class="navBtn" onclick="switchTab('profile')"><span>👤</span><small>ПРОФИЛЬ</small></div></div>
+</div>
+<div id="kaspiModal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.8);z-index:200;align-items:center;justify-content:center;padding:20px"><div class="glass" style="padding:20px;width:100%;max-width:320px;text-align:center"><h3>💳 KASPI 3000₸</h3><br><div style="background:#fff;color:#000;padding:12px;border-radius:12px;font-weight:900;font-size:20px">87066604117</div><br><button class="btn btnWhite" style="width:100%" onclick="navigator.clipboard.writeText('87066604117')">Көшіру</button><br><br><button onclick="document.getElementById('kaspiModal').style.display='none'" style="background:none;border:none;color:#888">Жабу</button></div></div>
 <script>
-let map=L.map('map',{zoomControl:false,attributionControl:false}).setView([42.3417,69.5901],13);
-L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
-L.marker([42.3412,69.5911]).addTo(map).bindPopup("Шымкент ПП 1234 🔺");
-function openGames(){openModal('gamesM'); initDurak(); initNardy();}
-function openModal(id){document.getElementById('modal').classList.add('show');document.querySelectorAll('.modalBox').forEach(m=>m.style.display='none');document.getElementById(id).style.display='block';}
-function closeM(){document.getElementById('modal').classList.remove('show');}
-function openKaspi(){openModal('kaspiM');}
-function doGeoloc(){map.locate({setView:true,maxZoom:16});}
-function doSearch(){let q=document.getElementById('searchInput').value; if(q.toLowerCase().includes('дурак')||q.toLowerCase().includes('нард'))openGames(); else map.setView([42.34,69.59],13);}
-function showGame(g){document.querySelectorAll('[id^=game-]').forEach(e=>e.style.display='none');document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));document.getElementById('game-'+g).style.display='block';document.getElementById('tab-'+g).classList.add('active'); if(g==='durak')initDurak(); if(g==='nardy')initNardy();}
-let suits=['♠️','♥️','♦️','♣️'], ranks=['6','7','8','9','10','J','Q','K','A'], deck=[], myHand=[], enemyHand=[], table=[], trumpSuit='♠️';
-function initDurak(){deck=[]; for(let s of suits)for(let r of ranks)deck.push({r,s,red:(s=='♥️'||s=='♦️')}); deck.sort(()=>Math.random()-0.5); trumpSuit=deck[0].s; document.getElementById('trump').innerText=trumpSuit; myHand=deck.splice(0,6); enemyHand=deck.splice(0,6); document.getElementById('deckCnt').innerText=deck.length; renderHands(); document.getElementById('table').innerHTML='<span style="font-size:11px;color:#666">Карта таста...</span>';}
-function renderHands(){let mh=document.getElementById('myHand'); mh.innerHTML=''; myHand.forEach((c,i)=>{let d=document.createElement('div'); d.className='card'+(c.red?' red':''); d.innerHTML=c.r+'<br>'+c.s; d.onclick=()=>playCard(i); mh.appendChild(d);}); let eh=document.getElementById('enemyHand'); eh.innerHTML=''; enemyHand.forEach(()=>{let d=document.createElement('div'); d.className='card'; d.style.background='#333'; d.style.color='#333'; d.innerHTML='🃏'; eh.appendChild(d);});}
-function playCard(i){let c=myHand.splice(i,1)[0]; table.push(c); let td=document.getElementById('table'); if(td.innerText.includes('Карта')) td.innerHTML=''; let d=document.createElement('div'); d.className='card'+(c.red?' red':''); d.innerHTML=c.r+'<br>'+c.s; td.appendChild(d); renderHands(); setTimeout(()=>{if(enemyHand.length>0){let ec=enemyHand.pop(); let dd=document.createElement('div'); dd.className='card'+(ec.red?' red':''); dd.innerHTML=ec.r+'<br>'+ec.s; td.appendChild(dd); renderHands();}},600);}
-function takeCards(){myHand=myHand.concat(table); table=[]; document.getElementById('table').innerHTML='Алдың!'; renderHands();}
-function beat(){table=[]; document.getElementById('table').innerHTML='Бито! ✅'; if(deck.length>0){myHand.push(deck.pop()); enemyHand.push(deck.pop()); document.getElementById('deckCnt').innerText=deck.length;} renderHands(); if(myHand.length===0) alert('Жеңдің! 🎉 +10 балл!');}
-function initNardy(){let b=document.getElementById('nardyBoard'); b.innerHTML=''; for(let i=0;i<24;i++){let p=document.createElement('div'); p.className='point'; p.innerHTML='<div style="font-size:8px">'+(i+1)+'</div>'; if(i<2)for(let k=0;k<2;k++){let ch=document.createElement('div'); ch.className='checker white'; p.appendChild(ch);} if(i>21)for(let k=0;k<2;k++){let ch=document.createElement('div'); ch.className='checker black'; p.appendChild(ch);} b.appendChild(p);}}
-function rollDice(){let d1=Math.floor(Math.random()*6)+1, d2=Math.floor(Math.random()*6)+1; document.getElementById('dice').innerText=d1+':'+d2;}
+const SUPABASE_URL = 'https://YOUR_PROJECT.supabase.co';
+const SUPABASE_KEY = 'YOUR_ANON_KEY';
+let supabaseClient=null; try{supabaseClient=supabase.createClient(SUPABASE_URL,SUPABASE_KEY);}catch(e){console.log('Supabase offline mode');}
+let map=null;
+function switchTab(name){document.querySelectorAll('.tabPage').forEach(p=>p.classList.remove('active'));document.querySelectorAll('.navBtn').forEach(b=>b.classList.remove('active'));document.getElementById('page-'+name).classList.add('active');event.currentTarget.classList.add('active'); if(name==='map' && !map){setTimeout(()=>{map=L.map('map',{zoomControl:false}).setView([42.3417,69.5901],13); L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map); L.marker([42.3412,69.5911]).addTo(map).bindPopup('Шымкент 🔺');},100);}}
+function openKaspi(){document.getElementById('kaspiModal').style.display='flex';}
+let posts=JSON.parse(localStorage.getItem('geo_posts')||'[]');
+if(posts.length===0){posts=[{user:'Али',avatar:'А',text:'Бүгін Шымкентте 15 нүкте өлшедім! Trimble R12, 13 зона 🔺',img:'https://images.unsplash.com/photo-1503387762-592deb58ef4e?w=400',likes:12,loc:'42.34, 69.59',time:'2 сағат'},{user:'Ерлан',avatar:'Е',text:'Тригопункт ПП 1234 таптым! #шымкент',img:'https://images.unsplash.com/photo-1541888946425-d81bb19240f6?w=400',likes:8,loc:'42.35, 69.60',time:'5 сағат'}];}
+function renderFeed(){let f=document.getElementById('feed'); f.innerHTML=''; posts.forEach((p,i)=>{f.innerHTML+=`<div class=post><div class=postHead><div class=avatar>${p.avatar}</div><div style=flex:1><b style=font-size:13px>${p.user} ${p.user==='Али'?'💳 PRO':''}</b><div style=font-size:10px;color:#888>📍 ${p.loc} • ${p.time}</div></div><span>⋯</span></div><div style=padding:0 12px 10px;font-size:13px>${p.text}</div><img class=postImg src=${p.img}><div class=postAct><span onclick=likePost(${i})>❤️ ${p.likes}</span><span>💬</span><span>📤</span><span style=margin-left:auto onclick=openGameChat()>🎮 Ойын</span></div></div>`;});}
+function addPost(){let t=document.getElementById('postText').value; if(!t)return; posts.unshift({user:'Али',avatar:'А',text:t,img:'https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=400',likes:0,loc:'42.3417, 69.5901',time:'қазір'}); localStorage.setItem('geo_posts',JSON.stringify(posts)); document.getElementById('postText').value=''; renderFeed();}
+function likePost(i){posts[i].likes++; localStorage.setItem('geo_posts',JSON.stringify(posts)); renderFeed();}
+function handleFile(f){if(!f)return; alert('Файл ашылды: '+f.name+' — '+(f.size/1024).toFixed(1)+' KB'); document.getElementById('dropZone').innerHTML='<div style=font-size:24px>✅</div><b>'+f.name+'</b><div style=font-size:11px;color:#00ff88>Ашылды! 1240 объект</div>';}
+function createGroup(){let name=prompt('Группа аты:','Шымкент бригада'); if(name)alert('Группа "'+name+'" құрылды! Сілтеме: https://geo-joba.world/g/'+Date.now()+'\nWhatsApp-қа жібер!');}
+function openGameChat(){alert('Дурак бөлме #123 — Сілтеме: https://aliadiluly7-lgtm.github.io/geo-joba-world/?game=durak&room=123\nWhatsApp-қа жібер!');}
+function shareProfile(){let url='https://aliadiluly7-lgtm.github.io/geo-joba-world/'; window.open('https://wa.me/?text='+encodeURIComponent('Менің GEO профилім: '+url),'_blank');}
+renderFeed();
+let dz=document.getElementById('dropZone'); dz.addEventListener('dragover',e=>{e.preventDefault(); dz.style.borderColor='#00ff88';}); dz.addEventListener('drop',e=>{e.preventDefault(); handleFile(e.dataTransfer.files[0]);});
 </script></body></html>
