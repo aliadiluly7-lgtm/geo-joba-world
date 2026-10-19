@@ -1,5 +1,5 @@
 <!DOCTYPE html><html lang="kk"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>GEO JOBA v25.6 - INSTAGRAM СИЯҚТЫ - Номер Парольмен Кіру - Суреттегідей</title>
+<title>GEO JOBA v25.7 - ПЛАТФОРМА НОМЕР ПАРОЛЬ - ДРУЗЬЯ MESSAGE ТАНЫСЫҢЫЗ БОЛУЫ МҮМКІН</title>
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
 <style>
 *{margin:0;padding:0;box-sizing:border-box}body{font-family:Inter,Roboto,sans-serif;background:#000;height:100vh;overflow:hidden}
@@ -10,7 +10,7 @@
 .inputs{flex:1;display:flex;flex-direction:column;gap:4px}.rRow{display:flex;gap:4px;align-items:center}.dot{width:6px;height:6px;border-radius:50%}.dotA{background:#4285f4}.dotB{background:#ea4335}
 .rRow input{flex:1;border:none;background:#f1f3f4;border-radius:6px;padding:6px 8px;font-size:11px;outline:none}
 .mini{padding:5px 8px;border-radius:12px;border:none;font-weight:700;cursor:pointer;font-size:9px}
-.btnG{background:#1a73e8;color:#fff}.btnW{background:#f1f3f4;color:#202124}
+.btnG{background:#1a73e8;color:#fff}.btnW{background:#f1f3f4;color:#202124}.btnR{background:#d93025;color:#fff}
 #switcher{position:absolute;top:70px;left:10px;background:#fff;border-radius:18px;padding:3px;display:flex;gap:3px;z-index:1100;box-shadow:0 2px 8px rgba(0,0,0,0.2)}
 .sw{padding:6px 10px;border-radius:14px;font-size:10px;font-weight:700;cursor:pointer;color:#5f6368}.sw.active{background:#1a73e8;color:#fff}
 #speedMini{position:absolute;left:10px;bottom:78px;z-index:1100;display:flex;gap:5px}
@@ -24,33 +24,43 @@
 .navBtn{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;color:#5f6368;cursor:pointer;font-size:9px}.navBtn.active{color:#1a73e8;font-weight:700}.navBtn b{font-size:16px}
 .page{position:absolute;inset:0;display:none;background:#fff;z-index:1300;flex-direction:column}.page.active{display:flex}
 #alert{position:absolute;top:70px;right:10px;background:#d93025;color:#fff;padding:6px 10px;border-radius:12px;font-weight:800;font-size:10px;z-index:1200;display:none}
-
-/* INSTAGRAM СИЯҚТЫ - СУРЕТТЕГІДЕЙ */
+/* ПЛАТФОРМА ЛОГИН - БІР РЕТ - ОСЫ САЙТҚА */
+#platformLogin{position:absolute;inset:0;background:#fff;z-index:5000;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:20px}
+#platformLogin h2{font-size:28px;margin-bottom:6px} #platformLogin small{color:#666;margin-bottom:16px;text-align:center;max-width:300px}
+#platformLogin input{width:100%;max-width:300px;padding:12px;border:1px solid #dbdbdb;border-radius:8px;background:#fafafa;margin-bottom:8px;font-size:13px;outline:none}
+#platformLogin button{width:100%;max-width:300px;padding:12px;background:#0095f6;color:#fff;border:none;border-radius:8px;font-weight:700;margin-top:8px;cursor:pointer}
+/* INSTAGRAM ПЛАТФОРМА - ДРУЗЬЯ MESSAGE */
 .instaTop{height:48px;background:#fff;border-bottom:1px solid #dbdbdb;display:flex;align-items:center;justify-content:space-between;padding:0 12px}
-.instaLogo{font-family:'Billabong',cursive;font-size:24px;font-weight:900;letter-spacing:-1px}
+.instaLogo{font-size:22px;font-weight:900}
 .instaStories{height:90px;background:#fff;display:flex;gap:12px;padding:10px 12px;overflow:auto;border-bottom:1px solid #efefef}
-.story{display:flex;flex-direction:column;align-items:center;gap:4px;min-width:62px}
-.storyRing{width:58px;height:58px;border-radius:50%;background:linear-gradient(45deg,#feda75,#fa7e1e,#d62976,#962fbf,#4f5bd5);padding:2px;display:flex;align-items:center;justify-content:center}
-.storyRingInner{width:100%;height:100%;background:#fff;border-radius:50%;padding:2px}
-.storyRingInner img,.storyRingInner div{width:100%;height:100%;border-radius:50%;background:#eee;display:flex;align-items:center;justify-content:center;font-size:20px}
-.storyName{font-size:10px;color:#262626;max-width:62px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.instaPost{flex:1;background:#fff;overflow:auto}
+.story{display:flex;flex-direction:column;align-items:center;gap:4px;min-width:62px;cursor:pointer}
+.storyRing{width:58px;height:58px;border-radius:50%;background:linear-gradient(45deg,#feda75,#fa7e1e,#d62976,#962fbf,#4f5bd5);padding:2px}
+.storyRingInner{width:100%;height:100%;background:#fff;border-radius:50%;padding:2px;display:flex;align-items:center;justify-content:center}
+.storyName{font-size:10px;max-width:62px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.instaMain{flex:1;display:flex;overflow:hidden}
+.instaLeft{flex:1;background:#fff;overflow:auto;border-right:1px solid #efefef}
+.instaRight{width:280px;background:#fafafa;display:flex;flex-direction:column;overflow:auto}
 .postHead{height:48px;display:flex;align-items:center;gap:8px;padding:0 12px}
 .postHead img{width:32px;height:32px;border-radius:50%}
-.postName{font-weight:700;font-size:12px}
-.postMusic{font-size:10px;color:#000}
-.postImg{width:100%;aspect-ratio:1/1.2;background:#eee;position:relative;background-size:cover;background-position:center}
-.postActions{height:44px;display:flex;align-items:center;gap:14px;padding:0 12px;font-size:22px}
-.postLikes{padding:0 12px;font-size:12px;font-weight:700}
-.postText{padding:6px 12px;font-size:12px;line-height:1.3}
-.postTag{background:#000;color:#fff;display:inline-block;padding:6px 10px;border-radius:8px;margin:6px 12px;font-weight:700;font-size:12px}
-.instaLogin{flex:1;background:#fff;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:20px}
-.instaLogin h2{font-size:28px;font-family:cursive;margin-bottom:20px}
-.instaLogin input{width:100%;max-width:280px;padding:12px;border:1px solid #dbdbdb;border-radius:6px;background:#fafafa;margin-bottom:8px;font-size:13px;outline:none}
-.instaLogin button{width:100%;max-width:280px;padding:12px;background:#0095f6;color:#fff;border:none;border-radius:8px;font-weight:700;margin-top:8px;cursor:pointer}
-.instaBottom{height:48px;background:#fff;border-top:1px solid #dbdbdb;display:flex;justify-content:space-around;align-items:center;font-size:22px}
+.postImg{width:100%;aspect-ratio:1/1;background:#eee;background-size:cover;background-position:center;position:relative}
+.postActions{height:44px;display:flex;align-items:center;gap:14px;padding:0 12px;font-size:20px}
+.friendCard{padding:8px 12px;display:flex;align-items:center;gap:8px;border-bottom:1px solid #efefef;background:#fff}
+.friendCard img{width:40px;height:40px;border-radius:50%}
+.suggest{padding:10px 12px;background:#fff;margin-bottom:8px;border-radius:8px;border:1px solid #efefef}
 </style></head><body>
-<div id="app"><div id="mapWrap"><div id="map"></div>
+<div id="app">
+<!-- ПЛАТФОРМАҒА КІРУ - БІР РЕТ - НОМЕР ПАРОЛЬ - ОСЫ САЙТҚА - ИНСТАГРАМҒА ЖЕКЕ ЕМЕС -->
+<div id="platformLogin">
+<h2>GEO JOBA 🌍</h2>
+<small>Осы платформаға номер парольмен кіреді — Instagram-ға жеке керек емес — кірген соң — друзья, сообщение, танысыңыз болуы мүмкін — қызықтыру үшін</small>
+<input id="platPhone" placeholder="Номер — 87066604117" value="87066604117">
+<input id="platName" placeholder="Атыңыз — Али">
+<input id="platPass" type="password" placeholder="Пароль — 123456" value="123456">
+<button onclick="loginPlatform()">Кіру — Платформаға — GEO JOBA</button>
+<div style="font-size:10px;color:#8e8e8e;margin-top:10px;text-align:center;max-width:300px">Кез келген номер/пароль өтеді — тест — 87066604117 / Али / 123456 — кірген соң — барлық жерде — осы аккаунт — Instagram бетінде де — жеке пароль керек емес</div>
+</div>
+
+<div id="mapWrap"><div id="map"></div>
 <div id="top">
 <div class="inputs">
 <div class="rRow"><div class="dot dotA"></div><input id="from" placeholder="Қайдан? GPS"><span onclick="useGPS('from')" style="cursor:pointer">📍</span></div>
@@ -69,54 +79,50 @@
 <div class="sCard cur" id="cardCur"><div class="sNum" id="curSpeed">0</div><div class="sLabel">КМ/САҒ</div></div>
 </div>
 <div id="goBox"><button id="goBtn" onclick="startNav()">🚀 ЖОЛҒА</button></div>
-<div id="bottomInfo"><b style="font-size:10px" id="routeInfo">v25.6 — INSTAGRAM СИЯҚТЫ — Номер Пароль — Суреттегідей</b><span style="font-size:8px;color:#5f6368" id="routeStat">Камера: 0 — Тек ЖОЛ</span></div>
+<div id="bottomInfo"><b style="font-size:10px" id="routeInfo">v25.7 — Платформа номер пароль — Друзья Message — Қызықтыру</b><span style="font-size:8px;color:#5f6368" id="routeStat">Камера: 0 — Тек ЖОЛ</span></div>
 
-<!-- CAD PAGE - AUTOCAD СИЯҚТЫ -->
-<div class="page" id="page-cad" style="background:#2b2b2b"><div style="color:#fff;padding:10px"><b>📐 CAD — AutoCAD 2025 сияқты</b><br><small>Суреттегі СВОЙСТВА — Центр X/Y — осында</small><div style="margin-top:10px"><button class="mini btnG" onclick="showMap()">→ Картаға</button></div></div></div>
+<div class="page" id="page-cad" style="background:#2b2b2b"><div style="color:#fff;padding:12px"><b>📐 CAD — AutoCAD 2025</b><button class="mini btnG" onclick="showMap()" style="margin-top:10px">→ Картаға</button></div></div>
 <div class="page" id="page-line" style="background:#fff"><div style="padding:12px"><b>📏 LINE</b><button class="mini btnG" onclick="showMap()" style="margin-top:10px">→ Картаға</button></div></div>
 
-<!-- INSTAGRAM СИЯҚТЫ - СУРЕТТЕГІДЕЙ - НОМЕР ПАРОЛЬМЕН КІРУ -->
+<!-- INSTAGRAM — ПЛАТФОРМА ІШІНДЕ — ЖЕКЕ ПАРОЛЬ ЖОҚ — ОСЫ ПЛАТФОРМА АРҚЫЛЫ — ДРУЗЬЯ MESSAGE -->
 <div class="page" id="page-insta">
-<!-- LOGIN - НОМЕР ПАРОЛЬ - БҰЛ САЙТҚА КІРУ -->
-<div class="instaLogin" id="instaLogin">
-<h2>Instagram — GEO JOBA</h2>
-<div style="font-size:12px;color:#8e8e8e;margin-bottom:16px;text-align:center;max-width:280px">Бұл сайтқа номер пароль арқылы кіреді — GEO JOBA Instagram — дала жұмысы — учаске фото</div>
-<input id="instaPhone" placeholder="Номер — 87066604117" value="87066604117">
-<input id="instaPass" type="password" placeholder="Пароль — 123456" value="123456">
-<button onclick="loginInsta()">Кіру — GEO JOBA Instagram</button>
-<div style="font-size:10px;color:#8e8e8e;margin-top:12px">Тест: 87066604117 / 123456 — кез келген номер пароль өтеді — болашақта базаға байланады</div>
-<button class="mini btnW" onclick="showMap()" style="margin-top:16px;max-width:280px;width:100%">→ Картаға қайту</button>
+<div class="instaTop">
+<span style="font-size:18px">+</span>
+<span class="instaLogo">Instagram — GEO JOBA</span>
+<span style="font-size:16px" onclick="logoutPlatform()">♡ • <span id="myPhoneLabel">8706</span></span>
+</div>
+<div class="instaStories" id="storyBar"></div>
+<div class="instaMain">
+<div class="instaLeft" id="instaLeft">
+<div class="postHead"><img id="myAvatar"><div><div style="font-weight:700;font-size:12px" id="myNameLabel">Али</div><div style="font-size:10px" id="myPhoneLabel2">87066604117 — платформада</div></div><div style="margin-left:auto;font-size:10px;background:#efefef;padding:4px 8px;border-radius:12px" id="friendsCount">Друзей: 0</div></div>
+<div class="postImg" style="background-image:url('https://images.unsplash.com/photo-1518005020951-eccb494ad742?w=600');display:flex;align-items:flex-end;justify-content:center;padding:10px"><div style="background:rgba(255,255,255,0.9);padding:8px 12px;border-radius:12px;font-weight:700;font-size:13px;text-align:center">Qajet Taxi - халықтың жобасы!<br>Цифрлық тәуелсіздікке ұмтылу ✅<br><small>GEO JOBA платформа — друзья — сообщение</small></div></div>
+<div class="postActions"><span>❤️</span><span>💬</span><span>✈️</span><span style="margin-left:auto">🔖</span></div>
+<div style="padding:6px 12px;font-size:12px"><b id="myNameLabel3">Али</b> Платформаға кірдім — номер парольмен — Instagram-ға жеке керек емес — достарымды қосамын — #геодезия #шымкент</div>
+
+<div style="padding:10px 12px;background:#fafafa;border-top:1px solid #efefef">
+<b style="font-size:12px">📸 Пост қосу — GEO JOBA платформа</b>
+<div style="display:flex;gap:6px;margin-top:6px"><input id="postText" placeholder="Не жаңалық? — учаске — Бадам 10 соток" style="flex:1;padding:8px;border:1px solid #dbdbdb;border-radius:6px;font-size:11px"><button class="mini btnG" onclick="addPost()">Пост</button></div>
+</div>
+<div id="postList"></div>
 </div>
 
-<!-- FEED - СУРЕТТЕГІДЕЙ - INSTAGRAM ПАНЕЛЬ -->
-<div id="instaFeed" style="display:none;flex:1;flex-direction:column;width:100%">
-<div class="instaTop">
-<span style="font-size:20px">+</span>
-<span class="instaLogo">Instagram</span>
-<span style="font-size:20px">♡</span>
+<div class="instaRight">
+<div style="padding:10px 12px;background:#fff;border-bottom:1px solid #efefef"><b style="font-size:12px">👥 Менің достарым — Друзья</b><div style="font-size:10px;color:#8e8e8e">Бір бірін сақтаса — осы платформадан — друзья таста — досың деп — Келе беру керек</div></div>
+<div id="friendsList" style="flex:1;overflow:auto;background:#fff"></div>
+
+<div style="padding:10px 12px;background:#fff;border-top:1px solid #efefef;margin-top:8px"><b style="font-size:12px">🔍 Танысыңыз болуы мүмкін — Друзьяның друзьясы</b><div style="font-size:10px;color:#8e8e8e">Осы сайтқа қызықтыруымыз керек барлығын — достарыңның достары</div></div>
+<div id="suggestList" style="background:#fafafa;padding:8px"></div>
+
+<div style="padding:10px 12px;background:#fff;border-top:1px solid #efefef;margin-top:8px"><b style="font-size:12px">💬 Сообщения — Message</b></div>
+<div id="chatList" style="background:#fff;max-height:200px;overflow:auto"></div>
+<div style="display:flex;gap:6px;padding:8px;background:#fff;border-top:1px solid #efefef"><input id="chatTo" placeholder="Кімге? — номер" style="width:80px;padding:6px;border:1px solid #dbdbdb;border-radius:6px;font-size:10px"><input id="chatMsg" placeholder="Сообщение..." style="flex:1;padding:6px;border:1px solid #dbdbdb;border-radius:6px;font-size:10px"><button class="mini btnG" onclick="sendMsg()">Жіберу</button></div>
 </div>
-<div class="instaStories">
-<div class="story"><div class="storyRing"><div class="storyRingInner"><div>👤</div></div></div><div class="storyName">Ваша история</div></div>
-<div class="story"><div class="storyRing"><div class="storyRingInner"><div>👤</div></div></div><div class="storyName">mmahambet_</div></div>
-<div class="story"><div class="storyRing"><div class="storyRingInner"><img src="https://i.pravatar.cc/100?img=5"></div></div><div class="storyName">alima_kadirkulo...</div></div>
-<div class="story"><div class="storyRing"><div class="storyRingInner"><img src="https://i.pravatar.cc/100?img=8"></div></div><div class="storyName">yerdos_rys</div></div>
-<div class="story"><div class="storyRing"><div class="storyRingInner"><div>📐</div></div></div><div class="storyName">geo_joba_</div></div>
 </div>
-<div class="instaPost">
-<div class="postHead"><img src="https://i.pravatar.cc/100?img=12"><div><div class="postName">duman.qajet ✅ и ещё 3</div><div class="postMusic">♫ ASU.Erkebulan.Bauyrzhan · Елім деп соқсы...</div></div><div style="margin-left:auto">☰</div></div>
-<div class="postImg" style="background-image:url('https://images.unsplash.com/photo-1518005020951-eccb494ad742?w=600');display:flex;align-items:flex-end;justify-content:center;padding:10px"><div style="background:rgba(255,255,255,0.9);padding:8px 12px;border-radius:12px;font-weight:700;font-size:13px;text-align:center">Qajet Taxi - халықтың жобасы!<br>Цифрлық тәуелсіздікке ұмтылу ✅<br><small style="font-size:10px">GEO JOBA — Шымкент 42.3417,69.5901 — даладан</small></div></div>
-<div class="postActions"><span>❤️</span><span>💬</span><span>✈️</span><span style="margin-left:auto">🔖</span></div>
-<div class="postLikes">1,234 нравится</div>
-<div class="postText"><b>geo_joba_official</b> Бадамнан Шымкентке — учаске түсірдім — кадастр — 10 соток — AutoCAD 2025 — GEO JOBA — Qajet Taxi — халықтың жобасы! #геодезия #шымкент #qajet</div>
-<div style="display:flex;gap:6px;padding:10px 12px"><button class="mini btnG" style="flex:1">❤️ Лайк</button><button class="mini btnW" style="flex:1">💬 Коммент</button><button class="mini btnW" style="flex:1">📤 Бөлісу</button></div>
-<div style="padding:10px 12px;background:#fafafa;border-top:1px solid #efefef"><b style="font-size:12px">📸 Учаске қосу — GEO JOBA — Инстаграм сияқты</b><div style="display:flex;gap:6px;margin-top:8px"><input placeholder="Учаске аты — Бадам 10 соток" style="flex:1;padding:8px;border:1px solid #dbdbdb;border-radius:6px;font-size:11px"><button class="mini btnG">📸 Фото</button></div></div>
-</div>
-<div class="instaBottom"><span>⌂</span><span>▶️</span><span>✈️</span><span>🔍</span><span onclick="logoutInsta()">👤</span></div>
-</div>
+<div style="height:40px;background:#fff;border-top:1px solid #dbdbdb;display:flex;justify-content:space-around;align-items:center;font-size:18px"><span>⌂</span><span>▶️</span><span>✈️</span><span>🔍</span><span>👤</span></div>
 </div>
 
 <div class="page" id="page-game" style="background:#000"><div style="padding:12px;color:#fff"><b>🎮 GAME</b><button class="mini btnG" onclick="showMap()" style="margin-top:10px">→ Картаға</button></div></div>
-<div class="page" id="page-profile" style="background:#fff"><div style="padding:12px"><b>👤 PROFILE — 87066604117</b><div id="camList" style="margin-top:8px;background:#f1f3f4;padding:10px;border-radius:10px;font-size:10px;max-height:200px;overflow:auto"></div><button class="mini btnR" onclick="loadFullReal(true)" style="margin-top:8px">🇰🇿 МЛН КАМЕРА — БАРЛЫҒЫН ҚОСУ</button><button class="mini btnW" onclick="showMap()" style="margin-top:10px">→ Картаға</button></div></div>
+<div class="page" id="page-profile" style="background:#fff"><div style="padding:12px"><b>👤 PROFILE — Платформа</b><div id="profileInfo" style="margin-top:8px;background:#f1f3f4;padding:10px;border-radius:10px;font-size:11px"></div><div style="display:flex;gap:6px;margin-top:8px"><button class="mini btnR" onclick="logoutPlatform()">Шығу — Платформадан</button><button class="mini btnW" onclick="showMap()">→ Картаға</button></div><div id="camList" style="margin-top:8px;background:#f1f3f4;padding:10px;border-radius:10px;font-size:10px;max-height:150px;overflow:auto"></div></div></div>
 
 </div><div id="nav">
 <div class="navBtn active" onclick="showMap(this)"><b>🌍</b><span>Карта</span></div>
@@ -129,6 +135,8 @@
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <script>
 let map,layers={},camLayer,routeLayer,routeLine=null,cams=[],cur='road',watchId=null,curSpeed=0,limitSpeed=60,lastBeep=0,isNav=false;
+let currentUser=null, users=[], friends={}, posts=[], messages=[];
+
 function init(){
 map=L.map('map',{zoomControl:false,preferCanvas:true}).setView([42.3417,69.5901],13);
 layers.road=L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{maxZoom:19}).addTo(map);
@@ -137,23 +145,166 @@ layers.geoL=L.tileLayer('https://{s}.basemaps.cartocdn.com/light_only_labels/{z}
 layers.relief=L.tileLayer('https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png',{maxZoom:17});
 camLayer=L.layerGroup().addTo(map); routeLayer=L.layerGroup().addTo(map);
 loadFullReal();
-let savedPhone=localStorage.getItem('insta_phone');
-if(savedPhone){ document.getElementById('instaLogin').style.display='none'; document.getElementById('instaFeed').style.display='flex';}
+loadPlatformData();
+let saved=localStorage.getItem('geo_platform_user');
+if(saved){try{currentUser=JSON.parse(saved); document.getElementById('platformLogin').style.display='none'; updateUI();}catch(e){}}
+}
+function loadPlatformData(){
+try{
+users=JSON.parse(localStorage.getItem('geo_users')||'[]');
+friends=JSON.parse(localStorage.getItem('geo_friends')||'{}');
+posts=JSON.parse(localStorage.getItem('geo_posts')||'[]');
+messages=JSON.parse(localStorage.getItem('geo_messages')||'[]');
+}catch(e){users=[];friends={};posts=[];messages=[];}
+if(users.length===0){
+users=[
+{phone:'87066604117',name:'Али',pass:'123456',avatar:'https://i.pravatar.cc/100?img=8'},
+{phone:'87012345678',name:'mmahambet_',pass:'123',avatar:'https://i.pravatar.cc/100?img=12'},
+{phone:'87023456789',name:'alima_kadirkulo',pass:'123',avatar:'https://i.pravatar.cc/100?img=5'},
+{phone:'87034567890',name:'yerdos_rys',pass:'123',avatar:'https://i.pravatar.cc/100?img=15'},
+{phone:'87045678901',name:'duman.qajet',pass:'123',avatar:'https://i.pravatar.cc/100?img=20'},
+];
+friends={'87066604117':['87012345678'],'87012345678':['87066604117','87023456789'],'87023456789':['87012345678'],'87034567890':['87045678901'],'87045678901':['87034567890']};
+posts=[
+{phone:'87045678901',name:'duman.qajet',text:'Qajet Taxi - халықтың жобасы! Цифрлық тәуелсіздікке ұмтылу ✅',time:'2с бұрын'},
+{phone:'87023456789',name:'alima_kadirkulo',text:'Бадамда учаске түсірдім — 10 соток — GEO JOBA — геодезия',time:'5с бұрын'}
+];
+saveAll();
+}
+}
+function saveAll(){localStorage.setItem('geo_users',JSON.stringify(users));localStorage.setItem('geo_friends',JSON.stringify(friends));localStorage.setItem('geo_posts',JSON.stringify(posts));localStorage.setItem('geo_messages',JSON.stringify(messages));}
+function loginPlatform(){
+let phone=document.getElementById('platPhone').value.trim();
+let name=document.getElementById('platName').value.trim()||phone.slice(-4);
+let pass=document.getElementById('platPass').value.trim();
+if(phone.length<10){alert('Номер — 10 цифр — 87066604117');return;}
+if(pass.length<3){alert('Пароль — 3 символ кемінде');return;}
+let u=users.find(x=>x.phone===phone);
+if(!u){u={phone,name,pass,avatar:`https://i.pravatar.cc/100?img=${Math.floor(Math.random()*70)}`};users.push(u); if(!friends[phone]) friends[phone]=[];}
+else{if(u.pass!==pass && users.length>0 && u.phone==='87066604117' && pass!=='123456'){alert('Пароль қате — тест 123456');return;} u.name=name||u.name;}
+currentUser=u;
+localStorage.setItem('geo_platform_user',JSON.stringify(u));
+saveAll();
+document.getElementById('platformLogin').style.display='none';
+updateUI();
+}
+function logoutPlatform(){localStorage.removeItem('geo_platform_user'); currentUser=null; document.getElementById('platformLogin').style.display='flex';}
+function updateUI(){
+if(!currentUser) return;
+document.getElementById('myPhoneLabel').textContent=currentUser.phone.slice(-4);
+document.getElementById('myPhoneLabel2').textContent=currentUser.phone+' — платформада — жеке Insta пароль керек емес';
+document.getElementById('myNameLabel').textContent=currentUser.name;
+document.getElementById('myNameLabel3').textContent=currentUser.name;
+document.getElementById('myAvatar').src=currentUser.avatar;
+document.getElementById('profileInfo').innerHTML=`<b>Аты:</b> ${currentUser.name}<br><b>Номер:</b> ${currentUser.phone}<br><b>Пароль:</b> ••••<br><b>Статус:</b> Платформада — GEO JOBA — номер парольмен кірдің — Instagram-ға жеке керек емес — барлық жерде осы аккаунт`;
+renderFriends();
+}
+function renderFriends(){
+if(!currentUser) return;
+let myFriends=friends[currentUser.phone]||[];
+document.getElementById('friendsCount').textContent=`Друзей: ${myFriends.length}`;
+// Stories
+let storyHtml=`<div class="story"><div class="storyRing"><div class="storyRingInner"><img src="${currentUser.avatar}"></div></div><div class="storyName">Ваша история</div></div>`;
+myFriends.forEach(ph=>{
+let u=users.find(x=>x.phone===ph);
+if(u) storyHtml+=`<div class="story"><div class="storyRing"><div class="storyRingInner"><img src="${u.avatar}"></div></div><div class="storyName">${u.name}</div></div>`;
+});
+users.forEach(u=>{
+if(u.phone!==currentUser.phone && !myFriends.includes(u.phone)){
+storyHtml+=`<div class="story" onclick="addFriend('${u.phone}')"><div class="storyRing" style="background:#ddd"><div class="storyRingInner"><img src="${u.avatar}"></div></div><div class="storyName">${u.name}</div></div>`;
+}
+});
+document.getElementById('storyBar').innerHTML=storyHtml;
+
+// Friends list
+let fHtml='';
+myFriends.forEach(ph=>{
+let u=users.find(x=>x.phone===ph);
+if(u) fHtml+=`<div class="friendCard"><img src="${u.avatar}"><div style="flex:1"><div style="font-weight:700;font-size:12px">${u.name}</div><div style="font-size:10px;color:#8e8e8e">${u.phone} — досың — осы платформадан</div></div><button class="mini btnW" onclick="openChat('${u.phone}')">Сообщение</button><button class="mini btnR" onclick="removeFriend('${u.phone}')">✕</button></div>`;
+});
+if(fHtml==='') fHtml='<div style="padding:12px;font-size:11px;color:#8e8e8e">Достарың жоқ — төменде — танысыңыз болуы мүмкін — қос — бір бірін сақтаса — друзья — осы платформадан келе береді</div>';
+document.getElementById('friendsList').innerHTML=fHtml;
+
+// Suggest - друзьяның друзьясы - танысыңыз болуы мүмкін
+let suggestSet=new Set();
+myFriends.forEach(fPh=>{
+(friends[fPh]||[]).forEach(ff=>{
+if(ff!==currentUser.phone && !myFriends.includes(ff)) suggestSet.add(ff);
+});
+});
+let sHtml='';
+suggestSet.forEach(ph=>{
+let u=users.find(x=>x.phone===ph);
+if(u) sHtml+=`<div class="suggest"><div style="display:flex;align-items:center;gap:8px"><img src="${u.avatar}" style="width:36px;height:36px;border-radius:50%"><div style="flex:1"><div style="font-weight:700;font-size:12px">${u.name}</div><div style="font-size:10px;color:#8e8e8e">Танысыңыз болуы мүмкін — ${friends[ph]?.length||0} ортақ дос — досыңның досы — ${users.find(x=>friends[x.phone]?.includes(ph))?.name||''} арқылы</div></div><button class="mini btnG" onclick="addFriend('${u.phone}')">Друзья +</button></div></div>`;
+});
+if(sHtml===''){
+// Егер ортақ дос жоқ болса — басқа юзерлерді ұсын — осы сайтқа қызықтыру
+users.forEach(u=>{
+if(u.phone!==currentUser.phone && !myFriends.includes(u.phone) && !suggestSet.has(u.phone)){
+sHtml+=`<div class="suggest"><div style="display:flex;align-items:center;gap:8px"><img src="${u.avatar}" style="width:36px;height:36px;border-radius:50%"><div style="flex:1"><div style="font-weight:700;font-size:12px">${u.name}</div><div style="font-size:10px;color:#8e8e8e">Осы сайтқа қызықтыру — ${u.phone} — GEO JOBA-ға қосылған — танысыңыз болуы мүмкін</div></div><button class="mini btnG" onclick="addFriend('${u.phone}')">Друзья +</button></div></div>`;
+}
+});
+}
+document.getElementById('suggestList').innerHTML=sHtml||'<div style="padding:8px;font-size:11px;color:#8e8e8e">Барлық достар қосылды — жаңа адамдар келгенде — осында шығады</div>';
+
+// Chat
+renderChat();
+
+// Posts
+let pHtml='';
+posts.slice().reverse().forEach(p=>{
+let u=users.find(x=>x.phone===p.phone);
+pHtml+=`<div style="border-top:1px solid #efefef;padding:10px 12px"><div style="display:flex;align-items:center;gap:8px"><img src="${u?.avatar||'https://i.pravatar.cc/100'}" style="width:32px;height:32px;border-radius:50%"><b style="font-size:12px">${p.name}</b><span style="font-size:10px;color:#8e8e8e;margin-left:auto">${p.time}</span></div><div style="font-size:12px;margin-top:6px">${p.text}</div></div>`;
+});
+document.getElementById('postList').innerHTML=pHtml;
+}
+function addFriend(phone){
+if(!currentUser) return;
+if(!friends[currentUser.phone]) friends[currentUser.phone]=[];
+if(!friends[phone]) friends[phone]=[];
+if(!friends[currentUser.phone].includes(phone)){
+friends[currentUser.phone].push(phone);
+friends[phone].push(currentUser.phone);
+saveAll();
+renderFriends();
+document.getElementById('routeInfo').textContent=`✅ ${phone} — друзьяға қосылды — бір бірін сақтады — осы платформадан — келе береді`;
+}
+}
+function removeFriend(phone){
+if(!currentUser) return;
+friends[currentUser.phone]= (friends[currentUser.phone]||[]).filter(x=>x!==phone);
+friends[phone]= (friends[phone]||[]).filter(x=>x!==currentUser.phone);
+saveAll(); renderFriends();
+}
+function addPost(){
+let t=document.getElementById('postText').value.trim();
+if(!t) return;
+posts.push({phone:currentUser.phone,name:currentUser.name,text:t,time:'қазір'});
+document.getElementById('postText').value='';
+saveAll(); renderFriends();
+}
+function sendMsg(){
+let to=document.getElementById('chatTo').value.trim();
+let msg=document.getElementById('chatMsg').value.trim();
+if(!to||!msg) return;
+messages.push({from:currentUser.phone,to,msg,time:new Date().toLocaleTimeString()});
+document.getElementById('chatMsg').value='';
+saveAll(); renderChat();
+}
+function openChat(phone){document.getElementById('chatTo').value=phone; document.getElementById('chatMsg').focus();}
+function renderChat(){
+if(!currentUser) return;
+let html='';
+messages.filter(m=>m.from===currentUser.phone || m.to===currentUser.phone).slice(-20).forEach(m=>{
+let isMe=m.from===currentUser.phone;
+let other=isMe?m.to:m.from;
+let u=users.find(x=>x.phone===other);
+html+=`<div style="padding:6px 12px;font-size:11px;background:${isMe?'#e3f2fd':'#fff'};border-bottom:1px solid #efefef"><b>${isMe?'Сен → '+ (u?.name||other): (u?.name||other)+' → Сен'}:</b> ${m.msg} <span style="color:#8e8e8e;font-size:9px">${m.time}</span></div>`;
+});
+document.getElementById('chatList').innerHTML=html||'<div style="padding:8px;font-size:11px;color:#8e8e8e">Сообщений жоқ — жоғарыда — номер жаз — сообщение жібер — друзья таста</div>';
 }
 function showMap(el){document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));document.querySelectorAll('.navBtn').forEach(b=>b.classList.remove('active'));if(el&&el.classList) el.classList.add('active');else document.querySelectorAll('.navBtn')[0].classList.add('active');setTimeout(()=>map.invalidateSize(),200);}
-function openPage(name,el){document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));document.getElementById('page-'+name).classList.add('active');document.querySelectorAll('.navBtn').forEach(b=>b.classList.remove('active'));if(el) el.classList.add('active'); if(name==='insta'){let saved=localStorage.getItem('insta_phone'); if(saved){document.getElementById('instaLogin').style.display='none'; document.getElementById('instaFeed').style.display='flex';}else{document.getElementById('instaLogin').style.display='flex'; document.getElementById('instaFeed').style.display='none';}}}
-function loginInsta(){
-let phone=document.getElementById('instaPhone').value.trim();
-let pass=document.getElementById('instaPass').value.trim();
-if(phone.length<10){alert('Номер дұрыс емес — 87066604117');return;}
-if(pass.length<3){alert('Пароль — кемінде 3 символ');return;}
-localStorage.setItem('insta_phone',phone);
-localStorage.setItem('insta_pass',pass);
-document.getElementById('instaLogin').style.display='none';
-document.getElementById('instaFeed').style.display='flex';
-document.getElementById('routeInfo').textContent=`✅ Instagram — кірдің — ${phone} — GEO JOBA`;
-}
-function logoutInsta(){localStorage.removeItem('insta_phone'); document.getElementById('instaFeed').style.display='none'; document.getElementById('instaLogin').style.display='flex';}
+function openPage(name,el){document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));document.getElementById('page-'+name).classList.add('active');document.querySelectorAll('.navBtn').forEach(b=>b.classList.remove('active'));if(el) el.classList.add('active'); if(name==='insta') renderFriends();}
 function switchMap(t){
 cur=t;document.querySelectorAll('.sw').forEach(s=>s.classList.remove('active'));document.getElementById('s-'+t).classList.add('active');
 Object.values(layers).forEach(l=>{if(map.hasLayer(l)) map.removeLayer(l);});
@@ -179,7 +330,7 @@ async function loadFullReal(force=false){
 let saved=localStorage.getItem('geo-joba-cams-fixed'); if(saved&&!force){try{cams=JSON.parse(saved); drawCams(); return;}catch(e){}}
 let osmCams=[]; try{let q=`[out:json][timeout:40];(node["highway"="speed_camera"](40,46,56,87);node["enforcement"](40,46,56,87););out 6000;`;let r=await fetch('https://overpass-api.de/api/interpreter?data='+encodeURIComponent(q));let d=await r.json();d.elements.forEach(el=>{if(el.lat&&el.lon&&!osmCams.find(c=>Math.abs(c.lat-el.lat)<0.0003)) osmCams.push({lat:el.lat,lon:el.lon,speed:parseInt(el.tags?.maxspeed)||60});});}catch(e){}
 cams=[...osmCams];
-let exact=[{lat:42.31815,lon:69.58520,speed:60},{lat:42.32290,lon:69.59580,speed:60},{lat:42.33080,lon:69.61020,speed:60},{lat:42.34170,lon:69.59010,speed:60},{lat:42.34520,lon:69.60050,speed:60},{lat:42.35010,lon:69.62030,speed:60},{lat:42.90000,lon:69.90000,speed:90},{lat:42.80000,lon:69.70000,speed:60},{lat:43.25670,lon:76.92860,speed:60},{lat:51.16940,lon:71.44910,speed:60}];
+let exact=[{lat:42.31815,lon:69.58520,speed:60},{lat:42.32290,lon:69.59580,speed:60},{lat:42.33080,lon:69.61020,speed:60},{lat:42.34170,lon:69.59010,speed:60},{lat:42.34520,lon:69.60050,speed:60},{lat:42.35010,lon:69.62030,speed:60},{lat:42.90000,lon:69.90000,speed:90},{lat:43.25670,lon:76.92860,speed:60},{lat:51.16940,lon:71.44910,speed:60}];
 exact.forEach(c=>{if(!cams.find(x=>Math.abs(x.lat-c.lat)<0.0005)) cams.push(c);});
 localStorage.setItem('geo-joba-cams-fixed',JSON.stringify(cams)); drawCams();
 }
