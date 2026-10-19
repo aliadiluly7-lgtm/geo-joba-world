@@ -1,84 +1,101 @@
 <!DOCTYPE html>
 <html lang="kk">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>GEO JOBA WORLD v5.1 PRO - 3000₸/ай - © Әділұлы Әли</title>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>GEO JOBA WORLD v6.1 KASPI - © Әділұлы Әли</title>
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <style>
-*{margin:0;padding:0;box-sizing:border-box}body{font-family:system-ui;background:#0f172a;color:#e2e8f0}
-.hdr{background:#020617;padding:10px;border-bottom:2px solid #f59e0b;display:flex;justify-content:space-between;align-items:center}
-.btn{padding:8px 12px;border-radius:8px;border:none;font-weight:700;cursor:pointer;margin:2px}
-.btn-y{background:#f59e0b;color:#020617}.btn-b{background:#38bdf8;color:#020617}.btn-g{background:#22c55e;color:#020617}.btn-r{background:#ef4444;color:#fff}
-.main{display:flex;height:calc(100vh - 120px)} .left{width:30%;background:#1e293b;padding:8px;overflow:auto} .right{width:70%;display:flex;flex-direction:column} #map{flex:1} .bottom{height:38%;background:#1e293b;border-top:1px solid #334155;padding:8px;overflow:auto}
-.file-item{padding:6px;background:#0f172a;margin-bottom:4px;border-radius:6px;font-size:12px;cursor:pointer}.file-item.active{background:#f59e0b;color:#020617}
-table{width:100%;font-size:11px;border-collapse:collapse}th,td{border:1px solid #334155;padding:3px}
-.modal{position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.85);display:none;align-items:center;justify-content:center;z-index:9999}
-.modal-box{background:#1e293b;border:2px solid #f59e0b;border-radius:16px;padding:20px;max-width:360px;width:90%;text-align:center}
-.pro-badge{background:#ef4444;color:#fff;padding:2px 8px;border-radius:10px;font-size:10px;margin-left:6px}
-footer{height:28px;background:#020617;text-align:center;font-size:10px;padding:6px;color:#64748b}
-@media(max-width:768px){.main{flex-direction:column}.left{width:100%;height:30%}.right{width:100%;height:70%}}
+*{margin:0;padding:0;box-sizing:border-box}body{font-family:system-ui;background:#000;overflow:hidden}
+.hdr{position:fixed;top:0;left:0;width:100%;height:56px;background:#020617;border-bottom:3px solid #f59e0b;display:flex;justify-content:space-between;align-items:center;padding:0 10px;z-index:1000}
+.btn{padding:8px 12px;border-radius:8px;border:none;font-weight:800;cursor:pointer;font-size:11px;margin:1px}
+.btn-y{background:#f59e0b;color:#020617}.btn-b{background:#38bdf8;color:#020617}.btn-g{background:#22c55e;color:#fff}.btn-w{background:#e2e8f0;color:#020617}.btn-k{background:#f14635;color:#fff}
+#map{position:fixed;top:56px;left:0;width:100%;height:calc(100vh - 56px);z-index:1;background:#fff}
+.cad-panel{position:fixed;top:66px;left:10px;width:360px;max-width:92%;max-height:84vh;background:#fff;border:2px solid #020617;border-radius:14px;box-shadow:0 15px 40px rgba(0,0,0,0.6);z-index:500;display:flex;flex-direction:column;overflow:hidden}
+.cad-header{background:#020617;color:#f59e0b;padding:10px 12px;display:flex;justify-content:space-between;align-items:center;font-weight:800;font-size:13px}
+.cad-tabs{display:flex;background:#f1f5f9;border-bottom:1px solid #cbd5e1}
+.cad-tab{flex:1;padding:8px;border:none;background:transparent;cursor:pointer;font-size:10px;font-weight:800;border-bottom:2px solid transparent}
+.cad-tab.active{border-bottom-color:#f59e0b;background:#fff;color:#020617}
+.cad-body{padding:10px;overflow:auto;background:#fff;color:#020617;font-size:12px}
+.cad-white{background:#ffffff;border:1px dashed #94a3b8;border-radius:8px;padding:8px;min-height:180px}
+.file-item{padding:7px;background:#f8fafc;border:1px solid #e2e8f0;margin-bottom:4px;border-radius:7px;cursor:pointer;font-size:11px;color:#020617}
+.file-item.active{background:#f59e0b;color:#020617}
+table{width:100%;font-size:10px;border-collapse:collapse}th,td{border:1px solid #cbd5e1;padding:4px;color:#020617}
+.modal{position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.85);display:none;align-items:center;justify-content:center;z-index:2000;padding:12px}
+.modal-box{background:#fff;color:#020617;border-radius:18px;padding:18px;max-width:380px;width:100%;border:2px solid #f59e0b}
+.hide{display:none}
+.kaspi-box{background:linear-gradient(135deg,#f14635,#ff8c00);color:#fff;padding:12px;border-radius:12px;margin:8px 0}
 </style>
 </head>
 <body>
 <div class="hdr">
-<div><b>GEO JOBA WORLD v5.1 PRO</b><br><span style="font-size:10px;color:#fbbf24">© Әділұлы Әли | <span id="proStatus">🆓 ТЕГІН</span> | Шымкент</span></div>
+<div><b style="color:#f59e0b">GEO JOBA WORLD v6.1</b><br><span style="font-size:8px;color:#94a3b8">© Әділұлы Әли | <span id="proStatus">🆓 ТЕГІН 50 нүкте</span></span></div>
 <div>
+<button class="btn btn-w" onclick="togglePanel()">⚙️</button>
 <label class="btn btn-y" style="cursor:pointer">📁 ПАПКА<input type="file" id="folderInput" webkitdirectory multiple style="display:none"></label>
-<button class="btn btn-g" onclick="showProModal()">💎 PRO 3000₸/ай</button>
+<button class="btn btn-b" onclick="switchMode()">🗺️/📐</button>
+<button class="btn btn-k" onclick="showPro()">💳 KASPI 3000₸</button>
 </div>
 </div>
-<div class="main">
-<div class="left"><b style="font-size:12px">📁 Файлдар:</b><div id="fileList" style="margin-top:8px;font-size:11px;color:#64748b">Папка таңда...</div><div id="folderInfo" style="margin-top:8px;font-size:11px"></div></div>
-<div class="right"><div id="map"></div><div class="bottom"><div id="coordTable"><b>📍 Координат:</b> Тегін — 50 нүкте. PRO — шексіз!</div><div id="calcResult" style="margin-top:6px"></div></div></div>
-</div>
-<footer>© 2026 v5.1 PRO | Автор: Әділұлы Әли | 🆓 50 нүкте тегін | 💎 PRO 3000₸/ай | Шымкент</footer>
+<div id="map"></div>
 
-<!-- PRO MODAL -->
-<div id="proModal" class="modal">
-<div class="modal-box">
-<h3 style="color:#f59e0b">💎 PRO ҚОСУ — 3000₸/АЙ</h3>
-<p style="font-size:12px;margin:10px 0;color:#cbd5e1">Тегін нұсқада 50 нүкте ғана. PRO-да шексіз!</p>
-<div style="background:#0f172a;padding:10px;border-radius:8px;text-align:left;font-size:12px;margin:10px 0">
-✅ Шексіз нүкте, папка<br>✅ DXF, KML, GPX, DWG<br>✅ Объем, Отклонения<br>✅ PDF отчет, Trimble RTK<br>✅ Обновления тегін
+<div id="cadPanel" class="cad-panel">
+<div class="cad-header"><span>⚙️ ПРОЕКТ ЦЕНТРЫ - KASPI</span><button onclick="togglePanel()" style="background:transparent;border:none;color:#fff;cursor:pointer;font-size:18px">✕</button></div>
+<div class="cad-tabs">
+<button class="cad-tab active" onclick="setCadTab('project',this)">📁 ПРОЕКТ</button>
+<button class="cad-tab" onclick="setCadTab('volume',this)">📦 ОБЪЕМ</button>
+<button class="cad-tab" onclick="setCadTab('teams',this)">👷 КОМАНДА</button>
+<button class="cad-tab" onclick="setCadTab('points',this)">📍 ТОЧКА</button>
 </div>
-<div style="background:#020617;padding:10px;border-radius:8px;margin:10px 0">
-<b style="font-size:13px">Төлем: Kaspi Gold</b><br>
-<span style="font-size:11px;color:#94a3b8">Номеріңді осында жаз: 8 7XX XXX XX XX<br>Комментарий: GEO PRO + твой номер</span><br><br>
-<b style="color:#22c55e">Акция: 1-ші ай — 990₸!</b><br><span style="font-size:11px">Сосын — 3000₸/ай</span>
-</div>
-<input id="proKeyInput" placeholder="PRO кілтін енгіз: PRO-ALI-XXXX" style="width:100%;padding:10px;border-radius:8px;border:1px solid #334155;background:#0f172a;color:#fff;margin:8px 0">
-<button class="btn btn-g" style="width:100%" onclick="activatePro()">🔓 PRO ҚОСУ</button>
-<button class="btn btn-r" style="width:100%;margin-top:6px" onclick="hideProModal()">Жабу</button>
-<div style="font-size:10px;color:#64748b;margin-top:8px">Кілттер: PRO-ALI-2026 / PRO-TEST-30 / ALI-SHYMKENT-PRO (тест үшін)</div>
+<div class="cad-body">
+<div id="tab-project"><div style="font-weight:800">📁 Проект файлдары:</div><div id="fileList" style="color:#64748b;margin:6px 0">Папка таңда... CSV, DXF, KML</div><div id="folderInfo" style="font-size:10px;color:#64748b"></div><div class="cad-white" id="cadPreview"><b>📐 CAD Превью (АҚ ФОН):</b><div id="cadDraw" style="font-size:10px;color:#64748b;margin-top:6px">Точка лақтырғанда осында сызылады. Карта үлкен тұрады!</div></div></div>
+<div id="tab-volume" class="hide"><div style="font-weight:800">📦 Объем (Бөлек!):</div><div style="background:#f8fafc;padding:8px;border-radius:8px;margin:6px 0;font-size:11px">Нүкте: <b id="volCount">0</b><br>Аудан: <b id="volArea">0 м²</b><br>Орта H: <b id="volH">0 м</b><br>Көлем: <b id="volVol" style="color:#ef4444">0 м³</b></div><button class="btn btn-g" style="width:100%" onclick="calcVol()">📦 ОБЪЕМ ЕСЕПТЕ</button><div id="volResult" style="margin-top:6px;font-size:11px"></div></div>
+<div id="tab-teams" class="hide"><div style="font-weight:800">👷 Командалар (Бөлек проект):</div><div style="font-size:11px;background:#fef3c7;padding:8px;border-radius:8px;margin:6px 0">PRO+ 9900₸/ай<br>Әр команданың проекті бөлек!</div><div class="file-item">👷 Бригада-1 Шымкент (Актив)</div></div>
+<div id="tab-points" class="hide"><div style="font-weight:800">📍 Точкалар / Сызу:</div><div id="coordTable" style="margin-top:6px">CSV аш!</div><div style="margin-top:8px"><button class="btn btn-b" style="width:48%" onclick="drawLines()">📏 СЫЗУ</button><button class="btn btn-w" style="width:48%" onclick="clearDraw()">🧹 ӨШІРУ</button></div></div>
 </div>
 </div>
+
+<!-- KASPI MODAL - ОСЫ ЖЕРДЕ АҚША САҒАН ТҮСЕДІ! -->
+<div id="proModal" class="modal"><div class="modal-box">
+<h3 style="color:#f14635;text-align:center">💳 Kaspi Gold төлем</h3>
+<div class="kaspi-box">
+<div style="font-size:13px;font-weight:800">💎 GEO JOBA PRO 3000₸/ай</div>
+<div style="font-size:11px;margin-top:4px">👤 Алушы: Әділұлы Әли<br>📱 Kaspi: <b style="font-size:14px">87066604117</b><br>💰 Сома: 3000₸ (1-ші ай 990₸ акция!)</div>
+</div>
+<div style="background:#f8fafc;padding:10px;border-radius:10px;font-size:11px;margin:8px 0">
+<b>Қалай төлеу керек:</b><br>
+1. Төмендегі кнопкамен номерді көшіріп ал<br>
+2. Kaspi қосымшасы -> Переводы -> Клиенту Kaspi<br>
+3. <b>87066604117</b> енгіз, 3000₸ жібер<br>
+4. Скриншотты WhatsApp-қа жібер, кілт аласың!
+</div>
+<button class="btn btn-k" style="width:100%;padding:12px;font-size:13px" onclick="copyKaspi()">📋 НОМЕРДІ КӨШІРУ: 87066604117</button>
+<a id="waLink" href="https://wa.me/77066604117?text=Salam%20PRO%20alam%203000%20zhberdim%20skrinshot" target="_blank" class="btn btn-g" style="width:100%;display:block;text-align:center;margin-top:6px;padding:12px;text-decoration:none;font-size:13px">💬 WHATSAPP-ҚА СКРИНШОТ ЖІБЕРУ</a>
+<input id="proKey" placeholder="Кілт: PRO-ALI-2026" style="width:100%;padding:12px;border-radius:10px;border:2px solid #e2e8f0;margin:10px 0">
+<button class="btn btn-y" style="width:100%;padding:12px" onclick="activatePro()">🔓 PRO ҚОСУ</button>
+<button class="btn btn-w" style="width:100%;margin-top:6px" onclick="hidePro()">Жабу</button>
+<div style="font-size:9px;color:#64748b;text-align:center;margin-top:8px">Ақша тікелей Әділұлы Әли Kaspi-іне түседі. Карта номер жария емес, қауіпсіз!</div>
+</div></div>
 
 <script>
-var map=L.map('map').setView([42.32,69.59],13); L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
-var allPoints=[],layers=[]; var folderInput=document.getElementById('folderInput');
-var isPro=false, proExpiry=null;
-function loadPro(){ var data=localStorage.getItem('geo_pro_v51'); if(data){ try{ var j=JSON.parse(data); var exp=new Date(j.expiry); if(exp>new Date()){ isPro=true; proExpiry=exp; document.getElementById('proStatus').innerHTML='💎 PRO '+(Math.ceil((exp-new Date())/86400000))+' күн қалды'; document.getElementById('proStatus').style.color='#22c55e'; } else { localStorage.removeItem('geo_pro_v51'); } }catch(e){} } }
-loadPro();
-function showProModal(){document.getElementById('proModal').style.display='flex'} function hideProModal(){document.getElementById('proModal').style.display='none'}
-function activatePro(){ var key=document.getElementById('proKeyInput').value.trim().toUpperCase(); var validKeys=['PRO-ALI-2026','PRO-TEST-30','ALI-SHYMKENT-PRO','PRO-ALI']; var ok=validKeys.some(k=>key.includes(k)) || key.startsWith('PRO-'); if(!ok){ alert('❌ Кілт қате! Kaspi-ге 3000₸ жіберіп, кілт алыңыз!'); return; } var expiry=new Date(); expiry.setDate(expiry.getDate()+30); localStorage.setItem('geo_pro_v51',JSON.stringify({key:key,expiry:expiry.toISOString(),price:'3000/ай'})); isPro=true; proExpiry=expiry; alert('✅ PRO ҚОСЫЛДЫ! 30 күн! Рахмет, бауырым! Алла разы болсын!'); hideProModal(); loadPro(); location.reload(); }
-
-folderInput.addEventListener('change',function(e){
-  var files=e.target.files; var list=document.getElementById('fileList'); list.innerHTML=''; allPoints=[]; layers.forEach(l=>map.removeLayer(l)); layers=[];
-  document.getElementById('folderInfo').innerHTML='📦 '+files.length+' файл';
-  for(var i=0;i<files.length;i++){let f=files[i]; let div=document.createElement('div'); div.className='file-item'; div.textContent=f.name; div.onclick=function(){openFile(f,div)}; list.appendChild(div);}
-});
-function openFile(file,el){ document.querySelectorAll('.file-item').forEach(d=>d.classList.remove('active')); el.classList.add('active'); var r=new FileReader(); r.onload=function(ev){ parseFile(file.name,ev.target.result); }; r.readAsText(file); }
-function parseFile(name,content){
-  if((name.endsWith('.csv')||name.endsWith('.txt'))){ var lines=content.trim().split('\n'); if(lines.length>50 && !isPro){ showProModal(); document.getElementById('coordTable').innerHTML='🔒 <b>'+lines.length+' нүкте!</b> Тегін нұсқада 50 ғана! <br><button class="btn btn-y" onclick="showProModal()">💎 PRO 3000₸/ай — АШУ</button>'; return; } parseCSV(content,name); }
-  else if(name.endsWith('.kml')){ parseKML(content); }
-  else if(name.endsWith('.dxf')){ if(!isPro){ showProModal(); document.getElementById('coordTable').innerHTML='🔒 DXF — тек PRO-да! 3000₸/ай'; return; } document.getElementById('coordTable').innerHTML='📐 DXF табылды — PRO режимде ашылды!'; }
-  else { document.getElementById('coordTable').innerHTML='<b>'+name+'</b> ашылды'; }
-}
-function parseCSV(txt,name){ var lines=txt.split('\n'); var pts=[]; var html='<b>'+name+' ('+lines.length+')</b><table><tr><th>N</th><th>Lat</th><th>Lng</th><th>H</th></tr>'; lines.forEach((l,idx)=>{ var p=l.split(/[\s,;]+/); if(p.length>=2){ var x=parseFloat(p[1]), y=parseFloat(p[2]); var lat=y>1000?42.32+y/100000:parseFloat(p[0]), lng=x>1000?69.59+x/100000:parseFloat(p[1]); var h=parseFloat(p[3])||0; if(!isNaN(lat)&&!isNaN(lng)){ pts.push([lat,lng,h]); html+='<tr><td>'+(idx+1)+'</td><td>'+lat.toFixed(5)+'</td><td>'+lng.toFixed(5)+'</td><td>'+h+'</td></tr>'; } } }); html+='</table>'; document.getElementById('coordTable').innerHTML=html; if(pts.length){ pts.forEach(p=>{ var m=L.circleMarker([p[0],p[1]],{radius:4,color:isPro?'#f59e0b':'#22c55e'}).addTo(map); layers.push(m); }); map.fitBounds(L.latLngBounds(pts.map(p=>[p[0],p[1]]))); allPoints=pts; document.getElementById('calcResult').innerHTML='📦 Аудан ~ есептелді | Нүкте: '+pts.length+' | '+(isPro?'💎 PRO':'🆓 ТЕГІН'); } }
-function parseKML(txt){ var parser=new DOMParser(); var kml=parser.parseFromString(txt,"text/xml"); var coords=kml.getElementsByTagName("coordinates"); var pts=[]; for(var i=0;i<coords.length;i++){ var c=coords[i].textContent.trim().split(/\s+/); c.forEach(s=>{ var p=s.split(','); if(p.length>=2){ var lng=parseFloat(p[0]), lat=parseFloat(p[1]); if(!isNaN(lat)) pts.push([lat,lng]); } }); } if(pts.length){ var pl=L.polyline(pts,{color:'#f59e0b'}).addTo(map); layers.push(pl); map.fitBounds(pl.getBounds()); document.getElementById('coordTable').innerHTML='🗺️ KML: '+pts.length+' нүкте (PRO)'; } }
-document.addEventListener('contextmenu',e=>e.preventDefault());
+var map=L.map('map',{zoomControl:false}).setView([42.32,69.59],13); L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
+var isCad=false, allPoints=[],layers=[],isPro=false; L.control.zoom({position:'bottomright'}).addTo(map);
+function loadPro(){var d=localStorage.getItem('geo_pro_v61'); if(d){try{var j=JSON.parse(d); if(new Date(j.expiry)>new Date()){isPro=true; document.getElementById('proStatus').innerHTML='💎 PRO '+(Math.ceil((new Date(j.expiry)-new Date())/86400000))+' күн';}}catch(e){}}} loadPro();
+function togglePanel(){var p=document.getElementById('cadPanel'); p.style.display=p.style.display=='none'?'flex':'none'; if(p.style.display=='') p.style.display='flex';}
+function setCadTab(name,el){document.querySelectorAll('.cad-tab').forEach(b=>b.classList.remove('active')); el.classList.add('active'); ['project','volume','teams','points'].forEach(t=>{document.getElementById('tab-'+t).classList.add('hide')}); document.getElementById('tab-'+name).classList.remove('hide');}
+function switchMode(){isCad=!isCad; if(isCad){document.getElementById('map').style.background='#ffffff';} else {document.getElementById('map').style.background='#fff';} }
+function showPro(){document.getElementById('proModal').style.display='flex'} function hidePro(){document.getElementById('proModal').style.display='none'}
+function copyKaspi(){navigator.clipboard.writeText('87066604117'); alert('✅ Көшірілді: 87066604117\n\nKaspi-ге барып қойып, 3000₸ жібер!'); window.open('https://pay.kaspi.kz/', '_blank');}
+function activatePro(){var k=document.getElementById('proKey').value.trim().toUpperCase(); if(k.includes('PRO')||k.includes('ALI')||k=='87066604117'){var exp=new Date(); exp.setDate(exp.getDate()+30); localStorage.setItem('geo_pro_v61',JSON.stringify({expiry:exp.toISOString()})); alert('✅ PRO 30 күн қосылды! Рахмет! 87066604117-ге түсті!'); location.reload();} else alert('❌ Кілт қате. WhatsApp-қа жаз: 87066604117');}
+var folderInput=document.getElementById('folderInput');
+folderInput.addEventListener('change',function(e){var files=e.target.files; var list=document.getElementById('fileList'); list.innerHTML=''; layers.forEach(l=>map.removeLayer(l)); layers=[]; document.getElementById('folderInfo').innerHTML='📦 '+files.length+' файл'; for(var i=0;i<files.length;i++){let f=files[i]; let div=document.createElement('div'); div.className='file-item'; div.textContent=f.name; div.onclick=function(){openFile(f,div)}; list.appendChild(div);} });
+function openFile(file,el){document.querySelectorAll('.file-item').forEach(d=>d.classList.remove('active')); el.classList.add('active'); var r=new FileReader(); r.onload=function(ev){parseFile(file.name,ev.target.result)}; r.readAsText(file);}
+function parseFile(name,content){ if(name.match(/\.(csv|txt)$/i)){ parseCSV(content,name);} else if(name.match(/\.kml$/i)){ parseKML(content);} else {document.getElementById('coordTable').innerHTML=name+' ашылды';}}
+function parseCSV(txt,name){ var lines=txt.split('\n'); var pts=[]; var html='<table><tr><th>N</th><th>Lat</th><th>Lng</th><th>H</th></tr>'; lines.forEach((l,idx)=>{var p=l.split(/[\s,;]+/); if(p.length>=2){var x=parseFloat(p[1]), y=parseFloat(p[2]); var lat=y>1000?42.32+y/100000:parseFloat(p[0]), lng=x>1000?69.59+x/100000:parseFloat(p[1]); var h=parseFloat(p[3])||0; if(!isNaN(lat)&&!isNaN(lng)){pts.push([lat,lng,h]); html+='<tr><td>'+(idx+1)+'</td><td>'+lat.toFixed(5)+'</td><td>'+lng.toFixed(5)+'</td><td>'+h+'</td></tr>';}}}); html+='</table>'; document.getElementById('coordTable').innerHTML='<b>'+name+' ('+pts.length+')</b>'+html; setCadTab('points',document.querySelectorAll('.cad-tab')[3]); if(pts.length){ pts.forEach(p=>{var m=L.circleMarker([p[0],p[1]],{radius:6,color:'#f14635',fillColor:'#fff',fillOpacity:1,weight:2}).addTo(map).bindPopup('H:'+p[2]); layers.push(m);}); var pl=L.polyline(pts.map(p=>[p[0],p[1]]),{color:'#020617',weight:2,dashArray:'5,5'}).addTo(map); layers.push(pl); map.fitBounds(L.latLngBounds(pts.map(p=>[p[0],p[1]]))); allPoints=pts; document.getElementById('volCount').textContent=pts.length; document.getElementById('cadDraw').innerHTML='<div style="color:#22c55e">✅ '+pts.length+' точка лақтырылды!</div>';}}
+function parseKML(txt){var parser=new DOMParser(); var kml=parser.parseFromString(txt,"text/xml"); var coords=kml.getElementsByTagName("coordinates"); var pts=[]; for(var i=0;i<coords.length;i++){var c=coords[i].textContent.trim().split(/\s+/); c.forEach(s=>{var p=s.split(','); if(p.length>=2){var lng=parseFloat(p[0]), lat=parseFloat(p[1]); if(!isNaN(lat)) pts.push([lat,lng]);}});} if(pts.length){var pl=L.polyline(pts,{color:'#f59e0b',weight:3}).addTo(map); layers.push(pl); map.fitBounds(pl.getBounds());}}
+function calcVol(){if(allPoints.length<3){alert('3 нүкте керек');return;} var area=0; for(var i=0;i<allPoints.length;i++){var j=(i+1)%allPoints.length; area+=allPoints[i][0]*allPoints[j][1]; area-=allPoints[j][0]*allPoints[i][1];} area=Math.abs(area/2)*111000*111000; var avgH=allPoints.reduce((s,p)=>s+(p[2]||0),0)/allPoints.length; document.getElementById('volArea').textContent=area.toFixed(1)+' м²'; document.getElementById('volH').textContent=avgH.toFixed(2)+' м'; document.getElementById('volVol').textContent=(area*avgH).toFixed(1)+' м³'; document.getElementById('volResult').innerHTML='✅ Есептелді!';}
+function drawLines(){if(allPoints.length<2)return; var pl=L.polyline(allPoints.map(p=>[p[0],p[1]]),{color:'#020617',weight:3}).addTo(map); layers.push(pl);}
+function clearDraw(){layers.forEach(l=>map.removeLayer(l)); layers=[]; allPoints=[]; document.getElementById('coordTable').innerHTML='Тазаланды'; document.getElementById('volCount').textContent='0';}
 </script>
 </body>
 </html>
