@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="kk">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GEO JOBA WORLD v3 - QAZAQ JOLY</title>
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+<style>
+*{margin:0;padding:0;box-sizing:border-box;font-family:Inter,Arial}
+body{display:flex;height:100vh;background:#0f1419;color:white}
+#sidebar{width:380px;background:#151a23;padding:20px;overflow-y:auto;border-right:2px solid #00d4ff}
+h1{color:#00d4ff;font-size:24px;margin-bottom:5px} h1 span{color:#ffde00}
+.subtitle{color:#888;font-size:13px;margin-bottom:20px}
+.card{background:#1e2530;border-radius:12px;padding:15px;margin-bottom:15px;border:1px solid #2a3441}
+.card h3{font-size:14px;color:#00d4ff;margin-bottom:10px}
+.btn{width:100%;padding:12px;border:none;border-radius:8px;font-weight:bold;cursor:pointer;margin-top:8px}
+.btn-blue{background:#00d4ff;color:#000} .btn-yellow{background:#ffde00;color:#000}
+.btn-green{background:#00ff88;color:#000}
+input,select,textarea{width:100%;padding:10px;border-radius:8px;border:1px solid #333;background:#0f1419;color:white;margin-top:6px}
+#map{flex:1} .stat{display:flex;justify-content:space-between;margin:6px 0;font-size:13px}
+.stat b{color:#ffde00}
+</style>
+</head>
+<body>
+<div id="sidebar">
+<h1>GEO JOBA <span>WORLD</span></h1>
+<div class="subtitle">v3 SENIOR • QAZAQ JOLY 🇰🇿 • Shymkent 12°C</div>
+
+<div class="card">
+<h3>📍 ЖОЛ ҚОСУ - Яндекс-те жоқ жол</h3>
+<input id="roadName" placeholder="Жол аты: Мыс: Жаңа құрылыс">
+<select id="roadType"><option>Грунтовка</option><option>Асфальт</option><option>Тропинка</option><option>Стройка</option></select>
+<button class="btn btn-blue" onclick="startDraw()">✏️ Картадан сызуды бастау</button>
+<button class="btn btn-green" onclick="saveRoad()">💾 Сақтау</button>
+<div style="font-size:11px;color:#888;margin-top:8px">Картаны басып нүктелер қой, сосын Сақтау бас</div>
+</div>
+
+<div class="card">
+<h3>📊 Статистика</h3>
+<div class="stat"><span>Қосылған жолдар:</span><b id="count">0</b></div>
+<div class="stat"><span>Пайдаланушы:</span><b>aliadiluly7-lgtm</b></div>
+<div class="stat"><span>Статус:</span><b style="color:#00ff88">● ONLINE</b></div>
+</div>
+
+<div class="card">
+<h3>🚀 Келесі қадам</h3>
+<div style="font-size:12px;line-height:1.6">
+✅ 1. Картада жоқ жолды тап<br>
+✅ 2. Сызып, атын жаз<br>
+✅ 3. Сақтауды бас<br>
+✅ 4. Автомат сақталады (LocalStorage)
+</div>
+<button class="btn btn-yellow" onclick="exportData()">📤 JSON экспорт</button>
+</div>
+</div>
+
+<div id="map"></div>
+
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script>
+var map = L.map('map').setView([42.3417, 69.5901], 13);
+L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{maxZoom:19}).addTo(map);
+var drawing=false, points=[], tempLine=null, savedRoads=JSON.parse(localStorage.getItem('qazaq_joly')||'[]');
+function updateCount(){document.getElementById('count').innerText=savedRoads.length}
+function drawSaved(){savedRoads.forEach(r=>{L.polyline(r.points,{color:'#00d4ff',weight:5}).addTo(map).bindPopup('<b>'+r.name+'</b><br>'+r.type)})}
+drawSaved(); updateCount();
+function startDraw(){drawing=true; points=[]; alert('Енді картаны басып жолды сыз! Екі рет басқанда аяқталады');}
+map.on('click', e=>{
+ if(!drawing) return;
+ points.push([e.latlng.lat, e.latlng.lng]);
+ if(tempLine) map.removeLayer(tempLine);
+ tempLine = L.polyline(points,{color:'#ffde00',dashArray:'10,10'}).addTo(map);
+ L.circleMarker(e.latlng,{radius:6,color:'#ffde00'}).addTo(map);
+});
+map.on('dblclick', ()=>{drawing=false});
+function saveRoad(){
+ if(points.length<2){alert('Кемінде 2 нүкте қой!');return}
+ var name=document.getElementById('roadName').value||'Атаусыз жол';
+ var type=document.getElementById('roadType').value;
+ var road={name:name,type:type,points:points,time:new Date().toISOString()};
+ savedRoads.push(road);
+ localStorage.setItem('qazaq_joly',JSON.stringify(savedRoads));
+ L.polyline(points,{color:'#00d4ff',weight:5}).addTo(map).bindPopup('<b>'+name+'</b>');
+ points=[]; if(tempLine){map.removeLayer(tempLine);tempLine=null}
+ updateCount(); document.getElementById('roadName').value='';
+ alert('✅ Сақталды! '+name);
+}
+function exportData(){
+ var dataStr="data:text/json;charset=utf-8,"+encodeURIComponent(JSON.stringify(savedRoads,null,2));
+ var a=document.createElement('a'); a.href=dataStr; a.download="qazaq_joly_export.json"; a.click();
+}
+</script>
+</body>
+</html>
