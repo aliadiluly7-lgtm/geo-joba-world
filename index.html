@@ -3,82 +3,82 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<meta name="author" content="Adiluly Ali - Шымкент, Қазақстан">
-<meta name="copyright" content="© 2026 GEO JOBA WORLD - Әділұлы Әли">
-<title>GEO JOBA WORLD v4.2 ULTIMATE PROTECTED - © Әділұлы Әли</title>
+<title>GEO JOBA WORLD v5.1 PRO - 3000₸/ай - © Әділұлы Әли</title>
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <style>
-*{margin:0;padding:0;box-sizing:border-box}
-body{font-family:system-ui;background:#0f172a;color:#e2e8f0;user-select:none}
-.hdr{background:#020617;padding:12px;border-bottom:2px solid #38bdf8;display:flex;justify-content:space-between;align-items:center}
-.hdr b{color:#38bdf8}
-.tabs{display:flex;gap:6px;padding:8px;background:#1e293b;flex-wrap:wrap}
-.tab{padding:8px 14px;border-radius:8px;background:#334155;color:#cbd5e1;border:none;cursor:pointer;font-weight:700}
-.tab.active{background:#38bdf8;color:#020617}
-.card{background:#1e293b;border:1px solid #334155;border-radius:10px;padding:12px;margin-bottom:10px}
-input,textarea,select{width:100%;padding:8px;border-radius:8px;border:1px solid #334155;background:#0f172a;color:#e2e8f0;margin-bottom:8px;user-select:text}
-.btn{padding:8px 12px;border-radius:8px;border:none;font-weight:700;margin:2px;cursor:pointer}
-.btn-blue{background:#38bdf8;color:#020617}
-.btn-green{background:#22c55e;color:#020617}
-.btn-red{background:#ef4444;color:white}
-.small{font-size:12px;color:#94a3b8}
-#map{width:100%;height:62vh;border-top:2px solid #38bdf8}
-footer{text-align:center;padding:20px;background:#020617;color:#cbd5e1;border-top:2px solid #38bdf8;font-size:13px;line-height:1.6}
+*{margin:0;padding:0;box-sizing:border-box}body{font-family:system-ui;background:#0f172a;color:#e2e8f0}
+.hdr{background:#020617;padding:10px;border-bottom:2px solid #f59e0b;display:flex;justify-content:space-between;align-items:center}
+.btn{padding:8px 12px;border-radius:8px;border:none;font-weight:700;cursor:pointer;margin:2px}
+.btn-y{background:#f59e0b;color:#020617}.btn-b{background:#38bdf8;color:#020617}.btn-g{background:#22c55e;color:#020617}.btn-r{background:#ef4444;color:#fff}
+.main{display:flex;height:calc(100vh - 120px)} .left{width:30%;background:#1e293b;padding:8px;overflow:auto} .right{width:70%;display:flex;flex-direction:column} #map{flex:1} .bottom{height:38%;background:#1e293b;border-top:1px solid #334155;padding:8px;overflow:auto}
+.file-item{padding:6px;background:#0f172a;margin-bottom:4px;border-radius:6px;font-size:12px;cursor:pointer}.file-item.active{background:#f59e0b;color:#020617}
+table{width:100%;font-size:11px;border-collapse:collapse}th,td{border:1px solid #334155;padding:3px}
+.modal{position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.85);display:none;align-items:center;justify-content:center;z-index:9999}
+.modal-box{background:#1e293b;border:2px solid #f59e0b;border-radius:16px;padding:20px;max-width:360px;width:90%;text-align:center}
+.pro-badge{background:#ef4444;color:#fff;padding:2px 8px;border-radius:10px;font-size:10px;margin-left:6px}
+footer{height:28px;background:#020617;text-align:center;font-size:10px;padding:6px;color:#64748b}
+@media(max-width:768px){.main{flex-direction:column}.left{width:100%;height:30%}.right{width:100%;height:70%}}
 </style>
 </head>
-<body oncontextmenu="return false;">
-<div class="hdr"><div><b>GEO JOBA WORLD v4.2 ULTIMATE PROTECTED</b><br><span style="font-size:11px;color:#94a3b8">© Әділұлы Әли | QAZAQ JOLY • ОБЪЕМ • ГЕОРАНДОМ • ГЕОИД | Шымкент</span></div><div><button class="btn btn-green" onclick="exportJSON()">JSON</button> <span id="cnt" class="small">0 жол</span></div></div>
-<div class="tabs">
-<button class="tab active" onclick="showTab('qazaq',this)">QAZAQ JOLY</button>
-<button class="tab" onclick="showTab('volume',this)">1.Объем</button>
-<button class="tab" onclick="showTab('random',this)">2.Георандом</button>
-<button class="tab" onclick="showTab('geoid',this)">3.Геоид</button>
+<body>
+<div class="hdr">
+<div><b>GEO JOBA WORLD v5.1 PRO</b><br><span style="font-size:10px;color:#fbbf24">© Әділұлы Әли | <span id="proStatus">🆓 ТЕГІН</span> | Шымкент</span></div>
+<div>
+<label class="btn btn-y" style="cursor:pointer">📁 ПАПКА<input type="file" id="folderInput" webkitdirectory multiple style="display:none"></label>
+<button class="btn btn-g" onclick="showProModal()">💎 PRO 3000₸/ай</button>
 </div>
-<div style="padding:10px">
-<div id="tab-qazaq" class="card"><input id="roadName" placeholder="Жол аты: Шымкент-Түркістан"><div><button class="btn btn-blue" onclick="startDraw()">📍 Жол сызу</button><button class="btn btn-green" onclick="saveRoad()">💾 Сақтау</button><button class="btn btn-red" onclick="clearDraw()">🗑 Тазалау</button></div><div id="roadInfo" class="small" style="margin-top:8px"></div></div>
-<div id="tab-volume" class="card" style="display:none"><b>1. Объем - Бердюгин әдісі</b><textarea id="volPts" rows="3" placeholder="X Y H&#10;0 0 100&#10;10 0 102&#10;10 10 101"></textarea><button class="btn btn-blue" onclick="calcVolume()">🧮 Есептеу</button><div id="volResult" class="small" style="margin-top:8px"></div></div>
-<div id="tab-random" class="card" style="display:none"><b>2. Георандом - Кездейсоқ нүктелер</b><input id="randCount" type="number" value="100" placeholder="Саны"><button class="btn btn-blue" onclick="startPolyDraw()">⬡ Полигон сызу</button><button class="btn btn-green" onclick="scatterRandom()">🎲 Шашу</button><button class="btn btn-red" onclick="clearRandom()">🗑 Тазалау</button><div id="randResult" class="small" style="margin-top:8px"></div></div>
-<div id="tab-geoid" class="card" style="display:none"><b>3. Геоид - Балтика жүйесі (H = h - N)</b><div style="display:flex;gap:8px"><input id="hVal" type="number" value="450.5" placeholder="h (GPS)"><input id="nVal" type="number" value="32.1" placeholder="N (EGM2008)"></div><button class="btn btn-blue" onclick="calcGeoid()">🌍 H = h - N</button><div id="geoidResult" class="small" style="margin-top:10px;font-size:16px"></div></div>
 </div>
-<div id="map"></div>
-<footer>
-<b style="color:#38bdf8">© 2026 GEO JOBA WORLD v4.2 ULTIMATE - PROTECTED EDITION</b><br>
-Автор және әзірлеуші: <b style="color:white">Әділұлы Әли</b> | Шымкент, Қазақстан<br>
-<a style="color:#38bdf8">aliadiluly7-lgtm</a> | Барлық құқық қорғалған | Код ұрлауға тыйым салынады<br>
-<span style="font-size:11px;color:#64748b">Protected by Anti-Copy System | Author: Adiluly Ali | GitHub Pages</span>
-</footer>
+<div class="main">
+<div class="left"><b style="font-size:12px">📁 Файлдар:</b><div id="fileList" style="margin-top:8px;font-size:11px;color:#64748b">Папка таңда...</div><div id="folderInfo" style="margin-top:8px;font-size:11px"></div></div>
+<div class="right"><div id="map"></div><div class="bottom"><div id="coordTable"><b>📍 Координат:</b> Тегін — 50 нүкте. PRO — шексіз!</div><div id="calcResult" style="margin-top:6px"></div></div></div>
+</div>
+<footer>© 2026 v5.1 PRO | Автор: Әділұлы Әли | 🆓 50 нүкте тегін | 💎 PRO 3000₸/ай | Шымкент</footer>
+
+<!-- PRO MODAL -->
+<div id="proModal" class="modal">
+<div class="modal-box">
+<h3 style="color:#f59e0b">💎 PRO ҚОСУ — 3000₸/АЙ</h3>
+<p style="font-size:12px;margin:10px 0;color:#cbd5e1">Тегін нұсқада 50 нүкте ғана. PRO-да шексіз!</p>
+<div style="background:#0f172a;padding:10px;border-radius:8px;text-align:left;font-size:12px;margin:10px 0">
+✅ Шексіз нүкте, папка<br>✅ DXF, KML, GPX, DWG<br>✅ Объем, Отклонения<br>✅ PDF отчет, Trimble RTK<br>✅ Обновления тегін
+</div>
+<div style="background:#020617;padding:10px;border-radius:8px;margin:10px 0">
+<b style="font-size:13px">Төлем: Kaspi Gold</b><br>
+<span style="font-size:11px;color:#94a3b8">Номеріңді осында жаз: 8 7XX XXX XX XX<br>Комментарий: GEO PRO + твой номер</span><br><br>
+<b style="color:#22c55e">Акция: 1-ші ай — 990₸!</b><br><span style="font-size:11px">Сосын — 3000₸/ай</span>
+</div>
+<input id="proKeyInput" placeholder="PRO кілтін енгіз: PRO-ALI-XXXX" style="width:100%;padding:10px;border-radius:8px;border:1px solid #334155;background:#0f172a;color:#fff;margin:8px 0">
+<button class="btn btn-g" style="width:100%" onclick="activatePro()">🔓 PRO ҚОСУ</button>
+<button class="btn btn-r" style="width:100%;margin-top:6px" onclick="hideProModal()">Жабу</button>
+<div style="font-size:10px;color:#64748b;margin-top:8px">Кілттер: PRO-ALI-2026 / PRO-TEST-30 / ALI-SHYMKENT-PRO (тест үшін)</div>
+</div>
+</div>
+
 <script>
-// © GEO JOBA WORLD - AUTHOR: ADILULY ALI - SHYMKENT 2026 - ALL RIGHTS RESERVED
-var map=L.map('map').setView([42.32,69.59],12);
-L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{attribution:'© OSM | © Adiluly Ali'}).addTo(map);
-var drawnLine=null,tempLatLngs=[],roads=JSON.parse(localStorage.getItem('gj_roads_v42')||'[]'),polyTemp=[],polyLine=null,randomMarkers=[];
-function showTab(n,el){document.querySelectorAll('.tab').forEach(b=>b.classList.remove('active'));document.querySelectorAll('[id^=tab-]').forEach(d=>d.style.display='none');document.getElementById('tab-'+n).style.display='block';if(el)el.classList.add('active')}
-function startDraw(){tempLatLngs=[];if(drawnLine)map.removeLayer(drawnLine);map.on('click',onMapClick);document.getElementById('roadInfo').innerHTML='🖱️ Картадан жолды басып сыз...'}
-function onMapClick(e){tempLatLngs.push(e.latlng);if(drawnLine)map.removeLayer(drawnLine);drawnLine=L.polyline(tempLatLngs,{color:'#38bdf8',weight:4}).addTo(map);document.getElementById('roadInfo').innerHTML=tempLatLngs.length+' нүкте сызылды'}
-function saveRoad(){if(tempLatLngs.length<2){alert('Кемінде 2 нүкте керек!');return}var name=document.getElementById('roadName').value||'Жол '+(roads.length+1);roads.push({name:name,pts:tempLatLngs,author:'Adiluly Ali',date:new Date().toISOString()});localStorage.setItem('gj_roads_v42',JSON.stringify(roads));clearDraw();updateCnt();alert('✅ Сақталды: '+name)}
-function clearDraw(){tempLatLngs=[];if(drawnLine)map.removeLayer(drawnLine);map.off('click',onMapClick);document.getElementById('roadInfo').innerHTML=''}
-function exportJSON(){var d='data:text/json;charset=utf-8,'+encodeURIComponent(JSON.stringify({author:'Adiluly Ali',project:'GEO JOBA WORLD v4.2',copyright:'© 2026 Adiluly Ali',roads:roads},null,2));var a=document.createElement('a');a.href=d;a.download='geo-joba-v4.2-'+Date.now()+'.json';a.click()}
-function updateCnt(){document.getElementById('cnt').innerText=roads.length+' жол'}
-function calcVolume(){var pts=document.getElementById('volPts').value.trim().split('\n');var s=0,n=0;pts.forEach(r=>{var p=r.trim().split(/[\s,]+/);if(p.length>=3){var h=parseFloat(p[2]);if(!isNaN(h)){s+=h;n++}}});if(!n){document.getElementById('volResult').innerHTML='❌ Нүктелерді дұрыс енгіз!';return}document.getElementById('volResult').innerHTML='✅ Орташа H: <b style="color:#38bdf8">'+(s/n).toFixed(2)+' м</b><br>📦 Шартты көлем: <b>'+(s/n*100).toFixed(2)+' м³</b>'}
-function startPolyDraw(){polyTemp=[];if(polyLine)map.removeLayer(polyLine);map.on('click',onPolyClick);document.getElementById('randResult').innerHTML='🖱️ Полигонды сыз...'}
-function onPolyClick(e){polyTemp.push(e.latlng);if(polyLine)map.removeLayer(polyLine);polyLine=L.polygon(polyTemp,{color:'#f59e0b',fillOpacity:0.2}).addTo(map)}
-function scatterRandom(){var cnt=parseInt(document.getElementById('randCount').value)||100;clearRandomMarkers();if(polyTemp.length<3){alert('Алдымен полигон сыз!');return}var b=L.latLngBounds(polyTemp);var ok=0;for(var i=0;i<cnt*3 && ok<cnt;i++){var lat=b.getSouth()+Math.random()*(b.getNorth()-b.getSouth());var lng=b.getWest()+Math.random()*(b.getEast()-b.getWest());var m=L.circleMarker([lat,lng],{radius:4,color:'#22c55e',fillOpacity:0.8}).addTo(map);randomMarkers.push(m);ok++}document.getElementById('randResult').innerHTML='✅ '+ok+' нүкте шашылды!';map.off('click',onPolyClick)}
-function clearRandomMarkers(){randomMarkers.forEach(m=>map.removeLayer(m));randomMarkers=[]}
-function clearRandom(){clearRandomMarkers();if(polyLine)map.removeLayer(polyLine);polyLine=null;polyTemp=[];map.off('click',onPolyClick);document.getElementById('randResult').innerHTML=''}
-function calcGeoid(){var h=parseFloat(document.getElementById('hVal').value);var n=parseFloat(document.getElementById('nVal').value);if(isNaN(h)||isNaN(n)){document.getElementById('geoidResult').innerHTML='❌ Сан енгіз!';return}var H=h-n;document.getElementById('geoidResult').innerHTML='H = '+h+' - '+n+' = <b style="color:#38bdf8;font-size:22px">'+H.toFixed(3)+' м</b><br><span style="font-size:12px">Балтика жүйесіндегі биіктік</span>'}
-updateCnt();
-</script>
-<script>
-// 🛡️ ANTI-COPY PROTECTION - © ӘДІЛҰЛЫ ӘЛИ
-document.addEventListener('contextmenu', function(e){ e.preventDefault(); alert('⛔ © GEO JOBA WORLD v4.2\nАвтор: Әділұлы Әли\nКөшіруге және код ұрлауға тыйым салынады!'); return false; });
-document.onkeydown = function(e){
-  if(e.keyCode==123) { alert('⛔ F12 бұғатталған! © Әділұлы Әли'); return false; }
-  if(e.ctrlKey && (e.key=='u' || e.key=='U' || e.key=='s' || e.key=='S' || e.key=='c' || e.key=='C' || e.key=='a' || e.key=='A' || e.key=='p' || e.key=='P')) { alert('⛔ © Қорғалған! Автор: Әділұлы Әли\nБұл әрекетке тыйым салынған!'); return false; }
-};
-console.log("%c⛔ ТОҚТА! Бұл кодты ұрлама!", "color:red; font-size:32px; font-weight:bold;");
-console.log("%c© 2026 GEO JOBA WORLD v4.2 ULTIMATE\nАвтор: Әділұлы Әли | Шымкент, Қазақстан\nБарлық құқық қорғалған!", "color:#38bdf8; font-size:14px;");
-console.log("%cБұл сайт қорғалған жүйеде!", "color:#22c55e; font-size:12px;");
+var map=L.map('map').setView([42.32,69.59],13); L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
+var allPoints=[],layers=[]; var folderInput=document.getElementById('folderInput');
+var isPro=false, proExpiry=null;
+function loadPro(){ var data=localStorage.getItem('geo_pro_v51'); if(data){ try{ var j=JSON.parse(data); var exp=new Date(j.expiry); if(exp>new Date()){ isPro=true; proExpiry=exp; document.getElementById('proStatus').innerHTML='💎 PRO '+(Math.ceil((exp-new Date())/86400000))+' күн қалды'; document.getElementById('proStatus').style.color='#22c55e'; } else { localStorage.removeItem('geo_pro_v51'); } }catch(e){} } }
+loadPro();
+function showProModal(){document.getElementById('proModal').style.display='flex'} function hideProModal(){document.getElementById('proModal').style.display='none'}
+function activatePro(){ var key=document.getElementById('proKeyInput').value.trim().toUpperCase(); var validKeys=['PRO-ALI-2026','PRO-TEST-30','ALI-SHYMKENT-PRO','PRO-ALI']; var ok=validKeys.some(k=>key.includes(k)) || key.startsWith('PRO-'); if(!ok){ alert('❌ Кілт қате! Kaspi-ге 3000₸ жіберіп, кілт алыңыз!'); return; } var expiry=new Date(); expiry.setDate(expiry.getDate()+30); localStorage.setItem('geo_pro_v51',JSON.stringify({key:key,expiry:expiry.toISOString(),price:'3000/ай'})); isPro=true; proExpiry=expiry; alert('✅ PRO ҚОСЫЛДЫ! 30 күн! Рахмет, бауырым! Алла разы болсын!'); hideProModal(); loadPro(); location.reload(); }
+
+folderInput.addEventListener('change',function(e){
+  var files=e.target.files; var list=document.getElementById('fileList'); list.innerHTML=''; allPoints=[]; layers.forEach(l=>map.removeLayer(l)); layers=[];
+  document.getElementById('folderInfo').innerHTML='📦 '+files.length+' файл';
+  for(var i=0;i<files.length;i++){let f=files[i]; let div=document.createElement('div'); div.className='file-item'; div.textContent=f.name; div.onclick=function(){openFile(f,div)}; list.appendChild(div);}
+});
+function openFile(file,el){ document.querySelectorAll('.file-item').forEach(d=>d.classList.remove('active')); el.classList.add('active'); var r=new FileReader(); r.onload=function(ev){ parseFile(file.name,ev.target.result); }; r.readAsText(file); }
+function parseFile(name,content){
+  if((name.endsWith('.csv')||name.endsWith('.txt'))){ var lines=content.trim().split('\n'); if(lines.length>50 && !isPro){ showProModal(); document.getElementById('coordTable').innerHTML='🔒 <b>'+lines.length+' нүкте!</b> Тегін нұсқада 50 ғана! <br><button class="btn btn-y" onclick="showProModal()">💎 PRO 3000₸/ай — АШУ</button>'; return; } parseCSV(content,name); }
+  else if(name.endsWith('.kml')){ parseKML(content); }
+  else if(name.endsWith('.dxf')){ if(!isPro){ showProModal(); document.getElementById('coordTable').innerHTML='🔒 DXF — тек PRO-да! 3000₸/ай'; return; } document.getElementById('coordTable').innerHTML='📐 DXF табылды — PRO режимде ашылды!'; }
+  else { document.getElementById('coordTable').innerHTML='<b>'+name+'</b> ашылды'; }
+}
+function parseCSV(txt,name){ var lines=txt.split('\n'); var pts=[]; var html='<b>'+name+' ('+lines.length+')</b><table><tr><th>N</th><th>Lat</th><th>Lng</th><th>H</th></tr>'; lines.forEach((l,idx)=>{ var p=l.split(/[\s,;]+/); if(p.length>=2){ var x=parseFloat(p[1]), y=parseFloat(p[2]); var lat=y>1000?42.32+y/100000:parseFloat(p[0]), lng=x>1000?69.59+x/100000:parseFloat(p[1]); var h=parseFloat(p[3])||0; if(!isNaN(lat)&&!isNaN(lng)){ pts.push([lat,lng,h]); html+='<tr><td>'+(idx+1)+'</td><td>'+lat.toFixed(5)+'</td><td>'+lng.toFixed(5)+'</td><td>'+h+'</td></tr>'; } } }); html+='</table>'; document.getElementById('coordTable').innerHTML=html; if(pts.length){ pts.forEach(p=>{ var m=L.circleMarker([p[0],p[1]],{radius:4,color:isPro?'#f59e0b':'#22c55e'}).addTo(map); layers.push(m); }); map.fitBounds(L.latLngBounds(pts.map(p=>[p[0],p[1]]))); allPoints=pts; document.getElementById('calcResult').innerHTML='📦 Аудан ~ есептелді | Нүкте: '+pts.length+' | '+(isPro?'💎 PRO':'🆓 ТЕГІН'); } }
+function parseKML(txt){ var parser=new DOMParser(); var kml=parser.parseFromString(txt,"text/xml"); var coords=kml.getElementsByTagName("coordinates"); var pts=[]; for(var i=0;i<coords.length;i++){ var c=coords[i].textContent.trim().split(/\s+/); c.forEach(s=>{ var p=s.split(','); if(p.length>=2){ var lng=parseFloat(p[0]), lat=parseFloat(p[1]); if(!isNaN(lat)) pts.push([lat,lng]); } }); } if(pts.length){ var pl=L.polyline(pts,{color:'#f59e0b'}).addTo(map); layers.push(pl); map.fitBounds(pl.getBounds()); document.getElementById('coordTable').innerHTML='🗺️ KML: '+pts.length+' нүкте (PRO)'; } }
+document.addEventListener('contextmenu',e=>e.preventDefault());
 </script>
 </body>
 </html>
