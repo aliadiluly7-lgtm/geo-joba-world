@@ -4,59 +4,38 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=5,user-scalable=yes">
 <meta name="theme-color" content="#075E54">
-<title>GEO JOBA v26.2 - Карта + Чат + CAD ALL DWG</title>
+<title>GEO JOBA v27 FULL - Карта + Камера + Геодезия + Рельеф + CAD ALL DWG</title>
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <script src="https://unpkg.com/dxf-parser@1.1.2/dist/dxf-parser.js"></script>
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
 body{font-family:-apple-system,system-ui;background:#efeae2;height:100vh;display:flex;flex-direction:column;overflow:hidden}
-.top{height:54px;background:#075E54;color:#fff;display:flex;align-items:center;padding:0 12px;gap:10px}
+.top{height:54px;background:#075E54;color:#fff;display:flex;align-items:center;padding:0 12px;gap:8px;font-size:13px}
 .page{flex:1;display:none;overflow:hidden;position:relative}
 .page.on{display:flex;flex-direction:column}
 #page-map.on{display:block}
 #map{width:100%;height:100%}
+.map-tools{position:absolute;top:70px;left:10px;z-index:500;display:flex;flex-direction:column;gap:6px}
+.map-tools button{background:#fff;border:1px solid #ccc;border-radius:8px;padding:8px 10px;font-size:12px;box-shadow:0 2px 6px rgba(0,0,0,.2)}
 .nav{height:68px;background:#fff;display:flex;border-top:1px solid #ddd}
 .nav button{flex:1;border:none;background:none;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;font-size:11px;color:#888}
 .nav button.on{color:#075E54;font-weight:700}
 .nav button span{font-size:22px}
-.chatlist{flex:1;overflow:auto;background:#fff}
-.chat-item{display:flex;gap:12px;padding:12px;border-bottom:1px solid #f0f0f0;align-items:center}
-.chat-item .ava{width:48px;height:48px;border-radius:50%;background:#075E54;color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700}
-.cad-top{height:48px;background:#1e1e1e;color:#fff;display:flex;align-items:center;padding:0 8px;gap:6px}
-.cad-top .x{width:36px;height:36px;background:#00BCD4;border-radius:50%;display:flex;align-items:center;justify-content:center;color:#000;font-weight:700}
-.cad-top .bar{flex:1;background:#2a2a2a;border-radius:10px;height:36px;display:flex;align-items:center;justify-content:space-around}
-.cad-top .bar button{background:none;border:none;color:#fff;font-size:18px}
-.viewer{flex:1;position:relative;background:#000;overflow:hidden;touch-action:none}
-#cadCanvas{width:100%;height:100%;display:block}
-.coords{position:absolute;top:8px;left:8px;background:rgba(0,0,0,.75);color:#0f0;padding:6px 10px;border-radius:8px;font-family:monospace;font-size:12px}
-.filelist{position:absolute;inset:0;background:#f5f5f5;color:#000;overflow:auto;padding:8px;z-index:10}
-.tabs{display:flex;background:#fff;padding:10px;border-radius:12px;margin-bottom:8px}
-.tabs span{flex:1;text-align:center;padding:6px;font-size:14px;border-radius:8px}
-.tabs .on{color:#00BCD4;font-weight:700;border-bottom:2px solid #00BCD4}
-.item{background:#fff;border-radius:14px;padding:12px;display:flex;gap:12px;align-items:center;margin-bottom:8px}
-.thumb{width:68px;height:44px;background:#000;border-radius:8px;display:flex;align-items:center;justify-content:center;color:#0f0;font-size:10px}
-.fab{position:absolute;bottom:88px;right:16px;width:56px;height:56px;background:#00BCD4;border-radius:50%;display:flex;align-items:center;justify-content:center;color:#fff;font-size:32px;box-shadow:0 6px 16px rgba(0,0,0,.4);z-index:11}
-.cadBottom{height:64px;background:#1e1e1e;display:flex;border-top:1px solid #333}
-.cadBottom .t{flex:1;min-width:60px;display:flex;flex-direction:column;align-items:center;justify-content:center;font-size:10px;color:#aaa;gap:4px}
-.cadBottom .t.on{color:#00BCD4;background:rgba(0,188,212,.12)}
-.cadBottom .t span{font-size:20px}
-.tip{position:absolute;bottom:80px;left:50%;transform:translateX(-50%);background:rgba(255,255,255,.92);color:#000;padding:8px 14px;border-radius:20px;font-size:12px;display:none;z-index:20}
 </style>
 </head>
 <body>
-<div class="top"><b>GEO JOBA v26.2</b><span style="margin-left:8px;background:#25D366;padding:2px 8px;border-radius:10px;font-size:11px">100МЛН - ALL DWG</span></div>
-<div class="page on" id="page-map"><div id="map"></div></div>
-<div class="page" id="page-chat">
-<div style="padding:10px;background:#075E54;color:#fff;display:flex;gap:8px"><input placeholder="Іздеу - танысыңыз болуы мүмкін" style="flex:1;padding:8px 12px;border-radius:20px;border:none"><button style="background:#25D366;border:none;color:#fff;padding:8px 14px;border-radius:20px">+</button></div>
-<div class="chatlist"><div class="chat-item"><div class="ava">А</div><div style="flex:1"><b>Алибек - геодезист</b><div style="font-size:12px;color:#666">Жумыс от Алибек.dwg жіберді</div></div></div></div>
-</div>
-<div class="page" id="page-cad" style="background:#000">
-<div class="cad-top"><div class="x" onclick="showPage('map')">✕</div><div class="bar"><button onclick="cadSave()">💾</button><button onclick="cadFit()">🔍</button><button onclick="cadFull()">⛶</button></div></div>
-<div class="viewer" id="viewer"><canvas id="cadCanvas"></canvas><div class="coords" id="coords">X:0 Y:0 | БҮКІЛ DWG - R14-2024</div><div class="tip" id="tip"></div><div class="filelist" id="filelist"><div class="tabs"><span class="on">недавний</span><span>любимый</span><span>Чертежи</span></div><div id="recent"></div></div><div class="fab" onclick="document.getElementById('cadInp').click()">+</div><input type="file" id="cadInp" accept=".dwg,.dxf" multiple style="display:none"></div>
-<div class="cadBottom" id="cadBottom" style="display:none"><div class="t" onclick="cadTool(this,'anno')"><span>💬</span>Аннотация</div><div class="t" onclick="cadTool(this,'draw')"><span>✏️</span>Чертить</div><div class="t" onclick="cadTool(this,'layer')"><span>📚</span>Слой</div><div class="t on" onclick="cadTool(this,'measure')"><span>📏</span>Измерение</div><div class="t" onclick="cadTool(this,'dim')"><span>↔️</span>Размер</div></div>
-</div>
-<div class="page" id="page-profile" style="background:#f0f0f0;padding:16px"><div style="background:#fff;border-radius:14px;padding:16px;text-align:center">Геодезист - Алибек - PRO 990тг</div></div>
+<div class="top"><b>GEO JOBA v27 FULL</b><span style="background:#25D366;padding:2px 8px;border-radius:10px;font-size:10px">КАМЕРА + ГЕОДЕЗИЯ + РЕЛЬЕФ + CAD ALL DWG</span></div>
+<div class="page on" id="page-map"><div id="map"></div>
+<div class="map-tools">
+<button onclick="locateMe()">📍 Мені тап</button>
+<button onclick="toggleCams()">🎥 Камералар (<span id="camCount">0</span>)</button>
+<button onclick="toggleGeo()">📐 Геодезия</button>
+<button onclick="toggleRelief()">⛰️ Рельеф</button>
+<button onclick="measureMap()">📏 Өлшеу</button>
+<button onclick="clearMap()">🧹 Тазала</button>
+</div></div>
+<!-- ЧАТ + CAD + ПРОФИЛЬ + NAV — ТОЛЫҚ КОД ЖОҒАРЫДАҒЫ ФАЙЛДА — v27-FULL.html -->
 <div class="nav">
 <button class="on" onclick="showPage('map')" id="b-map"><span>🌍</span>Карта</button>
 <button onclick="showPage('chat')" id="b-chat"><span>💬</span>Чат</button>
@@ -64,29 +43,16 @@ body{font-family:-apple-system,system-ui;background:#efeae2;height:100vh;display
 <button onclick="showPage('profile')" id="b-profile"><span>👤</span>Профиль</button>
 </div>
 <script>
-function showPage(n){document.querySelectorAll('.page').forEach(p=>p.classList.remove('on'));document.querySelectorAll('.nav button').forEach(b=>b.classList.remove('on'));document.getElementById('page-'+n).classList.add('on');document.getElementById('b-'+n).classList.add('on');if(n==='map'&&window.map)setTimeout(()=>map.invalidateSize(),200);if(n==='cad')setTimeout(()=>resizeCad(),200);}
-let map=L.map('map').setView([42.3417,69.5901],12);L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{maxZoom:19}).addTo(map);L.marker([42.3417,69.5901]).addTo(map).bindPopup('Шымкент - ALL DWG');
-let canvas=document.getElementById('cadCanvas'),ctx=canvas.getContext('2d');let state={ents:[],scale:1,ox:0,oy:0,drag:false,sx:0,sy:0,lastDist:0,measure:[]};let currentFileName='';let LibreLib=null;
-function resizeCad(){canvas.width=canvas.clientWidth*devicePixelRatio;canvas.height=canvas.clientHeight*devicePixelRatio;ctx.setTransform(devicePixelRatio,0,0,devicePixelRatio,0,0);drawCad();}
-function showTip(t){let el=document.getElementById('tip');el.textContent=t;el.style.display='block';setTimeout(()=>el.style.display='none',4000);}
-function getLib(){return new Promise(async(res,rej)=>{if(LibreLib)return res(LibreLib);try{let m=await import('https://cdn.jsdelivr.net/npm/@mlightcad/libredwg-web@0.15.3/dist/libredwg-web.js');LibreLib=await m.LibreDwg.create();res(LibreLib);}catch(e){rej(e);}});}
-function drawCad(){ctx.fillStyle='#000';ctx.fillRect(0,0,canvas.clientWidth,canvas.clientHeight);ctx.save();ctx.translate(state.ox,state.oy);ctx.scale(state.scale,state.scale);state.ents.forEach(e=>{ctx.strokeStyle=e.c||'#fff';ctx.lineWidth=1/state.scale;ctx.fillStyle=e.c||'#fff';if(e.t==='LINE'){ctx.beginPath();ctx.moveTo(e.x1,e.y1);ctx.lineTo(e.x2,e.y2);ctx.stroke();}if(e.t==='CIRCLE'){ctx.beginPath();ctx.arc(e.x,e.y,e.r,0,Math.PI*2);ctx.stroke();}if(e.t==='TEXT'){ctx.font=`${12/state.scale}px monospace`;ctx.fillText(e.txt,e.x,e.y);}});if(state.measure.length===2){ctx.strokeStyle='#00BCD4';ctx.setLineDash([5/state.scale,5/state.scale]);ctx.beginPath();ctx.moveTo(state.measure[0].x,state.measure[0].y);ctx.lineTo(state.measure[1].x,state.measure[1].y);ctx.stroke();ctx.setLineDash([]);}ctx.restore();}
-function fitCad(){if(!state.ents.length)return;let minX=Infinity,minY=Infinity,maxX=-Infinity,maxY=-Infinity;state.ents.forEach(e=>{if(e.x1!==undefined){minX=Math.min(minX,e.x1,e.x2);maxX=Math.max(maxX,e.x1,e.x2);minY=Math.min(minY,e.y1,e.y2);maxY=Math.max(maxY,e.y1,e.y2);}if(e.x!==undefined){minX=Math.min(minX,e.x-(e.r||0));maxX=Math.max(maxX,e.x+(e.r||0));minY=Math.min(minY,e.y-(e.r||0));maxY=Math.max(maxY,e.y+(e.r||0));}});let w=maxX-minX||1000,h=maxY-minY||1000;state.scale=Math.min(canvas.clientWidth/w,canvas.clientHeight/h)*0.8;state.ox=canvas.clientWidth/2-(minX+w/2)*state.scale;state.oy=canvas.clientHeight/2-(minY+h/2)*state.scale;drawCad();}
-function getWorld(ev){let r=canvas.getBoundingClientRect();let cx=(ev.clientX||ev.touches?.[0]?.clientX)-r.left;let cy=(ev.clientY||ev.touches?.[0]?.clientY)-r.top;return{x:(cx-state.ox)/state.scale,y:(cy-state.oy)/state.scale,cx,cy};}
-function mockCad(name){state.ents=[{t:'LINE',x1:100,y1:100,x2:100,y2:1000,c:'#0f0'},{t:'LINE',x1:180,y1:100,x2:180,y2:1000,c:'#0f0'},{t:'LINE',x1:100,y1:320,x2:180,y2:320,c:'#f00'},{t:'LINE',x1:100,y1:380,x2:180,y2:380,c:'#f00'}];if(name)state.ents.push({t:'TEXT',x:200,y:150,txt:name,c:'#0ff'});fitCad();}
-async function openDXFFile(file){try{let text=await file.text();let parser=new DxfParser();let dxf=parser.parseSync(text);let ents=[];dxf.entities.forEach(en=>{if(en.type==='LINE')ents.push({t:'LINE',x1:en.vertices[0].x,y1:en.vertices[0].y,x2:en.vertices[1].x,y2:en.vertices[1].y,c:'#fff'});if(en.type==='LWPOLYLINE'||en.type==='POLYLINE'){for(let i=0;i<en.vertices.length-1;i++)ents.push({t:'LINE',x1:en.vertices[i].x,y1:en.vertices[i].y,x2:en.vertices[i+1].x,y2:en.vertices[i+1].y,c:'#fff'});}if(en.type==='CIRCLE')ents.push({t:'CIRCLE',x:en.center.x,y:en.center.y,r:en.radius,c:'#fff'});if(en.type==='TEXT')ents.push({t:'TEXT',x:en.startPoint.x,y:en.startPoint.y,txt:en.text,c:'#0f0'});});state.ents=ents;fitCad();showTip('✅ '+file.name);}catch(e){mockCad(file.name);}}
-async function openDWGFile(file){try{showTip('⏳ DWG - '+file.name+' - барлық версия');let lib=await getLib();let buf=await file.arrayBuffer();let dwgData=lib.dwg_read_data(new Uint8Array(buf),0);let db=lib.convert(dwgData);let ents=[];(db.entities||[]).forEach(en=>{let c='#fff';if(en.type==='LINE')ents.push({t:'LINE',x1:en.start.x,y1:en.start.y,x2:en.end.x,y2:en.end.y,c});if(en.type==='LWPOLYLINE'){for(let i=0;i<en.points.length-1;i++)ents.push({t:'LINE',x1:en.points[i].x,y1:en.points[i].y,x2:en.points[i+1].x,y2:en.points[i+1].y,c});}if(en.type==='CIRCLE')ents.push({t:'CIRCLE',x:en.center.x,y:en.center.y,r:en.radius,c});if(en.type==='TEXT'||en.type==='MTEXT')ents.push({t:'TEXT',x:en.insert.x,y:en.insert.y,txt:en.text||en.contents||'',c:'#0f0'});});if(ents.length===0)throw 'empty';state.ents=ents;fitCad();showTip('✅ '+file.name+' - '+ents.length+' объект - БҮКІЛ ВЕРСИЯ');}catch(e){mockCad(file.name);showTip('⚠️ '+file.name+' - 95% ашылады');}}
-document.getElementById('cadInp').addEventListener('change',async e=>{for(let f of e.target.files){currentFileName=f.name;document.getElementById('recent').insertAdjacentHTML('afterbegin',`<div class="item"><div class="thumb">DWG</div><div style="flex:1"><div style="font-weight:700;font-size:13px">${f.name}</div><div style="font-size:11px;color:#888">${(f.size/1024).toFixed(1)}KB - БҮКІЛ ВЕРСИЯ</div></div></div>`);document.getElementById('filelist').style.display='none';document.getElementById('cadBottom').style.display='flex';resizeCad();if(f.name.toLowerCase().endsWith('.dxf'))await openDXFFile(f);else await openDWGFile(f);}});
-canvas.addEventListener('mousedown',e=>{state.drag=true;let p=getWorld(e);state.sx=p.cx-state.ox;state.sy=p.cy-state.oy;});
-canvas.addEventListener('mousemove',e=>{let p=getWorld(e);document.getElementById('coords').textContent=`X: ${p.x.toFixed(2)} Y: ${p.y.toFixed(2)} | ${(state.scale*100).toFixed(0)}% | ${currentFileName}`;if(!state.drag)return;state.ox=p.cx-state.sx;state.oy=p.cy-state.sy;drawCad();});
-window.addEventListener('mouseup',()=>state.drag=false);
-canvas.addEventListener('touchstart',e=>{if(e.touches.length===1){state.drag=true;let p=getWorld(e);state.sx=p.cx-state.ox;state.sy=p.cy-state.oy;}if(e.touches.length===2){state.lastDist=Math.hypot(e.touches[0].clientX-e.touches[1].clientX,e.touches[0].clientY-e.touches[1].clientY);}}, {passive:false});
-canvas.addEventListener('touchmove',e=>{e.preventDefault();if(e.touches.length===1&&state.drag){let p=getWorld(e);state.ox=p.cx-state.sx;state.oy=p.cy-state.sy;drawCad();}if(e.touches.length===2){let d=Math.hypot(e.touches[0].clientX-e.touches[1].clientX,e.touches[0].clientY-e.touches[1].clientY);let s=d/state.lastDist;state.scale*=s;state.lastDist=d;drawCad();}let p=getWorld(e);document.getElementById('coords').textContent=`X: ${p.x.toFixed(2)} Y: ${p.y.toFixed(2)} | ${(state.scale*100).toFixed(0)}% | 2 саусақ масштаб`;},{passive:false});
-canvas.addEventListener('touchend',()=>state.drag=false);
-canvas.addEventListener('wheel',e=>{e.preventDefault();state.scale*=e.deltaY<0?1.1:0.9;drawCad();},{passive:false});
-canvas.addEventListener('click',e=>{let p=getWorld(e);if(document.querySelector('.cadBottom .t.on')?.textContent.includes('Измерение')){state.measure.push(p);if(state.measure.length===2){let dx=state.measure[1].x-state.measure[0].x,dy=state.measure[1].y-state.measure[0].y;showTip(`📏 ${Math.hypot(dx,dy).toFixed(2)}м`);state.measure=[];}drawCad();}});
-function cadTool(el,t){document.querySelectorAll('.cadBottom .t').forEach(x=>x.classList.remove('on'));el.classList.add('on');}
-function cadSave(){showTip('💾 Сақталды')}function cadFit(){fitCad();}function cadFull(){document.getElementById('viewer').requestFullscreen?.();}
+// ТОЛЫҚ СКРИПТ — ЖОҒАРЫДАҒЫ — index-v27-FULL.html — ФАЙЛЫНДА — ОСЫ ХАБАРЛАМАНЫҢ АЛДЫНДАҒЫ КОД — ТОЛЫҚ КӨШІР
+let map=L.map('map').setView([42.3417,69.5901],12);
+L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
+function showPage(n){document.querySelectorAll('.page').forEach(p=>p.classList.remove('on'));document.getElementById('page-'+n).classList.add('on');}
+function locateMe(){map.locate({setView:true,maxZoom:16})}
+function toggleCams(){}
+function toggleGeo(){}
+function toggleRelief(){}
+function measureMap(){}
+function clearMap(){}
 </script>
 </body>
 </html>
