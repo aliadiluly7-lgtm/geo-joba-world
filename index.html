@@ -3,92 +3,101 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>GEO JOBA WORLD v3 - QAZAQ JOLY</title>
-<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+<title>GEO JOBA WORLD v4 - ULTIMATE</title>
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@turf/turf@6/turf.min.js"></script>
 <style>
-*{margin:0;padding:0;box-sizing:border-box;font-family:Inter,Arial}
-body{display:flex;height:100vh;background:#0f1419;color:white}
-#sidebar{width:380px;background:#151a23;padding:20px;overflow-y:auto;border-right:2px solid #00d4ff}
-h1{color:#00d4ff;font-size:24px;margin-bottom:5px} h1 span{color:#ffde00}
-.subtitle{color:#888;font-size:13px;margin-bottom:20px}
-.card{background:#1e2530;border-radius:12px;padding:15px;margin-bottom:15px;border:1px solid #2a3441}
-.card h3{font-size:14px;color:#00d4ff;margin-bottom:10px}
-.btn{width:100%;padding:12px;border:none;border-radius:8px;font-weight:bold;cursor:pointer;margin-top:8px}
-.btn-blue{background:#00d4ff;color:#000} .btn-yellow{background:#ffde00;color:#000}
-.btn-green{background:#00ff88;color:#000}
-input,select,textarea{width:100%;padding:10px;border-radius:8px;border:1px solid #333;background:#0f1419;color:white;margin-top:6px}
-#map{flex:1} .stat{display:flex;justify-content:space-between;margin:6px 0;font-size:13px}
-.stat b{color:#ffde00}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:Inter,Arial,sans-serif;display:flex;height:100vh;background:#0f172a;color:#fff}
+#sidebar{width:380px;background:#0b1220;overflow-y:auto;padding:16px;border-right:2px solid #1e293b}
+#map{flex:1}
+h1{font-size:22px;color:#facc15}h1 span{color:#38bdf8}
+.tabs{display:flex;gap:6px;margin:12px 0;flex-wrap:wrap}
+.tab{padding:8px 12px;background:#1e293b;border-radius:8px;cursor:pointer;font-size:13px;border:1px solid #334155}
+.tab.active{background:#facc15;color:#000;font-weight:800}
+.panel{display:none}.panel.active{display:block}
+.card{background:#111c33;border:1px solid #22304d;border-radius:12px;padding:12px;margin-bottom:12px}
+input,textarea,select{width:100%;padding:10px;border-radius:8px;border:1px solid #334155;background:#0f1a30;color:#fff;margin-top:6px}
+button{width:100%;padding:11px;border:none;border-radius:10px;font-weight:800;cursor:pointer;margin-top:8px}
+.btn-blue{background:#38bdf8;color:#000}.btn-green{background:#22c55e;color:#000}.btn-yellow{background:#facc15;color:#000}.btn-red{background:#ef4444;color:#fff}
+.small{font-size:12px;color:#94a3b8;margin-top:6px;line-height:1.4}
+.kpi{display:flex;justify-content:space-between;font-size:13px;margin:4px 0}
 </style>
 </head>
 <body>
 <div id="sidebar">
 <h1>GEO JOBA <span>WORLD</span></h1>
-<div class="subtitle">v3 SENIOR • QAZAQ JOLY 🇰🇿 • Shymkent 12°C</div>
+<div class="small">v4 ULTIMATE • QAZAQ JOLY • 3 құрал қосылды</div>
 
+<div class="tabs">
+<div class="tab active" onclick="showTab('joly')">QAZAQ JOLY</div>
+<div class="tab" onclick="showTab('volume')">1.Объем</div>
+<div class="tab" onclick="showTab('georandom')">2.Георандом</div>
+<div class="tab" onclick="showTab('geoid')">3.Геоид</div>
+</div>
+
+<div id="panel-joly" class="panel active">
 <div class="card">
-<h3>📍 ЖОЛ ҚОСУ - Яндекс-те жоқ жол</h3>
-<input id="roadName" placeholder="Жол аты: Мыс: Жаңа құрылыс">
-<select id="roadType"><option>Грунтовка</option><option>Асфальт</option><option>Тропинка</option><option>Стройка</option></select>
-<button class="btn btn-blue" onclick="startDraw()">✏️ Картадан сызуды бастау</button>
-<button class="btn btn-green" onclick="saveRoad()">💾 Сақтау</button>
-<div style="font-size:11px;color:#888;margin-top:8px">Картаны басып нүктелер қой, сосын Сақтау бас</div>
+<div style="font-weight:800;color:#f87171">📍 ЖОЛ ҚОСУ</div>
+<input id="roadName" placeholder="Жол аты">
+<button class="btn-blue" onclick="startDraw()">✏️ Картадан сызуды бастау</button>
+<button class="btn-green" onclick="saveRoad()">💾 Сақтау</button>
 </div>
-
 <div class="card">
-<h3>📊 Статистика</h3>
-<div class="stat"><span>Қосылған жолдар:</span><b id="count">0</b></div>
-<div class="stat"><span>Пайдаланушы:</span><b>aliadiluly7-lgtm</b></div>
-<div class="stat"><span>Статус:</span><b style="color:#00ff88">● ONLINE</b></div>
+<div class="kpi"><span>Қосылған жолдар:</span><b id="cnt">0</b></div>
+<div class="kpi"><span>Статус:</span><b style="color:#22c55e">● ONLINE</b></div>
+<button class="btn-yellow" onclick="exportJSON()">📦 JSON экспорт</button>
+</div>
 </div>
 
+<div id="panel-volume" class="panel">
 <div class="card">
-<h3>🚀 Келесі қадам</h3>
-<div style="font-size:12px;line-height:1.6">
-✅ 1. Картада жоқ жолды тап<br>
-✅ 2. Сызып, атын жаз<br>
-✅ 3. Сақтауды бас<br>
-✅ 4. Автомат сақталады (LocalStorage)
-</div>
-<button class="btn btn-yellow" onclick="exportData()">📤 JSON экспорт</button>
+<div style="font-weight:800;color:#facc15">1. БЕРДЮГИН УБИЙЦА</div>
+<label>Проектная отметка (м):</label><input id="projH" type="number" value="100" step="0.01">
+<label>Квадрат торы (м):</label><input id="gridSize" type="number" value="10">
+<label>Нүктелер X Y H:</label>
+<textarea id="points" rows="7" placeholder="0 0 101.2&#10;10 0 100.8&#10;10 10 99.5&#10;0 10 100.1"></textarea>
+<button class="btn-blue" onclick="calcVolume()">📐 Есептеу</button>
+<div id="volResult" class="small" style="background:#0f172a;padding:10px;border-radius:8px;margin-top:8px;white-space:pre-wrap">Нәтиже осында...</div>
 </div>
 </div>
 
+<div id="panel-georandom" class="panel">
+<div class="card">
+<div style="font-weight:800;color:#a78bfa">2. ГЕОРАНДОМ</div>
+<label>Қанша нүкте?</label><input id="randCount" type="number" value="100">
+<button class="btn-blue" onclick="startPolyDraw()">⬛ Полигон сызу</button>
+<button class="btn-yellow" onclick="genRandom()">🎲 Шашу</button>
+<button class="btn-green" onclick="exportRandom()">📤 Экспорт TXT</button>
+<div id="randResult" class="small"></div>
+<textarea id="polyCoords" style="display:none"></textarea>
+</div>
+</div>
+
+<div id="panel-geoid" class="panel">
+<div class="card">
+<div style="font-weight:800;color:#22c55e">3. ГЕОИД EGM2008</div>
+<select id="geoidZone"><option value="24.5">Шымкент - 24.5м</option><option value="26">Алматы - 26м</option><option value="18">Астана - 18м</option><option value="35">Ақтау - 35м</option></select>
+<label>h - эллипсоидтық (GNSS):</label><input id="h_ellip" type="number" value="450.123" step="0.001">
+<button class="btn-blue" onclick="calcGeoid()">🌍 H = h - N</button>
+<div id="geoidResult" class="small" style="font-size:15px;font-weight:800;padding:12px;background:#052e16;border-radius:8px;margin-top:8px">H = ...</div>
+</div>
+</div>
+
+</div>
 <div id="map"></div>
-
-<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <script>
-var map = L.map('map').setView([42.3417, 69.5901], 13);
+var map = L.map('map').setView([42.32, 69.59], 12);
 L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{maxZoom:19}).addTo(map);
-var drawing=false, points=[], tempLine=null, savedRoads=JSON.parse(localStorage.getItem('qazaq_joly')||'[]');
-function updateCount(){document.getElementById('count').innerText=savedRoads.length}
-function drawSaved(){savedRoads.forEach(r=>{L.polyline(r.points,{color:'#00d4ff',weight:5}).addTo(map).bindPopup('<b>'+r.name+'</b><br>'+r.type)})}
-drawSaved(); updateCount();
-function startDraw(){drawing=true; points=[]; alert('Енді картаны басып жолды сыз! Екі рет басқанда аяқталады');}
-map.on('click', e=>{
- if(!drawing) return;
- points.push([e.latlng.lat, e.latlng.lng]);
- if(tempLine) map.removeLayer(tempLine);
- tempLine = L.polyline(points,{color:'#ffde00',dashArray:'10,10'}).addTo(map);
- L.circleMarker(e.latlng,{radius:6,color:'#ffde00'}).addTo(map);
-});
-map.on('dblclick', ()=>{drawing=false});
-function saveRoad(){
- if(points.length<2){alert('Кемінде 2 нүкте қой!');return}
- var name=document.getElementById('roadName').value||'Атаусыз жол';
- var type=document.getElementById('roadType').value;
- var road={name:name,type:type,points:points,time:new Date().toISOString()};
- savedRoads.push(road);
- localStorage.setItem('qazaq_joly',JSON.stringify(savedRoads));
- L.polyline(points,{color:'#00d4ff',weight:5}).addTo(map).bindPopup('<b>'+name+'</b>');
- points=[]; if(tempLine){map.removeLayer(tempLine);tempLine=null}
- updateCount(); document.getElementById('roadName').value='';
- alert('✅ Сақталды! '+name);
-}
-function exportData(){
- var dataStr="data:text/json;charset=utf-8,"+encodeURIComponent(JSON.stringify(savedRoads,null,2));
- var a=document.createElement('a'); a.href=dataStr; a.download="qazaq_joly_export.json"; a.click();
-}
+var drawnLine=null,tempLatLngs=[],polyDrawActive=false,volumePointsLayer=L.layerGroup().addTo(map),randomLayer=L.layerGroup().addTo(map),polyLayer=L.layerGroup().addTo(map);
+var roads = JSON.parse(localStorage.getItem('gj_roads')||'[]');
+function showTab(name){document.querySelectorAll('.tab').forEach(t=>{t.classList.remove('active')});document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));event.target.classList.add('active');document.getElementById('panel-'+name).classList.add('active');}
+function startDraw(){tempLatLngs=[];if(drawnLine)map.removeLayer(drawnLine);drawnLine=null;alert('Картаны басып жол сыз!');map.on('click',addPoint);}function addPoint(e){tempLatLngs.push(e.latlng);if(drawnLine)map.removeLayer(drawnLine);drawnLine=L.polyline(tempLatLngs,{color:'#facc15',weight:6}).addTo(map);}function saveRoad(){if(tempLatLngs.length<2){alert('Кемінде 2 нүкте');return}var name=document.getElementById('roadName').value||'Атаусыз жол';roads.push({name:name,latlngs:tempLatLngs});localStorage.setItem('gj_roads',JSON.stringify(roads));L.polyline(tempLatLngs,{color:'#22c55e'}).addTo(map).bindPopup(name);tempLatLngs=[];if(drawnLine){map.removeLayer(drawnLine);drawnLine=null}map.off('click',addPoint);updateCnt();alert('Сақталды!');}function updateCnt(){document.getElementById('cnt').innerText=roads.length}function exportJSON(){var blob=new Blob([JSON.stringify(roads,null,2)],{type:'application/json'});var a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='qazaq_joly.json';a.click();}
+function calcVolume(){var pts=document.getElementById('points').value.trim().split('\n').map(l=>l.trim().split(/\s+/).map(Number)).filter(a=>a.length>=3);if(pts.length<3){alert('Кемінде 3 нүкте');return}var proj=parseFloat(document.getElementById('projH').value);var grid=parseFloat(document.getElementById('gridSize').value)||10;var minX=Math.min(...pts.map(p=>p[0])),maxX=Math.max(...pts.map(p=>p[0])),minY=Math.min(...pts.map(p=>p[1])),maxY=Math.max(...pts.map(p=>p[1]));var volCut=0,volFill=0,cells=0;for(var x=minX;x<maxX;x+=grid){for(var y=minY;y<maxY;y+=grid){var z=0,w=0;for(var p of pts){var d=Math.hypot(p[0]-(x+grid/2),p[1]-(y+grid/2));if(d<1e-6){z=p[2];w=1;break}var wi=1/(d*d);z+=p[2]*wi;w+=wi;}if(w>0)z/=w;else continue;var dh=z-proj;var area=grid*grid;if(dh>0)volCut+=dh*area;else volFill+=-dh*area;cells++;}}document.getElementById('volResult').innerText=`Квадрат: ${grid}м\nТорлар: ${cells}\nПроект: ${proj}м\n\n📦 Выемка: ${volCut.toFixed(2)} м³\n📦 Насыпь: ${volFill.toFixed(2)} м³\nБаланс: ${(volCut-volFill).toFixed(2)} м³`;}
+var polyCoordsForRandom=[];function startPolyDraw(){polyCoordsForRandom=[];polyLayer.clearLayers();alert('Полигон сыз, аяқтау үшін 2 рет бас');var polyTemp=L.polyline([],{color:'#a78bfa',weight:3,dashArray:'6 6'}).addTo(polyLayer);function onClick(e){polyCoordsForRandom.push([e.latlng.lng,e.latlng.lat]);polyTemp.addLatLng(e.latlng);}map.on('click',onClick);map.once('dblclick',()=>{map.off('click',onClick);if(polyCoordsForRandom.length>=3){L.polygon(polyCoordsForRandom.map(c=>[c[1],c[0]]),{color:'#a78bfa',fillOpacity:0.2}).addTo(polyLayer);document.getElementById('polyCoords').value=JSON.stringify(polyCoordsForRandom);alert('Полигон дайын! Енді Шашу бас');}});}function genRandom(){var count=parseInt(document.getElementById('randCount').value)||100;var coords;try{coords=JSON.parse(document.getElementById('polyCoords').value);}catch(e){coords=polyCoordsForRandom}if(!coords||coords.length<3){alert('Алдымен полигон сыз');return}var polygon=turf.polygon([coords.concat([coords[0]])]);var pts=[];randomLayer.clearLayers();var bbox=turf.bbox(polygon);var i=0,attempts=0;while(pts.length<count&&attempts<count*20){var p=turf.randomPoint(1,{bbox:bbox}).features[0];if(turf.booleanPointInPolygon(p,polygon)){pts.push(p);L.circleMarker([p.geometry.coordinates[1],p.geometry.coordinates[0]],{radius:3,color:'#facc15'}).addTo(randomLayer);}attempts++;}document.getElementById('randResult').innerText=`Шашылды: ${pts.length} нүкте`;window._lastRandomPts=pts;}function exportRandom(){if(!window._lastRandomPts){alert('Алдымен шаш');return}var txt=window._lastRandomPts.map((f,i)=>`${i+1} ${f.geometry.coordinates[0].toFixed(6)} ${f.geometry.coordinates[1].toFixed(6)}`).join('\n');var blob=new Blob([txt],{type:'text/plain'});var a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='georandom.txt';a.click();}
+function calcGeoid(){var h=parseFloat(document.getElementById('h_ellip').value);var N=parseFloat(document.getElementById('geoidZone').value);var H=h-N;document.getElementById('geoidResult').innerText=`h=${h}м N=${N}м\n\n✅ H (Балт) = ${H.toFixed(3)} м`;}
+updateCnt();
 </script>
 </body>
 </html>
