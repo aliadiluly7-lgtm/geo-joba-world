@@ -1,71 +1,70 @@
-<!DOCTYPE html><html lang="kk"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
-<title>GEO JOBA v13 CIVIL FIELD - Алла бұйыртса</title>
+<!DOCTYPE html><html lang="kk"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>GEO JOBA v14 FIXED - Карта істейді</title>
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/><script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-<script src="https://unpkg.com/dxf-parser@1.1.2/dist/dxf-parser.js"></script>
 <style>
-*{margin:0;padding:0;box-sizing:border-box}body{font-family:Inter,sans-serif;background:#0f1110;color:#fff;height:100vh;overflow:hidden}
-#app{height:100%;display:flex;flex-direction:column}
-#top{height:50px;background:#1a1d1b;display:flex;align-items:center;padding:0 12px;gap:8px;border-bottom:2px solid #00ff88}
-#top b{font-size:13px}#top b span{color:#00ff88}
-#main{flex:1;display:flex;overflow:hidden}
-#map{flex:1.2}
-#panel{width:340px;background:#1a1d1b;border-left:2px solid #2a2a2a;display:flex;flex-direction:column;overflow:auto}
-.sec{padding:12px;border-bottom:1px solid #2a2a2a}.sec b{font-size:11px;color:#00ff88;display:block;margin-bottom:8px;letter-spacing:0.5px}
-.btn{padding:10px 12px;border-radius:10px;border:none;font-weight:800;cursor:pointer;font-size:11px;width:100%;margin-bottom:6px;text-align:left}
-.btnG{background:#00ff88;color:#000}.btnW{background:#2a2a2a;color:#fff;border:1px solid #3a3a3a}.btnW:hover{background:#333}
-.btnR{background:#ff4444;color:#fff}
-.row{display:flex;justify-content:space-between;font-size:11px;padding:4px 0;border-bottom:1px solid #222}
-.row span:last-child{color:#00ff88;font-weight:700}
-#cadCanvas{width:100%;height:200px;background:#0a0a0a;border-radius:8px;margin-top:8px}
-.gpsDot{width:14px;height:14px;background:#00ff88;border-radius:50%;border:3px solid #fff;box-shadow:0 0 10px #00ff88;animation:pulse 1.5s infinite}
-@keyframes pulse{0%{box-shadow:0 0 0 0 #00ff88}70%{box-shadow:0 0 0 10px rgba(0,255,136,0)}100%{box-shadow:0 0 0 0 rgba(0,255,136,0)}}
-.nav{height:58px;background:#1a1d1b;border-top:1px solid #2a2a2a;display:flex}
-.navBtn{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;color:#666;cursor:pointer}.navBtn.active{color:#00ff88}
+*{margin:0;padding:0;box-sizing:border-box}body{font-family:Inter,sans-serif;background:#0f0f0f;color:#fff;height:100vh;overflow:hidden}
+#app{height:100vh;display:flex;flex-direction:column}
+#top{height:48px;background:#1e1e1e;display:flex;align-items:center;padding:0 10px;gap:8px;border-bottom:2px solid #00ff88;flex-shrink:0}
+#main{flex:1;display:flex;overflow:hidden;position:relative}
+#map{flex:1;background:#222;height:100% !important;min-height:300px}
+#panel{width:320px;background:#1e1e1e;border-left:1px solid #333;display:flex;flex-direction:column;overflow:auto}
+.btn{padding:12px;border-radius:10px;border:none;font-weight:800;cursor:pointer;font-size:12px;width:100%;margin-bottom:6px;text-align:left}
+.btnG{background:#00ff88;color:#000}.btnW{background:#2a2a2a;color:#fff;border:1px solid #444}
+.sec{padding:10px;border-bottom:1px solid #333}
+.row{display:flex;justify-content:space-between;font-size:11px;padding:3px 0}
 </style></head><body>
 <div id="app">
-<div id="top"><b>GEO JOBA <span>v13 CIVIL FIELD — Алла бұйыртса</span></b><div style="margin-left:auto;display:flex;gap:6px"><span style="background:#ff1a1a;padding:5px 8px;border-radius:8px;font-size:10px;font-weight:800">💳 87066604117</span><span id="gpsAcc" style="background:#2a2a2a;padding:5px 8px;border-radius:8px;font-size:10px">GPS: OFF</span></div></div>
+<div id="top"><b>GEO JOBA v14 FIXED 🔧</b><span style="color:#00ff88;font-size:11px">— Карта істейді — Алла бұйыртса</span><div style="margin-left:auto"><span style="background:#ff1a1a;padding:5px 8px;border-radius:8px;font-size:10px">💳 87066604117</span></div></div>
 <div id="main">
 <div id="map"></div>
 <div id="panel">
-<div class="sec"><b>📍 TRIMBLE СИЯҚТЫ — ТЕЛЕФОНМЕН СЪЕМКА — DALA</b>
-<button class="btn btnG" onclick="startGPS()">📡 GPS ҚОСУ — TRIMBLE R12 СИЯҚТЫ — RTK</button>
-<div style="font-size:11px;background:#0a0a0a;padding:8px;border-radius:8px;margin-top:6px"><div class="row"><span>X:</span><span id="gx">—</span></div><div class="row"><span>Y:</span><span id="gy">—</span></div><div class="row"><span>H:</span><span id="gh" style="color:#ffff00">—</span></div><div class="row"><span>Точность:</span><span id="gacc" style="color:#00ff88">—</span></div><div class="row"><span>Спутник:</span><span id="gsat">—</span></div></div>
-<button class="btn btnW" onclick="savePoint()">📍 НҮКТЕ АЛУ — ПИКЕТ — СОХРАНИТЬ — TRIMBLE СИЯҚТЫ</button>
-<button class="btn btnW" onclick="exportTXT()">⬇️ EXPORT TXT/CSV — CIVIL-ҒА — 100 НҮКТЕ</button>
-<div style="font-size:10px;color:#888;margin-top:4px">Далада интернет жоқ болса да — GPS істейді! Оффлайн карта!</div>
+<div class="sec"><b style="color:#00ff88;font-size:11px">📍 GPS — TRIMBLE — ТЕЛЕФОНМЕН СЪЕМКА</b>
+<button class="btn btnG" onclick="startGPS()">📡 GPS ҚОСУ — МЕНІ ТАП</button>
+<div style="background:#0a0a0a;padding:8px;border-radius:8px;margin-top:6px;font-size:11px">
+<div class="row"><span>X (Lng):</span><span id="gx" style="color:#00ff88">—</span></div>
+<div class="row"><span>Y (Lat):</span><span id="gy" style="color:#00ff88">—</span></div>
+<div class="row"><span>H:</span><span id="gh" style="color:#ffff00">—</span></div>
+<div class="row"><span>Точность:</span><span id="gacc">—</span></div>
 </div>
-<div class="sec"><b>📐 CIVIL — ТҮСІНІКТІ КОМАНДА — БАЛА ДА ТҮСІНЕДІ</b>
-<button class="btn btnW" onclick="cmd('ID')">🎯 ID — КООРДИНАТА ҚАРАУ — X,Y,H — Trimble</button>
-<button class="btn btnW" onclick="cmd('LIST')">📝 LIST — ТІЗІМ — БАРЛЫҚ НҮКТЕ — ТАБЛИЦА — EXCEL</button>
-<button class="btn btnW" onclick="cmd('DIST')">📏 DIST — ҚАШЫҚТЫҚ — 2 НҮКТЕ — МЕТР</button>
-<button class="btn btnW" onclick="cmd('AREA')">📐 AREA — АУДАН — ГА — ГЕКТАР</button>
-<button class="btn btnW" style="background:#332200;color:#ffcc00;border:1px solid #ff8800" onclick="cmd('DOPOSLE')">⛰️ ДО-ПОСЛЕ — ГРУНТ — ДО/ПОСЛЕ — ОБЪЕМ</button>
-<button class="btn btnW" style="background:#331100;color:#ff8800;border:1px solid #ff4444" onclick="cmd('VOL')">⛰️ ОБЪЕМ ГРУНТА — ВЫЕМКА/НАСЫПЬ — М3 — CIVIL 3D</button>
-<button class="btn btnW" style="background:#330000;color:#ff8888;border:1px solid #ff4444" onclick="cmd('OTKL')">📉 ОТКЛОНЕНИЕ — ПРОЕКТ VS ФАКТ — ММ — ДОПУСК</button>
-<canvas id="cadCanvas"></canvas>
-<div style="font-size:11px;background:#0a0a0a;padding:8px;border-radius:8px;margin-top:8px"><div class="row"><span>Аудан:</span><span id="pArea">— га</span></div><div class="row"><span>До H:</span><span id="pDo">—</span></div><div class="row"><span>После H:</span><span id="pPosle">—</span></div><div class="row"><span>Объем:</span><span id="pVol" style="color:#ff8800;font-size:12px">— м3</span></div><div class="row"><span>Отклон:</span><span id="pDev" style="color:#ff4444">— мм</span></div></div>
+<button class="btn btnW" onclick="savePt()">📍 НҮКТЕ АЛУ — СОХРАНИТЬ</button>
+<button class="btn btnW" onclick="exportTXT()">⬇️ EXPORT TXT — CIVIL-ҒА</button>
 </div>
-<div class="sec"><b>📂 УНИВЕРСАЛ — DWG/DXF/TXT/CSV — 2027</b>
-<div onclick="document.getElementById('f').click()" style="border:2px dashed #444;border-radius:10px;padding:20px;text-align:center;background:#0f0f0f;cursor:pointer"><div style="font-size:24px">📂</div><div style="font-size:11px;margin-top:4px"><b>ФАЙЛ ТАСТА — БӘРІН АШАДЫ</b><br><span style="color:#888">DWG 2027 → DXF қып SaveAs керек<br>TXT/CSV — бірден!</span></div></div>
-<div style="margin-top:8px;font-size:10px;color:#888" id="fileInfo">Файл күтілуде... 0 нүкте</div>
-<button class="btn btnW" onclick="calcDoPosle()">⛰️ ДО-ПОСЛЕ ЕСЕПТЕУ — МЫСАЛ — 1.24га * 1.5м = 18600м3</button>
+<div class="sec"><b style="color:#ff8800;font-size:11px">⛰️ ДО-ПОСЛЕ — ГРУНТ — CIVIL</b>
+<button class="btn btnW" onclick="calcDoPosle()">⛰️ ДО-ПОСЛЕ — ОБЪЕМ м3 — ЕСЕПТЕУ</button>
+<div style="background:#0a0a0a;padding:8px;border-radius:8px;margin-top:6px;font-size:11px">
+<div class="row"><span>Нүкте:</span><span id="pcnt" style="color:#00ff88">0</span></div>
+<div class="row"><span>Аудан:</span><span id="pArea">— га</span></div>
+<div class="row"><span>Объем:</span><span id="pVol" style="color:#ff8800">— м3</span></div>
 </div>
-<div class="sec" style="font-size:10px;color:#666">Алла бұйыртса — мықты жоба — GEO JOBA v13 — 87066604117 — Kaspi 3000₸ — PRO — Trimble + Civil + 2GIS — бірге!</div>
+<button class="btn btnW" onclick="document.getElementById('f').click()">📂 TXT/DXF АШУ — КООРДИНАТА</button>
+<input type="file" id="f" style="display:none" accept=".txt,.csv,.dxf" onchange="openF(this.files[0])">
+<div id="log" style="font-size:10px;color:#888;margin-top:6px">> v14 FIXED дайын<br>> Карта — OSM — істейді<br>></div>
+</div>
+<div class="sec"><b style="font-size:11px">🃏 ДУРАК 54 — 6 АДАМ — ЭКШН</b>
+<button class="btn btnW" onclick="alert('Дурак 54 — 6 адам — v12 код — осы сілтемеде: /durak.html')">🎮 ДУРАК ОЙНАУ — 54 КАРТА</button>
 </div>
 </div>
-<div class="nav"><div class="navBtn active"><span>🗺️</span><small style="font-size:9px">КАРТА TRIMBLE</small></div><div class="navBtn"><span>📐</span><small style="font-size:9px">CIVIL ДО-ПОСЛЕ</small></div><div class="navBtn"><span>🃏</span><small style="font-size:9px">ДУРАК 54</small></div><div class="navBtn"><span>💬</span><small style="font-size:9px">ЧАТ</small></div></div>
 </div>
-<input type="file" id="f" style="display:none" accept=".dxf,.txt,.csv,.kml" onchange="openFile(this.files[0])">
+</div>
 <script>
-let map=null; let points=[]; let gpsWatch=null; let lastPos=null;
-function initMap(){map=L.map('map',{zoomControl:false}).setView([42.3417,69.5901],16); L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',{attribution:'Esri Спутник — үй көрінеді'}).addTo(map); L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_only_labels/{z}/{x}/{y}{r}.png').addTo(map); setTimeout(()=>map.invalidateSize(),300); map.on('click',e=>{let lat=e.latlng.lat,lng=e.latlng.lng; addPoint(lng,lat,0,'Картадан');});}
-function startGPS(){if(!navigator.geolocation){alert('GPS жоқ!'); return;} document.getElementById('gpsAcc').textContent='GPS: ІЗДЕУ...'; gpsWatch=navigator.geolocation.watchPosition(pos=>{let lat=pos.coords.latitude,lng=pos.coords.longitude,acc=pos.coords.accuracy,alt=pos.coords.altitude||0; lastPos={x:lng,y:lat,z:alt,acc:acc}; document.getElementById('gx').textContent=lng.toFixed(6); document.getElementById('gy').textContent=lat.toFixed(6); document.getElementById('gh').textContent=alt.toFixed(2)+'м'; document.getElementById('gacc').textContent=acc.toFixed(2)+'м'; document.getElementById('gsat').textContent='GPS + ГЛОНАСС — '+(acc<5?'RTK Fix':'Float'); document.getElementById('gpsAcc').textContent='GPS: '+acc.toFixed(1)+'м — '+(acc<1?'FIX':'FLOAT'); if(map){map.setView([lat,lng],18); if(window.gpsMarker)map.removeLayer(window.gpsMarker); window.gpsMarker=L.marker([lat,lng],{icon:L.divIcon({className:'',html:'<div class=gpsDot></div>'})}).addTo(map);} },{err=>{alert('GPS қате: '+err.message);},{enableHighAccuracy:true,maximumAge:0});}
-function addPoint(x,y,z,code){points.push({x:x,y:y,z:z,code:code||'Пикет',id:points.length+1}); document.getElementById('fileInfo').textContent=points.length+' нүкте — соңғы: '+x.toFixed(3)+','+y.toFixed(3); drawCAD(); if(map){L.circleMarker([y,x],{radius:6,color:'#00ff88',fillColor:'#00ff88',fillOpacity:0.8}).addTo(map).bindPopup(`Пикет ${points.length}<br>X:${x.toFixed(3)}<br>Y:${y.toFixed(3)}<br>H:${z}`);} }
-function savePoint(){if(!lastPos){alert('GPS қос! 📡'); return;} let code=prompt('Код:','Бордюр'); addPoint(lastPos.x,lastPos.y,lastPos.z,code); if(navigator.vibrate)navigator.vibrate(100);}
-function exportTXT(){if(points.length==0){alert('Нүкте жоқ!'); return;} let txt=points.map(p=>`${p.id},${p.x.toFixed(3)},${p.y.toFixed(3)},${p.z.toFixed(3)},${p.code}`).join('\n'); let blob=new Blob([txt],{type:'text/plain'}); let url=URL.createObjectURL(blob); let a=document.createElement('a'); a.href=url; a.download=`Шымкент_съемка_${new Date().toISOString().slice(0,10)}_${points.length}нүкте.txt`; a.click(); alert(`⬇️ ${points.length} нүкте — TXT — дайын! Civil-ға лақтыр!`);}
-function openFile(file){if(!file)return; let ext=file.name.split('.').pop().toLowerCase(); let rd=new FileReader(); rd.onload=e=>{if(ext==='txt'||ext==='csv'){let lines=e.target.result.split('\n'); lines.forEach(line=>{let p=line.trim().split(/[\s,;]+/); if(p.length>=2){let x=parseFloat(p[0]),y=parseFloat(p[1]),z=p[2]?parseFloat(p[2]):0; if(!isNaN(x)&&!isNaN(y))addPoint(x,y,z,p[3]||'TXT');}});} if(ext==='dxf'){try{let parser=new DxfParser(); let dxf=parser.parse(e.target.result); dxf.entities.forEach(en=>{if(en.type==='POINT'){addPoint(en.position.x,en.position.y,en.position.z||0,'DXF');}});}catch(err){alert('DXF қате: '+err.message);}}}; rd.readAsText(file);}
-function cmd(c){if(c==='ID'){if(points.length==0){alert('Нүкте жоқ!'); return;} let p=points[points.length-1]; alert(`🎯 ID — КООРДИНАТА:\nX: ${p.x.toFixed(3)}\nY: ${p.y.toFixed(3)}\nH: ${p.z.toFixed(3)}\nКод: ${p.code}\n\nTrimble сияқты!`);} if(c==='LIST'){alert(`📝 LIST — ${points.length} нүкте:\n`+points.slice(0,20).map(p=>`${p.id}: ${p.x.toFixed(2)},${p.y.toFixed(2)},${p.z.toFixed(2)} — ${p.code}`).join('\n'));} if(c==='DIST'){let i=prompt('1-ші нүкте ID (1-'+points.length+'):','1'); let j=prompt('2-ші ID:','2'); if(i&&j){let a=points[parseInt(i)-1],b=points[parseInt(j)-1]; if(a&&b){let d=Math.hypot(a.x-b.x,a.y-b.y); alert(`📏 DIST: ${d.toFixed(3)}м\n${a.code} → ${b.code}`);}}} if(c==='AREA'){let area=prompt('Аудан га (мысалы):','1.24'); document.getElementById('pArea').textContent=area+' га';} if(c==='DOPOSLE'||c==='VOL'){calcDoPosle();} if(c==='OTKL'){let proj=prompt('Проект H:','100.000'); let fact=prompt('Факт H:','100.035'); let dev=(parseFloat(fact)-parseFloat(proj))*1000; document.getElementById('pDev').textContent=(dev>0?'+':'')+dev.toFixed(0)+' мм'; alert(`📉 ОТКЛОН: ${dev.toFixed(0)}мм\n${Math.abs(dev)<=30?'✅ Допуск':'❌ Допусктан тыс'}`);}}
-function calcDoPosle(){let area=prompt('Аудан га:','1.24'); let hDo=prompt('До H (средний):','100.00'); let hPosle=prompt('После H:','101.50'); if(!area||!hDo||!hPosle)return; let vol=parseFloat(area)*10000*(parseFloat(hPosle)-parseFloat(hDo)); document.getElementById('pArea').textContent=area+' га'; document.getElementById('pDo').textContent=hDo; document.getElementById('pPosle').textContent=hPosle; document.getElementById('pVol').textContent=vol.toFixed(1)+' м3'; alert(`⛰️ ДО-ПОСЛЕ — ГРУНТ ОБЪЕМ:\nАудан: ${area} га\nДо: ${hDo}м\nПосле: ${hPosle}м\n\nОбъем: ${vol.toFixed(1)} м3\n${vol>0?'Насыпь':'Выемка'}\n\nCivil 3D сияқты!`);}
-function drawCAD(){let c=document.getElementById('cadCanvas'); let ctx=c.getContext('2d'); c.width=320; c.height=200; ctx.clearRect(0,0,320,200); ctx.strokeStyle='#222'; for(let x=0;x<320;x+=20){ctx.beginPath(); ctx.moveTo(x,0); ctx.lineTo(x,200); ctx.stroke();} for(let y=0;y<200;y+=20){ctx.beginPath(); ctx.moveTo(0,y); ctx.lineTo(320,y); ctx.stroke();} if(points.length<2)return; let xs=points.map(p=>p.x),ys=points.map(p=>p.y); let minX=Math.min(...xs),maxX=Math.max(...xs),minY=Math.min(...ys),maxY=Math.max(...ys); let sx=280/(maxX-minX||1),sy=180/(maxY-minY||1),s=Math.min(sx,sy); points.forEach(p=>{let px=(p.x-minX)*s+10,py=180-(p.y-minY)*s; ctx.fillStyle='#ff4444'; ctx.beginPath(); ctx.arc(px,py,3,0,Math.PI*2); ctx.fill();});}
-initMap();
+let map=null, points=[], lastPos=null, gpsWatch=null;
+function init(){
+console.log('init map');
+let mapDiv=document.getElementById('map');
+if(!mapDiv){alert('map div жоқ!'); return;}
+map=L.map('map',{zoomControl:true}).setView([42.3417,69.5901],14);
+L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{maxZoom:19,attribution:'OSM — істейді!'}).addTo(map);
+L.marker([42.3417,69.5901]).addTo(map).bindPopup('Шымкент — GEO JOBA v14 — карта істейді!').openPopup();
+map.on('click',e=>{addPt(e.latlng.lng,e.latlng.lat,0,'Картадан');});
+setTimeout(()=>{map.invalidateSize(); console.log('invalidate');},500);
+document.getElementById('log').innerHTML+='> Карта ашылды — OSM<br>';
+}
+function addPt(x,y,z,c){points.push({x:x,y:y,z:z,c:c,id:points.length+1}); document.getElementById('pcnt').textContent=points.length; if(map){L.circleMarker([y,x],{radius:7,color:'#00ff88'}).addTo(map).bindPopup(`${points.length}: ${x.toFixed(4)},${y.toFixed(4)}`);} document.getElementById('log').innerHTML+='> Нүкте '+points.length+'<br>';}
+function startGPS(){if(!navigator.geolocation){alert('GPS жоқ'); return;} document.getElementById('log').innerHTML+='> GPS іздеу...<br>'; navigator.geolocation.getCurrentPosition(p=>{let lat=p.coords.latitude,lng=p.coords.longitude,acc=p.coords.accuracy,alt=p.coords.altitude||0; lastPos={x:lng,y:lat,z:alt}; document.getElementById('gx').textContent=lng.toFixed(6); document.getElementById('gy').textContent=lat.toFixed(6); document.getElementById('gh').textContent=alt.toFixed(1)+'м'; document.getElementById('gacc').textContent=acc.toFixed(1)+'м'; if(map){map.setView([lat,lng],17); L.marker([lat,lng],{icon:L.divIcon({html:'<div style=width:14px;height:14px;background:#00ff88;border-radius:50%;border:3px solid #fff;box-shadow:0 0 10px #00ff88></div>'})}).addTo(map);} document.getElementById('log').innerHTML+='> GPS FIX '+acc.toFixed(1)+'м<br>';},err=>{alert('GPS қате: '+err.message); document.getElementById('log').innerHTML+='> GPS қате: '+err.message+'<br>';},{enableHighAccuracy:true,timeout:10000});}
+function savePt(){if(!lastPos){alert('Алдымен GPS ҚОСУ бас!'); return;} addPt(lastPos.x,lastPos.y,lastPos.z,'GPS');}
+function exportTXT(){if(points.length==0){alert('Нүкте жоқ'); return;} let txt=points.map(p=>`${p.id},${p.x.toFixed(3)},${p.y.toFixed(3)},${p.z.toFixed(3)},${p.c}`).join('\n'); let blob=new Blob([txt],{type:'text/plain'}); let a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download=`sjemka_${points.length}nuqte_${new Date().toISOString().slice(0,10)}.txt`; a.click(); alert(points.length+' нүкте TXT дайын!');}
+function openF(f){if(!f)return; let rd=new FileReader(); rd.onload=e=>{let lines=e.target.result.split('\n'); lines.forEach(line=>{let p=line.trim().split(/[\s,;]+/); if(p.length>=2){let x=parseFloat(p[0]),y=parseFloat(p[1]),z=p[2]?parseFloat(p[2]):0; if(!isNaN(x)&&!isNaN(y)){if(x>20&&x<80&&y>20&&y<80){addPt(y,x,z,'TXT');} else {addPt(x,y,z,'TXT');}}}});}; rd.readAsText(f);}
+function calcDoPosle(){let area=prompt('Аудан га:','1.24'); let h1=prompt('До H:','100.00'); let h2=prompt('После H:','101.50'); if(!area||!h1||!h2)return; let vol=parseFloat(area)*10000*(parseFloat(h2)-parseFloat(h1)); document.getElementById('pArea').textContent=area+' га'; document.getElementById('pVol').textContent=vol.toFixed(1)+' м3'; alert(`⛰️ ДО-ПОСЛЕ:\nАудан: ${area} га\nДо: ${h1}м\nПосле: ${h2}м\nОбъем: ${vol.toFixed(1)} м3\n${vol>0?'Насыпь':'Выемка'}`);}
+window.onload=init;
+setTimeout(init,1000);
 </script></body></html>
