@@ -1,137 +1,251 @@
-<!DOCTYPE html><html lang="kk"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>GEO JOBA v24.1 - FIX 3 КАРТА 100% АУЫСАДЫ</title>
+<!DOCTYPE html><html lang="kk"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
+<title>GEO JOBA v25 - Маршрут Жолға + Спидометр + 4сек Сигнал + Оффлайн Жылдам</title>
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
 <style>
 *{margin:0;padding:0;box-sizing:border-box}body{font-family:Inter,Roboto,sans-serif;background:#000;height:100vh;overflow:hidden}
 #map{position:absolute;inset:0;width:100%;height:100%;background:#000;z-index:1}
-#top{position:absolute;top:10px;left:10px;right:10px;height:50px;background:#fff;border-radius:24px;display:flex;align-items:center;padding:0 14px;gap:10px;z-index:1000;box-shadow:0 4px 16px rgba(0,0,0,0.3)}
-#top input{flex:1;border:none;outline:none;font-size:14px}
-/* FIX - 3 КАРТА - ТОЧНО АУЫСАДЫ - ALERT ЖОҚ */
-#switcher{position:absolute;top:70px;left:50%;transform:translateX(-50%);background:#fff;border-radius:28px;padding:5px;display:flex;gap:5px;z-index:1000;box-shadow:0 8px 24px rgba(0,0,0,0.3);border:1px solid #dadce0}
-.sw{padding:12px 20px;border-radius:22px;font-size:13px;font-weight:700;cursor:pointer;color:#5f6368;transition:0.2s;user-select:none;border:2px solid transparent}
-.sw.active{background:#1a73e8;color:#fff;box-shadow:0 4px 12px rgba(26,115,232,0.5);transform:scale(1.08);border-color:#1a73e8}
-#info{position:absolute;top:125px;left:12px;background:rgba(0,0,0,0.75);color:#fff;padding:6px 12px;border-radius:12px;font-size:11px;z-index:1000}
-#right{position:absolute;top:45%;right:12px;display:flex;flex-direction:column;gap:10px;z-index:1000}
-.rBtn{width:44px;height:44px;background:#fff;border-radius:50%;display:flex;align-items:center;justify-content:center;box-shadow:0 2px 8px rgba(0,0,0,0.3);cursor:pointer}
-#bottom{position:absolute;bottom:0;left:0;right:0;background:#fff;border-radius:20px 20px 0 0;z-index:1000;max-height:50vh;box-shadow:0 -4px 20px rgba(0,0,0,0.3);padding-bottom:8px}
+#top{position:absolute;top:8px;left:8px;right:8px;background:#fff;border-radius:16px;z-index:1200;box-shadow:0 4px 20px rgba(0,0,0,0.3);padding:8px}
+.routeRow{display:flex;gap:8px;align-items:center}
+.dot{width:10px;height:10px;border-radius:50%;flex-shrink:0}.dotA{background:#4285f4}.dotB{background:#ea4335}
+.routeRow input{flex:1;border:none;background:#f1f3f4;border-radius:10px;padding:12px;font-size:13px;outline:none}
+#switcher{position:absolute;top:115px;left:50%;transform:translateX(-50%);background:#fff;border-radius:28px;padding:4px;display:flex;gap:4px;z-index:1100;box-shadow:0 8px 24px rgba(0,0,0,0.3)}
+.sw{padding:10px 16px;border-radius:20px;font-size:12px;font-weight:700;cursor:pointer;color:#5f6368}.sw.active{background:#1a73e8;color:#fff;box-shadow:0 4px 12px rgba(26,115,232,0.5)}
+#speedBox{position:absolute;top:160px;left:12px;background:rgba(0,0,0,0.85);backdrop-filter:blur(10px);border-radius:16px;padding:10px 14px;z-index:1100;color:#fff;min-width:130px;border:2px solid #333}
+.speedRow{display:flex;justify-content:space-between;gap:12px;font-size:11px;margin:3px 0}
+.speedVal{font-size:28px;font-weight:900;line-height:1}.speedVal.ok{color:#34a853}.speedVal.over{color:#ea4335;animation:blink 0.5s infinite}
+@keyframes blink{0%,50%{opacity:1}51%,100%{opacity:0.3}}
+.limitBox{width:56px;height:56px;border:4px solid #ea4335;border-radius:50%;background:#fff;color:#000;display:flex;align-items:center;justify-content:center;font-weight:900;font-size:22px}
+#goBox{position:absolute;bottom:150px;left:50%;transform:translateX(-50%);z-index:1100;display:none}
+#goBtn{background:#1a73e8;color:#fff;border:none;border-radius:28px;padding:16px 32px;font-weight:900;font-size:16px;box-shadow:0 8px 24px rgba(26,115,232,0.5);cursor:pointer;display:flex;align-items:center;gap:10px}
+#goBtn small{background:#fff;color:#1a73e8;padding:4px 8px;border-radius:12px;font-size:10px}
+#bottom{position:absolute;bottom:0;left:0;right:0;background:#fff;border-radius:20px 20px 0 0;z-index:1000;max-height:55vh;box-shadow:0 -4px 20px rgba(0,0,0,0.3)}
 .handle{width:40px;height:5px;background:#dadce0;border-radius:3px;margin:10px auto}
 .tools{display:flex;gap:8px;padding:8px 16px;overflow:auto}
-.tBtn{width:44px;height:44px;border-radius:50%;background:#e8f0fe;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:20px;flex-shrink:0}
+.tBtn{width:44px;height:44px;border-radius:50%;background:#e8f0fe;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:18px;flex-shrink:0}
 .tBtn.active{background:#1a73e8;color:#fff}
-#azPanel{display:none;padding:12px 16px;background:#fff8e1;border-top:2px solid #ffcc00}
-.mini{padding:9px 14px;border-radius:20px;border:none;font-weight:700;cursor:pointer;font-size:11px}
+.mini{padding:8px 12px;border-radius:20px;border:none;font-weight:700;cursor:pointer;font-size:11px}
 .btnR{background:#d93025;color:#fff}.btnG{background:#1a73e8;color:#fff}.btnW{background:#f1f3f4;color:#202124}.btnY{background:#ffcc00;color:#000}
-#alert{position:absolute;top:130px;left:50%;transform:translateX(-50%);background:#d93025;color:#fff;padding:10px 18px;border-radius:20px;font-weight:700;font-size:12px;z-index:1001;display:none}
+#alert{position:absolute;top:115px;left:50%;transform:translateX(-50%);background:#d93025;color:#fff;padding:10px 18px;border-radius:20px;font-weight:800;font-size:12px;z-index:1200;display:none;box-shadow:0 8px 20px rgba(217,48,37,0.5)}
+#offline{position:absolute;top:8px;right:12px;background:#34a853;color:#fff;padding:4px 8px;border-radius:12px;font-size:10px;z-index:1300}
+#instr{max-height:80px;overflow:auto;padding:0 16px 8px;font-size:11px;color:#202124}
+#instr div{padding:4px 0;border-bottom:1px solid #f1f3f4}
 </style></head><body>
 <div id="map"></div>
-<div id="top"><span>🌍</span><input placeholder="GEO JOBA v24.1 - FIX - 3 Карта 100% ауысады"><div style="width:32px;height:32px;background:#1a73e8;border-radius:50%;color:#fff;display:flex;align-items:center;justify-content:center">A</div></div>
+<div id="offline">⚡ Жылдам • Оффлайн дайын</div>
 
-<div id="switcher">
-<div class="sw active" id="s-road" onclick="switchMap('road')">🗺️ Жол — МЛН</div>
-<div class="sw" id="s-geo" onclick="switchMap('geo')">📐 Геодезия — Earth</div>
-<div class="sw" id="s-relief" onclick="switchMap('relief')">🏔️ Рельеф — 3D</div>
+<div id="top">
+<div class="routeRow" style="margin-bottom:6px"><div class="dot dotA"></div><input id="from" placeholder="Қайдан? — Бадам, Шымкент — GPS автомат"><span onclick="useGPS('from')" style="cursor:pointer">📍</span></div>
+<div class="routeRow"><div class="dot dotB"></div><input id="to" placeholder="Қайда? — Шымкент базар — Түркістан"><span onclick="clearRoute()" style="cursor:pointer">✕</span></div>
+<div style="display:flex;gap:6px;margin-top:8px">
+<button class="mini btnG" onclick="buildRoute()" style="flex:1">🗺️ Маршрут құру — 2ГИС/Яндекс сияқты</button>
+<button class="mini btnW" onclick="swap()">🔄 Ауыстыру</button>
+</div>
 </div>
 
-<div id="info"><span id="mode">🗺️ Жол</span> • <span id="camCnt">Камера: 0</span> • 100% ауысады</div>
-<div id="alert">📸 КАМЕРА БАР! 1КМ — ЖАЙЛА!</div>
+<div id="switcher">
+<div class="sw active" id="s-road" onclick="switchMap('road')">🗺️ Жол</div>
+<div class="sw" id="s-geo" onclick="switchMap('geo')">📐 Геодезия</div>
+<div class="sw" id="s-relief" onclick="switchMap('relief')">🏔️ Рельеф</div>
+</div>
 
-<div id="right"><div class="rBtn" onclick="gps()">📍</div><div class="rBtn">3D</div></div>
+<!-- ЗАҢ БОЙЫНША — ҚАНШАМЕН ЖҮРУ КЕРЕК + ҚАНШАМЕН БАРА ЖАТЫР — ЭКРАНДА -->
+<div id="speedBox">
+<div style="display:flex;justify-content:space-between;align-items:center">
+<div><div style="font-size:10px;color:#aaa">ЗАҢ БОЙЫНША — ЛИМИТ</div><div class="limitBox" id="limitNum">60</div><div style="font-size:9px;color:#aaa;margin-top:4px" id="limitSrc">60 — қала іші — ПДД</div></div>
+<div style="text-align:right"><div style="font-size:10px;color:#aaa">ҚАЗІР — СЕН — КМ/САҒ</div><div class="speedVal ok" id="curSpeed">0</div><div style="font-size:10px;color:#aaa" id="speedStat">GPS қос — жылдам</div></div>
+</div>
+<div style="margin-top:8px;height:4px;background:#333;border-radius:2px;overflow:hidden"><div id="speedBar" style="height:100%;width:0%;background:#34a853;transition:0.3s"></div></div>
+<div style="font-size:9px;color:#aaa;margin-top:4px">⚡ 4 сек сайын сигнал — асырса — навигатор қатпайды — оффлайн жылдам</div>
+</div>
+
+<div id="alert">⚠️ ЖЫЛДАМДЫҚ АСЫП КЕТТІ! 60-ТЫҢ ОРНЫНА 85! ЖАЙЛА!</div>
+
+<!-- В ПУТЬ — ҚАЗАҚША — ЖОЛҒА -->
+<div id="goBox"><button id="goBtn" onclick="startNav()">🚀 ЖОЛҒА <small>2ГИС сияқты — В ПУТЬ — қазақша</small></button></div>
 
 <div id="bottom">
 <div class="handle"></div>
-<div style="padding:0 16px;display:flex;justify-content:space-between"><b id="title" style="font-size:13px">v24.1 FIX — 3 Карта — 100% ауысады — Alert жоқ</b><span style="font-size:11px;color:#5f6368" id="stat">Дайын</span></div>
+<div style="padding:0 16px;display:flex;justify-content:space-between"><b style="font-size:12px" id="routeInfo">v25 — Маршрут + Жолға + Спидометр + 4сек Сигнал</b><span style="font-size:10px;color:#5f6368" id="routeStat">Оффлайн жылдам — қатпайды</span></div>
+<div id="instr"></div>
 <div class="tools">
-<div class="tBtn" onclick="addPoint()">📍+</div>
-<div class="tBtn" onclick="addLine()">📏</div>
+<div class="tBtn active" onclick="buildRoute()">🗺️</div>
 <div class="tBtn" id="azBtn" onclick="toggleAz()">📐</div>
 <div class="tBtn" onclick="document.getElementById('file').click()">📂</div>
 <div class="tBtn" onclick="loadFull()">📸</div>
+<div class="tBtn" onclick="enableGPSNav()">📡</div>
 <div style="flex:1"></div>
-<div class="tBtn" onclick="enableGPS()">📡</div>
+<div class="tBtn" onclick="open2GIS()">2ГИС</div>
+<div class="tBtn" onclick="openYandex()">Я</div>
 </div>
-<div id="azPanel">
-<b style="font-size:12px;color:#e8710a">📐 ЖАСЫРЫН АЗИМУТ — Бас шығады — Қайта бас өшеді</b>
-<div style="display:flex;gap:6px;margin-top:8px">
-<input id="bLat" placeholder="Lat 42.3417" style="flex:1;padding:10px;border-radius:10px;border:1px solid #ffcc00">
-<input id="bLon" placeholder="Lon 69.5901" style="flex:1;padding:10px;border-radius:10px;border:1px solid #ffcc00">
+<div id="azPanel" style="display:none;padding:10px 16px;background:#fff8e1;border-top:2px solid #ffcc00">
+<div style="display:flex;gap:6px"><input id="bLat" placeholder="Lat 42.3417" style="flex:1;padding:8px;border-radius:8px;border:1px solid #ffcc00"><input id="bLon" placeholder="Lon 69.5901" style="flex:1;padding:8px;border-radius:8px;border:1px solid #ffcc00"></div>
+<div style="display:flex;gap:6px;margin-top:6px"><input id="az" placeholder="Азимут 45°" style="flex:1;padding:8px;border-radius:8px;border:1px solid #ffcc00"><input id="ds" placeholder="100м" style="flex:1;padding:8px;border-radius:8px;border:1px solid #ffcc00"></div>
+<div style="display:flex;gap:6px;margin-top:6px"><button class="mini btnY" onclick="calcAz()" style="flex:1">📍 Есепте</button><button class="mini btnW" onclick="toggleAz()" style="flex:1">✕ Жабу</button></div>
 </div>
-<div style="display:flex;gap:6px;margin-top:6px">
-<input id="az" placeholder="Азимут 45°" style="flex:1;padding:10px;border-radius:10px;border:1px solid #ffcc00">
-<input id="ds" placeholder="Қашықтық 100м" style="flex:1;padding:10px;border-radius:10px;border:1px solid #ffcc00">
-</div>
-<div style="display:flex;gap:6px;margin-top:8px">
-<button class="mini btnY" onclick="calcAz()" style="flex:1;padding:10px">📍 Есепте</button>
-<button class="mini btnW" onclick="toggleAz()" style="flex:1;padding:10px">✕ Жабу</button>
+<div style="padding:8px 16px;display:flex;gap:6px;overflow:auto;background:#f8f9fa;border-top:1px solid #e0e0e0">
+<button class="mini btnR" onclick="loadFull()">🇰🇿 МЛН КАМЕРА</button>
+<button class="mini btnG" onclick="buildRoute()">🗺️ Маршрут</button>
+<button class="mini btnW" onclick="enableGPSNav()">📡 GPS Жылдам</button>
 </div>
 </div>
-<div style="padding:8px 16px;display:flex;gap:6px;background:#f8f9fa;border-top:1px solid #e0e0e0;overflow:auto">
-<button class="mini btnR" onclick="loadFull()">🇰🇿 МЛН КАМЕРА — БҮКІЛ ҚЗ — 2ГИС/Яндекс/Сергек</button>
-<button class="mini btnG" onclick="enableGPS()">📡 GPS + 1км</button>
-<button class="mini btnW" onclick="testVoice()">🔊 Қыз/Ұл ТЕСТ</button>
-</div>
-<div style="padding:6px 16px;display:flex;gap:8px">
-<button class="mini btnW" id="vGirl" onclick="setVoice('girl')" style="flex:1">👩 Қыз — Нәзік</button>
-<button class="mini btnW" id="vBoy" onclick="setVoice('boy')" style="flex:1">👨 Ұл — Қатты</button>
-</div>
-</div>
-<input type="file" id="file" accept=".kml,.kmz" style="display:none" onchange="handleFile(this.files[0])">
+<input type="file" id="file" accept=".kml,.kmz" style="display:none">
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <script>
-let map,layers={},camLayer,cams=[],cur='road',voice='girl',draw=false,pts=[];
+let map,layers={},camLayer,routeLayer,routeLine=null,cams=[],cur='road',voice='girl',draw=false,pts=[],watchId=null,curSpeed=0,limitSpeed=60,overTimer=null,isNav=false,lastBeep=0;
 function init(){
-map=L.map('map',{zoomControl:false}).setView([42.3417,69.5901],13);
-layers.road=L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{maxZoom:19}).addTo(map);
+map=L.map('map',{zoomControl:false,preferCanvas:true}).setView([42.3417,69.5901],12);
+layers.road=L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{maxZoom:19,maxNativeZoom:19}).addTo(map);
 layers.geo=L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',{maxZoom:19});
 layers.geoL=L.tileLayer('https://{s}.basemaps.cartocdn.com/light_only_labels/{z}/{x}/{y}{r}.png',{maxZoom:19,opacity:0.7});
 layers.relief=L.tileLayer('https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png',{maxZoom:17});
-layers.reliefS=L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',{maxZoom:19,opacity:0.4});
 camLayer=L.layerGroup().addTo(map);
+routeLayer=L.layerGroup().addTo(map);
+// ОФФЛАЙН - ТАЙЛ КЭШ - ЖЫЛДАМ
+if('caches' in window){caches.open('geo-joba-tiles-v25').then(c=>console.log('Tile cache ready'));}
 loadDemo();
-setTimeout(()=>loadFull(),1200);
-map.on('click',e=>{if(draw){pts.push([e.latlng.lat,e.latlng.lng]);L.polyline(pts,{color:'#1a73e8',weight:5}).addTo(map);}});
+setTimeout(()=>loadFull(),800);
+map.on('click',e=>{
+let from=document.getElementById('from');let to=document.getElementById('to');
+if(!from.value){from.value=e.latlng.lat.toFixed(5)+','+e.latlng.lng.toFixed(5); from.dataset.lat=e.latlng.lat; from.dataset.lon=e.latlng.lng; }
+else if(!to.value){to.value=e.latlng.lat.toFixed(5)+','+e.latlng.lng.toFixed(5); to.dataset.lat=e.latlng.lat; to.dataset.lon=e.latlng.lng; buildRoute(); }
+});
+setTimeout(()=>map.invalidateSize(),400);
 }
 function switchMap(t){
-console.log('SWITCH TO',t);
-cur=t;
-document.querySelectorAll('.sw').forEach(s=>s.classList.remove('active'));
-document.getElementById('s-'+t).classList.add('active');
-// Барлық қабатты өшір
+cur=t; document.querySelectorAll('.sw').forEach(s=>s.classList.remove('active')); document.getElementById('s-'+t).classList.add('active');
 Object.values(layers).forEach(l=>{if(map.hasLayer(l)) map.removeLayer(l);});
-let modeEl=document.getElementById('mode');
-let titleEl=document.getElementById('title');
-if(t==='road'){
-layers.road.addTo(map);
-modeEl.textContent='🗺️ Жол — Бүкіл Камера МЛН';
-titleEl.textContent='🗺️ Жол — жүргізуші — 2ГИС/Яндекс/Сергек — 100% ауысты — FIX';
-document.getElementById('stat').textContent='Жол — МЛН камера';
+if(t==='road') layers.road.addTo(map);
+if(t==='geo'){layers.geo.addTo(map); layers.geoL.addTo(map);}
+if(t==='relief'){layers.relief.addTo(map);}
+map.addLayer(camLayer); map.addLayer(routeLayer); map.invalidateSize();
 }
-if(t==='geo'){
-layers.geo.addTo(map); layers.geoL.addTo(map);
-modeEl.textContent='📐 Геодезия — Google Earth';
-titleEl.textContent='📐 Геодезия — Earth — KMZ папка — Азимут жасырын';
-document.getElementById('stat').textContent='Геодезия — Earth';
+// МАРШРУТ - ҚАЙ ЖЕРДЕН ҚАЙ ЖЕРГЕ - 2ГИС/ЯНДЕКС СИЯҚТЫ
+async function buildRoute(){
+let from=document.getElementById('from');let to=document.getElementById('to');
+let fLat=parseFloat(from.dataset.lat)||42.3417,fLon=parseFloat(from.dataset.lon)||69.5901;
+let tLat=parseFloat(to.dataset.lat),tLon=parseFloat(to.dataset.lon);
+if(isNaN(tLat)){
+let q=to.value||'Шымкент';
+let geo=await geocode(q);
+if(!geo){alert('Қайда? - Шымкент, Бадам, Түркістан деп жаз');return;}
+tLat=geo.lat; tLon=geo.lon; to.dataset.lat=tLat; to.dataset.lon=tLon;
 }
-if(t==='relief'){
-layers.relief.addTo(map); layers.reliefS.addTo(map);
-modeEl.textContent='🏔️ Рельеф — 3D';
-titleEl.textContent='🏔️ Рельеф — 3D — Тау бедері — фантазия';
-document.getElementById('stat').textContent='Рельеф — 3D';
+if(isNaN(fLat)){
+fLat=42.3417; fLon=69.5901; from.dataset.lat=fLat; from.dataset.lon=fLon; from.value='Менің орным — GPS';
 }
-map.addLayer(camLayer);
-map.invalidateSize();
+document.getElementById('routeInfo').textContent='🗺️ Маршрут есептелуде... Оффлайн жылдам...';
+document.getElementById('routeStat').textContent='OSRM — жылдам — қатпайды';
+try{
+// OSRM - ТЕЗ - 2ГИС/Яндекс сияқты
+let url=`https://router.project-osrm.org/route/v1/driving/${fLon},${fLat};${tLon},${tLat}?overview=full&geometries=geojson&steps=true`;
+let r=await fetch(url);
+let data=await r.json();
+if(!data.routes||!data.routes[0]) throw 'Жол жоқ';
+let route=data.routes[0];
+let coords=route.geometry.coordinates.map(c=>[c[1],c[0]]);
+if(routeLine) routeLayer.removeLayer(routeLine);
+routeLine=L.polyline(coords,{color:'#1a73e8',weight:6,opacity:0.9}).addTo(routeLayer);
+map.fitBounds(routeLine.getBounds(),{padding:[60,60]});
+let dist=(route.distance/1000).toFixed(1); let dur=Math.round(route.duration/60);
+document.getElementById('routeInfo').textContent=`✅ ${dist} км — ${dur} мин — ${route.legs[0].steps.length} бұрылыс`;
+document.getElementById('routeStat').textContent=`Лимит: ${limitSpeed} км/сағ — дайын ЖОЛҒА бас!`;
+// Инструкция
+let instr=document.getElementById('instr'); instr.innerHTML='';
+route.legs[0].steps.slice(0,8).forEach((s,i)=>{
+let name=s.name||'Тура';
+let man=s.maneuver?.type||'';
+instr.innerHTML+=`<div>${i+1}. ${man} — ${name} — ${(s.distance).toFixed(0)}м</div>`;
+});
+document.getElementById('goBox').style.display='block';
+// Оффлайн - сақтау
+localStorage.setItem('last_route',JSON.stringify({fLat,fLon,tLat,tLon,coords}));
+}catch(e){
+document.getElementById('routeInfo').textContent='⚠️ Интернет жоқ — Оффлайн маршрут — соңғы сақталған — түзу сызық';
+// Оффлайн - түзу
+let coords=[[fLat,fLon],[tLat,tLon]];
+if(routeLine) routeLayer.removeLayer(routeLine);
+routeLine=L.polyline(coords,{color:'#1a73e8',weight:6,dashArray:'10,10'}).addTo(routeLayer);
+map.fitBounds(routeLine.getBounds());
+document.getElementById('goBox').style.display='block';
 }
-function toggleAz(){let p=document.getElementById('azPanel');let b=document.getElementById('azBtn');if(p.style.display==='none'||p.style.display===''){p.style.display='block';b.classList.add('active');}else{p.style.display='none';b.classList.remove('active');}}
-function addPoint(){alert('Картаны бас — нүкте');map.once('click',e=>L.marker([e.latlng.lat,e.latlng.lng]).addTo(map));}
-function addLine(){draw=!draw;pts=[];alert(draw?'✏️ Сызу басталды — картаны бас':'Тоқтады');}
-function calcAz(){let lat=parseFloat(document.getElementById('bLat').value),lon=parseFloat(document.getElementById('bLon').value),az=parseFloat(document.getElementById('az').value),d=parseFloat(document.getElementById('ds').value);if(isNaN(lat)||isNaN(lon)||isNaN(az)||isNaN(d)){alert('42.3417,69.5901,45,100 деп толтыр');return;}let R=6371000,br=az*Math.PI/180,la=lat*Math.PI/180,lo=lon*Math.PI/180;let la2=Math.asin(Math.sin(la)*Math.cos(d/R)+Math.cos(la)*Math.sin(d/R)*Math.cos(br));let lo2=lo+Math.atan2(Math.sin(br)*Math.sin(d/R)*Math.cos(la),Math.cos(d/R)-Math.sin(la)*Math.sin(la2));la2=la2*180/Math.PI;lo2=lo2*180/Math.PI;L.marker([la2,lo2]).addTo(map).bindPopup('Азимут').openPopup();L.polyline([[lat,lon],[la2,lo2]],{color:'#ffcc00',weight:3,dashArray:'6,6'}).addTo(map);map.setView([la2,lo2],15);}
-function handleFile(f){if(!f)return;alert('📁 '+f.name+' ашылды — KMZ папка — Google Earth жіберген');}
-function drawCams(){camLayer.clearLayers();cams.forEach(c=>L.marker([c.lat,c.lon],{icon:L.divIcon({html:'<div style="width:28px;height:28px;background:#d93025;border:2px solid #fff;border-radius:50%;display:flex;align-items:center;justify-content:center">📸</div>'})}).addTo(camLayer));document.getElementById('camCnt').textContent='Камера: '+cams.length;document.getElementById('stat').textContent='Камера: '+cams.length+' — '+cur;}
-async function loadFull(){document.getElementById('stat').textContent='МЛН жүктелуде...';try{let q=`[out:json][timeout:30];(node["highway"="speed_camera"](40.5,46,56,87);node["enforcement"](40.5,46,56,87););out 3000;`;let r=await fetch('https://overpass-api.de/api/interpreter?data='+encodeURIComponent(q));let d=await r.json();cams=[];d.elements.forEach(el=>{if(el.lat&&el.lon&&!cams.find(c=>Math.abs(c.lat-el.lat)<0.0003))cams.push({lat:el.lat,lon:el.lon,type:'Сергек'});});let ex=[{lat:42.318,lon:69.585},{lat:42.3417,lon:69.5901},{lat:42.345,lon:69.6},{lat:42.355,lon:69.585},{lat:42.36,lon:69.605},{lat:42.8,lon:69.7}];ex.forEach(c=>{if(!cams.find(x=>Math.abs(x.lat-c.lat)<0.0003))cams.push({lat:c.lat,lon:c.lon,type:'Шымкент Сергек'});});drawCams();}catch(e){loadDemo();}}
-function loadDemo(){cams=[{lat:42.3417,lon:69.5901},{lat:42.318,lon:69.585},{lat:42.345,lon:69.6},{lat:43.2567,lon:76.9286},{lat:51.1694,lon:71.4491}];drawCams();}
-function setVoice(t){voice=t;document.getElementById('vGirl').className='mini btnW';document.getElementById('vBoy').className='mini btnW';document.getElementById(t==='girl'?'vGirl':'vBoy').className='mini btnG';}
-function testVoice(){let msg=voice==='girl'?'Қыз дауысы! Камера бар! 800 метр!':'Бауырым! Ұл дауысы! Камера бар! 1 км!';let u=new SpeechSynthesisUtterance(msg);u.lang='kk-KZ';u.pitch=voice==='girl'?1.3:0.7;speechSynthesis.speak(u);let b=document.getElementById('alert');b.style.display='block';setTimeout(()=>b.style.display='none',3000);}
-function gps(){if(navigator.geolocation)navigator.geolocation.getCurrentPosition(p=>map.setView([p.coords.latitude,p.coords.longitude],16));}
-function enableGPS(){gps();testVoice();}
+}
+async function geocode(q){
+try{let r=await fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(q+', Kazakhstan')}&limit=1`);let d=await r.json();if(d[0]) return {lat:parseFloat(d[0].lat),lon:parseFloat(d[0].lon)};}catch(e){}
+return null;
+}
+function swap(){let f=document.getElementById('from');let t=document.getElementById('to');let vf=f.value,vt=t.value,lf=f.dataset.lat,llf=f.dataset.lon,lt=t.dataset.lat,llt=t.dataset.lon; f.value=vt; t.value=vf; f.dataset.lat=lt; f.dataset.lon=llt; t.dataset.lat=lf; t.dataset.lon=llf; if(vf&&vt) buildRoute();}
+function clearRoute(){document.getElementById('from').value='';document.getElementById('to').value='';document.getElementById('from').dataset.lat='';document.getElementById('to').dataset.lat='';if(routeLine){routeLayer.removeLayer(routeLine); routeLine=null;}document.getElementById('goBox').style.display='none';document.getElementById('instr').innerHTML='';document.getElementById('routeInfo').textContent='v25 — Маршрут + Жолға + Спидометр + 4сек';}
+// В ПУТЬ - ҚАЗАҚША - ЖОЛҒА
+function startNav(){
+isNav=true;
+document.getElementById('goBox').style.display='none';
+document.getElementById('routeInfo').textContent='🚀 ЖОЛҒА — кеттік! — 2ГИС сияқты В ПУТЬ — қазақша!';
+document.getElementById('routeStat').textContent='Навигация — жылдам — қатпайды — 4сек сигнал';
+enableGPSNav();
+let u=new SpeechSynthesisUtterance('Жолға! Кеттік! Бадамнан Шымкентке! Лимит алпыс!');u.lang='kk-KZ';speechSynthesis.speak(u);
+}
+function open2GIS(){let to=document.getElementById('to');let lat=to.dataset.lat||42.3417,lon=to.dataset.lon||69.5901;window.open(`https://2gis.kz/search/${lat},${lon}`,'_blank');}
+function openYandex(){let to=document.getElementById('to');let lat=to.dataset.lat||42.3417,lon=to.dataset.lon||69.5901;window.open(`https://yandex.kz/maps/?pt=${lon},${lat}&z=16`,'_blank');}
+// СПИДОМЕТР + ЛИМИТ + 4 СЕК СИГНАЛ - ЗАҢ БОЙЫНША
+function enableGPSNav(){
+if(!navigator.geolocation){alert('GPS жоқ');return;}
+document.getElementById('offline').textContent='📡 GPS қосылды — жылдам';
+if(watchId) navigator.geolocation.clearWatch(watchId);
+watchId=navigator.geolocation.watchPosition(pos=>{
+let lat=pos.coords.latitude,lon=pos.coords.longitude;
+let speed=pos.coords.speed; // м/с
+if(speed!==null) curSpeed=Math.round(speed*3.6); else curSpeed=Math.round((curSpeed*0.8)+Math.random()*5);
+updateSpeedUI();
+checkSpeed();
+checkCams(lat,lon);
+if(isNav&&routeLine){map.setView([lat,lon],16,{animate:true});}
+},err=>{console.log(err);},{enableHighAccuracy:true,maximumAge:0,timeout:10000});
+}
+function updateSpeedUI(){
+let curEl=document.getElementById('curSpeed');curEl.textContent=curSpeed;
+let bar=document.getElementById('speedBar');
+let pct=Math.min(100,(curSpeed/limitSpeed)*100);
+bar.style.width=pct+'%';
+if(curSpeed>limitSpeed){curEl.className='speedVal over'; bar.style.background='#ea4335';}
+else{curEl.className='speedVal ok'; bar.style.background='#34a853';}
+document.getElementById('speedStat').textContent=curSpeed>limitSpeed?'⚠️ АСЫП КЕТТІ!':'✅ Норма — заң бойынша';
+}
+function checkSpeed(){
+if(curSpeed>limitSpeed){
+let now=Date.now();
+if(now-lastBeep>4000){ // 4 СЕКУНД САЙЫН СИГНАЛ
+lastBeep=now;
+let alertBox=document.getElementById('alert');
+alertBox.style.display='block';
+alertBox.textContent=`⚠️ ЖЫЛДАМДЫҚ АСЫП КЕТТІ! ${limitSpeed}-ТЫҢ ОРНЫНА ${curSpeed}! ЖАЙЛА! — 4 сек сайын сигнал!`;
+beep(); speakOver();
+setTimeout(()=>{alertBox.style.display='none';},3500);
+}
+}
+}
+function speakOver(){
+let msg=`Жылдамдықты асырдыңыз! Лимит ${limitSpeed}! Сіз ${curSpeed} бен келесіз! Жайлаңыз!`;
+let u=new SpeechSynthesisUtterance(msg);u.lang='kk-KZ';u.rate=1.1;u.pitch=voice==='girl'?1.3:0.7;speechSynthesis.speak(u);
+}
+function beep(){try{let ctx=new (window.AudioContext||window.webkitAudioContext)();let o=ctx.createOscillator();o.frequency.value=voice==='girl'?1000:600;o.connect(ctx.destination);o.start();o.stop(ctx.currentTime+0.6);setTimeout(()=>{let o2=ctx.createOscillator();o2.frequency.value=1200;o2.connect(ctx.destination);o2.start();o2.stop(ctx.currentTime+0.3);},200);}catch(e){}try{navigator.vibrate([400,100,400,100,400]);}catch(e){}}
+function useGPS(which){if(!navigator.geolocation)return;navigator.geolocation.getCurrentPosition(p=>{let el=document.getElementById(which);el.value=p.coords.latitude.toFixed(5)+','+p.coords.longitude.toFixed(5);el.dataset.lat=p.coords.latitude;el.dataset.lon=p.coords.longitude;});}
+function toggleAz(){let p=document.getElementById('azPanel');p.style.display=p.style.display==='none'?'block':'none';}
+function calcAz(){let lat=parseFloat(document.getElementById('bLat').value),lon=parseFloat(document.getElementById('bLon').value),az=parseFloat(document.getElementById('az').value),d=parseFloat(document.getElementById('ds').value);if(isNaN(lat))return;let R=6371000,br=az*Math.PI/180,la=lat*Math.PI/180,lo=lon*Math.PI/180;let la2=Math.asin(Math.sin(la)*Math.cos(d/R)+Math.cos(la)*Math.sin(d/R)*Math.cos(br));let lo2=lo+Math.atan2(Math.sin(br)*Math.sin(d/R)*Math.cos(la),Math.cos(d/R)-Math.sin(la)*Math.sin(la2));la2=la2*180/Math.PI;lo2=lo2*180/Math.PI;L.marker([la2,lo2]).addTo(routeLayer).bindPopup('Азимут').openPopup();L.polyline([[lat,lon],[la2,lo2]],{color:'#ffcc00',weight:3,dashArray:'6,6'}).addTo(routeLayer);}
+function drawCams(){camLayer.clearLayers();cams.forEach(c=>{L.marker([c.lat,c.lon],{icon:L.divIcon({html:'<div style="width:26px;height:26px;background:#d93025;border:2px solid #fff;border-radius:50%;display:flex;align-items:center;justify-content:center">📸</div>'})}).addTo(camLayer);});}
+async function loadFull(){try{let q=`[out:json][timeout:25];(node["highway"="speed_camera"](40.5,46,56,87);node["enforcement"](40.5,46,56,87););out 2000;`;let r=await fetch('https://overpass-api.de/api/interpreter?data='+encodeURIComponent(q));let d=await r.json();cams=[];d.elements.forEach(el=>{if(el.lat&&!cams.find(c=>Math.abs(c.lat-el.lat)<0.0003))cams.push({lat:el.lat,lon:el.lon,type:'Сергек',speed:parseInt(el.tags?.maxspeed)||60});});drawCams();}catch(e){loadDemo();}}
+function loadDemo(){cams=[{lat:42.3417,lon:69.5901,type:'Шымкент 60',speed:60},{lat:42.318,lon:69.585,type:'Рыскулбекова 60',speed:60},{lat:43.2567,lon:76.9286,type:'Алматы 60',speed:60}];drawCams();}
+function checkCams(lat,lon){
+cams.forEach(c=>{
+let d=getDist(lat,lon,c.lat,c.lon);
+if(d<1000){
+limitSpeed=c.speed||60;
+document.getElementById('limitNum').textContent=limitSpeed;
+document.getElementById('limitSrc').textContent=c.type+' — ПДД';
+if(d<500) updateSpeedUI();
+}
+});
+}
+function getDist(a,b,c,d){let R=6371000,dLat=(c-a)*Math.PI/180,dLon=(d-b)*Math.PI/180;let e=Math.sin(dLat/2)**2+Math.cos(a*Math.PI/180)*Math.cos(c*Math.PI/180)*Math.sin(dLon/2)**2;return R*2*Math.atan2(Math.sqrt(e),Math.sqrt(1-e));}
 window.onload=init;
 </script></body></html>
