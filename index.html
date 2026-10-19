@@ -1,205 +1,202 @@
 <!DOCTYPE html><html lang="kk"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>GEO JOBA v21 - Бүкіл Камера + Дыбыс + Қыз/Ұл</title>
+<title>GEO JOBA v22 - Google Дизайн - 3 Карта</title>
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
 <style>
-*{margin:0;padding:0;box-sizing:border-box}body{font-family:Inter,sans-serif;background:#0a0a0a;color:#fff;height:100vh;overflow:hidden}
+*{margin:0;padding:0;box-sizing:border-box}body{font-family:Roboto,Inter,sans-serif;background:#0a0a0a;color:#111;height:100vh;overflow:hidden}
 #app{height:100vh;display:flex;flex-direction:column}
-#top{height:48px;background:#111;display:flex;align-items:center;padding:0 10px;gap:8px;border-bottom:1px solid #222}
-#search{flex:1;background:#222;border-radius:20px;padding:6px 12px;display:flex;gap:6px}
-#search input{background:transparent;border:none;color:#fff;flex:1;outline:none;font-size:11px}
-#main{flex:1;position:relative;overflow:hidden}.page{position:absolute;inset:0;display:none}.page.active{display:flex}
-#map{flex:1;width:100%;height:100%;background:#e5e3df}
-.mini{position:absolute;background:rgba(17,17,17,0.94);backdrop-filter:blur(10px);border:1px solid #333;border-radius:12px;padding:8px;z-index:1000;box-shadow:0 4px 20px rgba(0,0,0,0.6);max-width:260px;font-size:10px}
-.mini b{font-size:10px;color:#00ff88;display:flex;justify-content:space-between}
-.miniBtn{padding:6px 8px;border-radius:8px;border:none;font-weight:800;cursor:pointer;font-size:10px;width:100%;margin:3px 0}
-.btnG{background:#00ff88;color:#000}.btnW{background:#222;color:#fff;border:1px solid #333}.btnR{background:#ff4444;color:#fff}.btnY{background:#ffcc00;color:#000}
-#panelLeft{top:10px;left:10px;width:250px}
-#panelRight{top:10px;right:10px;display:flex;gap:6px;background:transparent;border:none;box-shadow:none;padding:0;max-width:none}
-#panelRight .miniBtn{width:auto;padding:7px 12px;border-radius:20px;font-size:11px}
-#nav{height:52px;background:#111;border-top:1px solid #222;display:flex;z-index:2000}
-.navBtn{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;color:#666;cursor:pointer;font-size:10px}.navBtn.active{color:#00ff88}
-#settingsBtn{position:absolute;bottom:80px;right:12px;width:44px;height:44px;background:#111;border:2px solid #00ff88;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:20px;z-index:1100;cursor:pointer}
-#settingsPanel{position:absolute;bottom:130px;right:12px;width:300px;background:rgba(15,15,15,0.98);border:1px solid #333;border-radius:16px;padding:12px;z-index:1200;display:none;max-height:75vh;overflow:auto}
-.toggleRow{display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px solid #222;font-size:11px}
-.switch{width:36px;height:20px;background:#333;border-radius:10px;position:relative;cursor:pointer}.switch.on{background:#00ff88}.switch::after{content:'';position:absolute;top:2px;left:2px;width:16px;height:16px;background:#fff;border-radius:50%;transition:0.2s}.switch.on::after{left:18px}
-#camAlert{position:absolute;top:60px;left:50%;transform:translateX(-50%);background:linear-gradient(90deg,#ff0000,#ff4444);color:#fff;padding:12px 20px;border-radius:30px;font-weight:900;font-size:13px;z-index:1300;display:none;animation:blink 0.8s infinite;box-shadow:0 0 20px #ff0000;text-align:center;max-width:92%}
-@keyframes blink{0%,100%{opacity:1}50%{opacity:0.6}}
-.voiceBtn{padding:8px;border-radius:10px;border:1px solid #333;background:#222;color:#fff;cursor:pointer;font-size:11px;width:48%;text-align:center}
-.voiceBtn.active{border-color:#00ff88;background:#0a1a0a;color:#00ff88;font-weight:800}
+#top{height:56px;background:#fff;display:flex;align-items:center;padding:0 12px;gap:10px;box-shadow:0 2px 8px rgba(0,0,0,0.15);z-index:1000}
+#searchMain{flex:1;background:#f1f3f4;border-radius:24px;padding:10px 16px;display:flex;align-items:center;gap:10px}
+#searchMain input{background:transparent;border:none;flex:1;outline:none;font-size:15px;color:#202124}
+.pill{background:#fff;border:1px solid #dadce0;border-radius:20px;padding:8px 14px;font-size:13px;display:flex;align-items:center;gap:6px;cursor:pointer;box-shadow:0 1px 3px rgba(0,0,0,0.1)}
+#main{flex:1;position:relative;overflow:hidden}
+.page{position:absolute;inset:0;display:none}.page.active{display:flex}
+#map{flex:1;width:100%;height:100%;background:#e8eaed}
+#typeBtn{position:absolute;top:12px;right:12px;width:44px;height:44px;background:#fff;border-radius:50%;display:flex;align-items:center;justify-content:center;box-shadow:0 2px 8px rgba(0,0,0,0.3);z-index:1100;cursor:pointer;font-size:20px}
+#locateBtn{position:absolute;bottom:110px;right:12px;width:44px;height:44px;background:#fff;border-radius:50%;display:flex;align-items:center;justify-content:center;box-shadow:0 2px 8px rgba(0,0,0,0.3);z-index:1100;cursor:pointer}
+#goBtn{position:absolute;bottom:160px;right:12px;width:56px;height:56px;background:#1a73e8;border-radius:16px;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 12px rgba(26,115,232,0.4);z-index:1100;cursor:pointer;font-size:26px;color:#fff}
+#bottomSheet{position:absolute;bottom:0;left:0;right:0;background:#fff;border-radius:24px 24px 0 0;z-index:2000;transform:translateY(100%);transition:0.35s cubic-bezier(0.4,0,0.2,1);max-height:85vh;overflow:auto;box-shadow:0 -4px 24px rgba(0,0,0,0.2)}
+#bottomSheet.open{transform:translateY(0)}
+.handle{width:40px;height:4px;background:#dadce0;border-radius:2px;margin:10px auto}
+.sheetHeader{display:flex;justify-content:space-between;align-items:center;padding:0 20px 10px;font-size:18px;font-weight:500;color:#202124}
+.mapTypeGrid{display:flex;gap:12px;padding:10px 20px}
+.mapType{flex:1;text-align:center;cursor:pointer;border:2px solid transparent;border-radius:16px;padding:6px}
+.mapType.active{border-color:#1a73e8}
+.mapTypeIcon{width:100%;height:70px;border-radius:12px;background:#f8f9fa;display:flex;align-items:center;justify-content:center;font-size:32px;overflow:hidden;border:1px solid #e8eaed}
+.mapType.active .mapTypeIcon{border:2px solid #1a73e8}
+.mapTypeLabel{font-size:13px;margin-top:6px;color:#5f6368}.mapType.active .mapTypeLabel{color:#1a73e8;font-weight:500}
+.paramGrid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;padding:10px 20px;border-top:1px solid #f1f3f4;margin-top:10px}
+.paramItem{text-align:center;cursor:pointer;padding:8px;border-radius:12px}
+.paramItem.active{background:#e8f0fe}
+.paramIcon{width:48px;height:48px;background:#f1f3f4;border-radius:12px;display:flex;align-items:center;justify-content:center;margin:0 auto;font-size:22px}
+.paramItem.active .paramIcon{background:#d2e3fc}
+.paramLabel{font-size:11px;margin-top:6px;color:#5f6368;line-height:1.2}
+#camAlert{position:absolute;top:80px;left:50%;transform:translateX(-50%);background:#d93025;color:#fff;padding:10px 18px;border-radius:24px;font-weight:700;font-size:13px;z-index:1300;display:none;box-shadow:0 4px 12px rgba(217,48,37,0.4)}
+.mini{position:absolute;background:rgba(255,255,255,0.96);backdrop-filter:blur(12px);border-radius:16px;padding:10px;z-index:1000;box-shadow:0 4px 16px rgba(0,0,0,0.15);font-size:11px;color:#202124;max-width:270px}
+.miniBtn{padding:8px 12px;border-radius:20px;border:none;font-weight:600;cursor:pointer;font-size:11px;width:100%;margin:3px 0}
+.btnG{background:#1a73e8;color:#fff}.btnW{background:#f1f3f4;color:#202124}.btnR{background:#d93025;color:#fff}
+#panelLeft{top:10px;left:10px;width:260px;display:none}
+#panelLeft.show{display:block}
+.voiceBtn{padding:8px;border-radius:10px;border:1px solid #dadce0;background:#f8f9fa;color:#202124;cursor:pointer;font-size:11px;width:48%;text-align:center}
+.voiceBtn.active{border-color:#1a73e8;background:#e8f0fe;color:#1a73e8;font-weight:700}
+#nav{height:60px;background:#fff;border-top:1px solid #e8eaed;display:flex;z-index:2000;box-shadow:0 -2px 8px rgba(0,0,0,0.06)}
+.navBtn{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;color:#5f6368;cursor:pointer;font-size:11px;gap:2px}.navBtn.active{color:#1a73e8}
 </style></head><body>
 <div id="app">
-<div id="top"><b style="font-size:11px">GEO JOBA <span style="color:#00ff88">v21 — Камера + Дыбыс + Қыз/Ұл</span></b>
-<div id="search"><span>🔍</span><input id="qFrom" placeholder="Шымкент"><span>→</span><input id="qTo" placeholder="Алматы"><button onclick="searchRoute()" style="background:#00ff88;color:#000;border:none;padding:4px 8px;border-radius:8px;font-weight:800;font-size:10px">БАРУ</button></div>
-<div style="background:#1a1a1a;border:1px solid #00ff88;padding:4px 8px;border-radius:20px;font-size:9px">❤️ 87066604117</div>
+<div id="top">
+<div id="searchMain"><span style="color:#5f6368">📍</span><input id="qMain" placeholder="Бадам, Шымкент іздеу"><span>🎤</span><div style="width:32px;height:32px;background:#1a73e8;border-radius:50%;color:#fff;display:flex;align-items:center;justify-content:center">A</div></div>
 </div>
+<div style="background:#fff;display:flex;gap:8px;padding:8px 12px;overflow:auto;white-space:nowrap;border-bottom:1px solid #f1f3f4">
+<div class="pill" onclick="gps()">🏠 Үйді көрсет</div><div class="pill">⛽ АЗС</div><div class="pill">🍽️ Ресторан</div><div class="pill">🏨 Қонақүй</div>
+</div>
+
 <div id="main">
 <div class="page active" id="page-map"><div id="map"></div>
-<div id="camAlert">📸 КАМЕРА БАР! 1КМ — ЖАЙЛА!</div>
+<div id="camAlert">📸 КАМЕРА БАР! 850м — 60 — ЖАЙЛА!</div>
+<div id="typeBtn" onclick="openSheet()">🗂️</div>
+<div id="locateBtn" onclick="gps()">📍</div>
+<div id="goBtn" onclick="openAparu()">↗️</div>
 
 <div class="mini" id="panelLeft">
-<b>📍 ЖОЛ ҚОСУ <span onclick="this.parentElement.parentElement.style.display='none'" style="cursor:pointer">✕</span></b>
-<input id="roadName" placeholder="Жол аты"><button class="miniBtn btnG" onclick="startDraw()">✏️ Сызу</button><button class="miniBtn btnW" onclick="saveRoad()">💾 Сақтау</button>
-<div style="font-size:8px;color:#888;margin-top:4px" id="rcnt">Камера: 0 | ONLINE</div>
+<b style="color:#1a73e8">📍 ЖОЛ ҚОСУ — Яндекс-те жоқ</b>
+<input id="roadName" placeholder="Жол аты" style="width:100%;background:#f1f3f4;border:1px solid #dadce0;border-radius:8px;padding:8px;margin:4px 0;color:#202124">
+<button class="miniBtn btnG" onclick="startDraw()">✏️ Картадан сызу</button><button class="miniBtn btnW" onclick="saveRoad()">💾 Сақтау</button>
+<div style="font-size:9px;color:#5f6368;margin-top:6px" id="rcnt">Камера: 0 | Режим: Жол</div>
 </div>
 
-<div class="mini" id="panelRight">
-<button class="miniBtn btnG" onclick="exportKml()">📍 KML</button>
-<button class="miniBtn btnY" onclick="exportKml()">📦 KMZ</button>
-<button class="miniBtn btnW" onclick="toggleSettings()">⚙️</button>
+<!-- GOOGLE ДИЗАЙН - ТИП КАРТЫ - BOTTOM SHEET -->
+<div id="bottomSheet">
+<div class="handle"></div>
+<div class="sheetHeader"><span>Тип карты</span><span onclick="closeSheet()" style="cursor:pointer;font-size:24px">✕</span></div>
+
+<div class="mapTypeGrid">
+<div class="mapType active" id="mt-road" onclick="setMapType('road')">
+<div class="mapTypeIcon" style="background:#e8f0fe">🗺️</div>
+<div class="mapTypeLabel">Жол<br><small>По умолчанию</small></div>
+</div>
+<div class="mapType" id="mt-geo" onclick="setMapType('geo')">
+<div class="mapTypeIcon" style="background:#e6f4ea">📐</div>
+<div class="mapTypeLabel">Геодезия<br><small>Геодезист</small></div>
+</div>
+<div class="mapType" id="mt-relief" onclick="setMapType('relief')">
+<div class="mapTypeIcon" style="background:#fce8e6">🏔️</div>
+<div class="mapTypeLabel">Рельеф 3D<br><small>Спутник + Тау</small></div>
+</div>
 </div>
 
-<div id="settingsBtn" onclick="toggleSettings()">⚙️</div>
+<div style="padding:10px 20px 0;font-size:14px;font-weight:500;color:#202124">Параметры карты — Жол режимі</div>
+<div class="paramGrid" id="paramsRoad">
+<div class="paramItem" onclick="toggleParam(this)"><div class="paramIcon">🚌</div><div class="paramLabel">Общ.<br>транспорт</div></div>
+<div class="paramItem" onclick="toggleParam(this)"><div class="paramIcon">🚦</div><div class="paramLabel">Пробки</div></div>
+<div class="paramItem active" onclick="toggleParam(this)"><div class="paramIcon">📸</div><div class="paramLabel">Камера<br>Контркам</div></div>
+<div class="paramItem" onclick="toggleParam(this)"><div class="paramIcon">🏢</div><div class="paramLabel">Объемные<br>здания</div></div>
+<div class="paramItem" onclick="toggleParam(this)"><div class="paramIcon">⛽</div><div class="paramLabel">АЗС<br>Кафе</div></div>
+<div class="paramItem" onclick="toggleParam(this)"><div class="paramIcon">🔥</div><div class="paramLabel">Лесные<br>пожары</div></div>
+<div class="paramItem active" id="pAparu" onclick="openAparu()"><div class="paramIcon" style="background:#d2e3fc">↗️</div><div class="paramLabel">Апару<br>Яндекс/2ГИС</div></div>
+<div class="paramItem" onclick="toggleParam(this)"><div class="paramIcon">💨</div><div class="paramLabel">Кач.<br>воздуха</div></div>
+</div>
 
-<div id="settingsPanel">
-<b style="font-size:12px;color:#fff;display:flex;justify-content:space-between">⚙️ НАСТРОЙКА + ДЫБЫС <span onclick="toggleSettings()" style="cursor:pointer">✕</span></b>
+<div style="padding:10px 20px 0;font-size:14px;font-weight:500;color:#202124;border-top:1px solid #f1f3f4;margin-top:10px">Геодезия режимі — Азимут осында!</div>
+<div class="paramGrid" id="paramsGeo" style="background:#f8f9ff;border-radius:12px;margin:10px">
+<div class="paramItem active" style="background:#e8f0fe"><div class="paramIcon">📐</div><div class="paramLabel">Азимут<br>+ Дист</div></div>
+<div class="paramItem active"><div class="paramIcon">🔄</div><div class="paramLabel">СК<br>Конвертер</div></div>
+<div class="paramItem"><div class="paramIcon">⛰️</div><div class="paramLabel">Z<br>Биіктік</div></div>
+<div class="paramItem"><div class="paramIcon">📍</div><div class="paramLabel">Триго-<br>пункт</div></div>
+</div>
 
-<div style="margin-top:10px;background:#1a1a1a;border:1px solid #00ff88;border-radius:12px;padding:10px">
-<b style="color:#00ff88;font-size:11px">🔊 ДЫБЫС — МІНДЕТТІ — 1КМ ЕСКЕРТУ</b>
-<div class="toggleRow"><span>🔊 Дыбыс + Вибрация</span><div class="switch on" id="swSound" onclick="toggleSw('swSound',null)"></div></div>
-<div class="toggleRow"><span>🗣️ Дауыспен ескерту</span><div class="switch on" id="swVoice" onclick="toggleSw('swVoice',null)"></div></div>
-<div style="margin-top:8px"><b style="font-size:10px;color:#fff">Дауыс таңда — Қыз / Ұл — өзің ауыстыр:</b>
+<div style="padding:10px 20px;background:#fff8f0;border-radius:12px;margin:10px;border:1px solid #fde8d0">
+<b style="font-size:12px;color:#e8710a">🔊 ДЫБЫС — МІНДЕТТІ — Қыз/Ұл — өзі ауыстырсын!</b>
+<div style="display:flex;gap:8px;margin-top:8px">
+<div class="voiceBtn active" id="voiceGirl" onclick="setVoice('girl')">👩 ҚЫЗ<br><small>Нәзік</small></div>
+<div class="voiceBtn" id="voiceBoy" onclick="setVoice('boy')">👨 ҰЛ<br><small>Қатты</small></div>
+</div>
 <div style="display:flex;gap:6px;margin-top:6px">
-<div class="voiceBtn active" id="voiceGirl" onclick="setVoice('girl')">👩 ҚЫЗ ДАУЫСЫ<br><small style="font-size:8px">Нәзік — "Камера бар!"</small></div>
-<div class="voiceBtn" id="voiceBoy" onclick="setVoice('boy')">👨 ҰЛ ДАУЫСЫ<br><small style="font-size:8px">Қатты — "Жайла!"</small></div>
-</div>
-<div style="display:flex;gap:6px;margin-top:6px">
-<button class="miniBtn btnW" style="width:50%" onclick="testVoice('girl')">👩 ТЕСТ — Қыз</button>
-<button class="miniBtn btnW" style="width:50%" onclick="testVoice('boy')">👨 ТЕСТ — Ұл</button>
-</div>
+<button class="miniBtn btnW" style="width:50%" onclick="testVoice('girl')">👩 ТЕСТ Қыз</button>
+<button class="miniBtn btnW" style="width:50%" onclick="testVoice('boy')">👨 ТЕСТ Ұл</button>
 </div>
 </div>
 
-<div id="panelAz" style="margin-top:10px;background:#0a0a0a;border-radius:10px;padding:8px;border:1px solid #222">
-<b style="color:#ff8800;font-size:10px">📐 АЗИМУТ + ҚАШЫҚТЫҚ</b>
-<input id="baseLat" placeholder="База Lat 42.34" style="width:100%;background:#222;border:1px solid #333;border-radius:6px;padding:5px;color:#fff;font-size:10px;margin:3px 0">
-<input id="baseLon" placeholder="База Lon 69.59" style="width:100%;background:#222;border:1px solid #333;border-radius:6px;padding:5px;color:#fff;font-size:10px">
-<div style="display:flex;gap:4px"><input id="azim" placeholder="Азимут °" style="width:50%;background:#222;border:1px solid #333;border-radius:6px;padding:5px;color:#fff;font-size:10px"><input id="dist" placeholder="м" style="width:50%;background:#222;border:1px solid #333;border-radius:6px;padding:5px;color:#fff;font-size:10px"></div>
-<button class="miniBtn btnY" onclick="calcCoord()">📍 Есепте</button>
+<div id="geoTools" style="padding:10px 20px;display:none">
+<b style="font-size:12px;color:#1a73e8">📐 ГЕОДЕЗИЯ ҚҰРАЛДАРЫ — Азимут осында!</b>
+<div style="display:flex;gap:6px;margin-top:6px"><input id="baseLat" placeholder="База Lat" style="flex:1;background:#f1f3f4;border:1px solid #dadce0;border-radius:8px;padding:8px"><input id="baseLon" placeholder="Lon" style="flex:1;background:#f1f3f4;border:1px solid #dadce0;border-radius:8px;padding:8px"></div>
+<div style="display:flex;gap:6px;margin-top:6px"><input id="azim" placeholder="Азимут °" style="flex:1;background:#f1f3f4;border:1px solid #dadce0;border-radius:8px;padding:8px"><input id="dist" placeholder="Қашықтық м" style="flex:1;background:#f1f3f4;border:1px solid #dadce0;border-radius:8px;padding:8px"></div>
+<button class="miniBtn btnG" onclick="calcCoord()">📍 Координата Есепте</button>
+<div id="camList" style="max-height:100px;overflow:auto;margin-top:8px;background:#f8f9fa;border-radius:8px;padding:6px;font-size:9px"></div>
 </div>
 
-<div style="margin-top:10px;background:#330000;border:1px solid #ff4444;border-radius:10px;padding:8px">
-<b style="color:#ff4444;font-size:10px">📸 БҮКІЛ ҚАЗАҚСТАН — КАМЕРА — АВТО — БІРДЕН</b>
-<div style="font-size:8px;color:#ffaaaa">Карта ашылғанда — автомат қосылады — бөліп жармай!</div>
-<button class="miniBtn btnR" onclick="loadAllKZ()">🇰🇿 БҮКІЛ ҚАЗАҚСТАН — 2000+ — ҚОСЫМША ЖҮКТЕУ</button>
-<div id="camList" style="max-height:120px;overflow:auto;margin-top:6px;background:#0006;border-radius:6px;padding:4px"></div>
-<button class="miniBtn btnG" onclick="enableCamAlert()">📡 КОНТРКАМ + ДЫБЫС + ҚЫЗ/ҰЛ — ҚОСУ</button>
-<button class="miniBtn btnW" onclick="addCam()">➕ ӨЗ КАМЕРАҢДЫ ҚОС</button>
-</div>
-
-<div style="margin-top:8px"><button class="miniBtn btnW" onclick="document.getElementById('f').click()">📂 ФАЙЛ АШУ</button><input type="file" id="f" style="display:none"></div>
-</div>
-
-<div style="position:absolute;bottom:20px;left:10px;display:flex;gap:6px;z-index:1000">
-<button class="miniBtn btnG" style="width:auto;padding:8px 14px;border-radius:20px" onclick="gps()">📡 МЕНІ ТАП</button>
-<button class="miniBtn btnR" style="width:auto;padding:8px 12px;border-radius:20px" onclick="testCamFull()">📸🔊 ТЕСТ — КАМЕРА + ДЫБЫС + ҚЫЗ/ҰЛ</button>
+<div style="padding:20px;display:flex;gap:10px">
+<button class="miniBtn btnG" style="padding:12px" onclick="closeSheet()">✅ Қолдану — Картаға өту</button>
+<button class="miniBtn btnW" style="padding:12px" onclick="loadAllKZ()">🇰🇿 БҮКІЛ КАМЕРА — 2000+</button>
 </div>
 </div>
 
-<div class="page" id="page-cad" style="background:#0d0d0d;align-items:center;justify-content:center;flex-direction:column"><b>📐 CAD v21</b></div>
-<div class="page" id="page-feed" style="background:#0a0a0a;padding:12px"><b>📋 ЛЕНТА</b></div>
-<div class="page" id="page-game" style="background:radial-gradient(#1a5a1a,#0a2a0a);align-items:center;justify-content:center"><b>🎮 GAME</b></div>
-<div class="page" id="page-profile" style="background:#0a0a0a;padding:16px;align-items:center;flex-direction:column"><b>👤 Али — 87066604117</b></div>
+</div>
+
+<div class="page" id="page-cad" style="background:#fff;align-items:center;justify-content:center;flex-direction:column;color:#202124"><b>📐 CAD — Геодезия режимі</b><div style="font-size:12px;color:#5f6368;margin-top:8px">Азимут + СК — осында</div></div>
+<div class="page" id="page-feed" style="background:#f8f9fa;padding:12px;color:#202124"><b>📋 ЛЕНТА</b></div>
+<div class="page" id="page-game" style="background:#fff;align-items:center;justify-content:center;color:#202124"><b>🎮 GAME</b></div>
+<div class="page" id="page-profile" style="background:#f8f9fa;padding:16px;color:#202124;align-items:center;flex-direction:column"><b>👤 Али — Геодезист</b><div style="margin-top:10px">87066604117</div></div>
 </div>
 <div id="nav"><div class="navBtn active" onclick="tab('map')"><span>🗺️</span><small>КАРТА</small></div><div class="navBtn" onclick="tab('cad')"><span>📐</span><small>CAD</small></div><div class="navBtn" onclick="tab('feed')"><span>📋</span><small>ЛЕНТА</small></div><div class="navBtn" onclick="tab('game')"><span>🎮</span><small>GAME</small></div><div class="navBtn" onclick="tab('profile')"><span>👤</span><small>ПРОФИЛЬ</small></div></div>
 </div>
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <script>
-let map=null,satLayer=null,camLayer=null,cams=[],userMarker=null,camAlertOn=false,watchId=null,drawMode=false,roadPts=[],currentVoice='girl';
+let map=null,layers={},camLayer=null,cams=[],userMarker=null,camAlertOn=false,watchId=null,drawMode=false,roadPts=[],currentVoice='girl',mapType='road';
 function tab(n){document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));document.getElementById('page-'+n).classList.add('active');document.querySelectorAll('.navBtn').forEach(b=>b.classList.remove('active'));event.currentTarget.classList.add('active');if(n==='map'&&map)setTimeout(()=>map.invalidateSize(),300);}
 function initMap(){
-map=L.map('map').setView([42.3417,69.5901],12);
-L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{maxZoom:19}).addTo(map);
-satLayer=L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',{maxZoom:19});
+map=L.map('map',{zoomControl:false}).setView([42.3417,69.5901],12);
+layers.road=L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{maxZoom:19}).addTo(map);
+layers.geo=L.tileLayer('https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png',{maxZoom:17});
+layers.relief=L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',{maxZoom:19});
+layers.relief2=L.tileLayer('https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png',{maxZoom:17,opacity:0.5});
 camLayer=L.layerGroup().addTo(map);
-loadDemoKZ(); // 50 шт тез
-setTimeout(()=>{loadAllKZ();},1200); // 2000+ авто - бөліп жармай - бірден!
+loadDemoKZ(); setTimeout(()=>loadAllKZ(),1200);
 map.on('click',e=>{
-if(drawMode){roadPts.push([e.latlng.lat,e.latlng.lng]);L.polyline(roadPts,{color:'#00ff88',weight:4}).addTo(map);return;}
+if(drawMode){roadPts.push([e.latlng.lat,e.latlng.lng]);L.polyline(roadPts,{color:'#1a73e8',weight:5}).addTo(map);return;}
 if(window.addCamMode){addCamAt(e.latlng.lat,e.latlng.lng);window.addCamMode=false;return;}
-L.marker([e.latlng.lat,e.latlng.lng]).addTo(map).bindPopup(e.latlng.lat.toFixed(5)).openPopup();
+let m=L.marker([e.latlng.lat,e.latlng.lng]).addTo(map);
+m.bindPopup(`<b>${e.latlng.lat.toFixed(5)}, ${e.latlng.lng.toFixed(5)}</b><br><button onclick="openAparuCoord(${e.latlng.lat},${e.latlng.lng})" style="background:#1a73e8;color:#fff;border:none;padding:6px 10px;border-radius:8px;margin-top:6px;width:100%">↗️ Яндекс / 2ГИС-ке Апару</button>`).openPopup();
 });
 setTimeout(()=>map.invalidateSize(),600);
 }
-function toggleSettings(){let p=document.getElementById('settingsPanel');p.style.display=p.style.display==='none'?'block':'none';}
-function toggleSw(id){document.getElementById(id).classList.toggle('on');}
-function setVoice(t){
-currentVoice=t;
-document.getElementById('voiceGirl').classList.toggle('active',t==='girl');
-document.getElementById('voiceBoy').classList.toggle('active',t==='boy');
-localStorage.setItem('geo_voice',t);
-speak(t==='girl'?'Қыз дауысы таңдалды! Камера бар деп ескертемін!':'Ұл дауысы таңдалды! Жайла, камера бар!',t);
+function openSheet(){document.getElementById('bottomSheet').classList.add('open');}
+function closeSheet(){document.getElementById('bottomSheet').classList.remove('open');}
+function setMapType(t){
+mapType=t;
+document.querySelectorAll('.mapType').forEach(m=>m.classList.remove('active'));
+document.getElementById('mt-'+t).classList.add('active');
+Object.values(layers).forEach(l=>{if(map.hasLayer(l))map.removeLayer(l);});
+if(t==='road'){layers.road.addTo(map);document.getElementById('panelLeft').classList.remove('show');document.getElementById('geoTools').style.display='none';document.getElementById('rcnt').textContent=`Камера: ${cams.length} | Режим: Жол — жүргізуші`;}
+if(t==='geo'){layers.geo.addTo(map);document.getElementById('panelLeft').classList.add('show');document.getElementById('geoTools').style.display='block';document.getElementById('rcnt').textContent=`Камера: ${cams.length} | Режим: Геодезия — Азимут осында!`;map.addLayer(camLayer);}
+if(t==='relief'){layers.relief.addTo(map);layers.relief2.addTo(map);document.getElementById('panelLeft').classList.remove('show');document.getElementById('geoTools').style.display='none';document.getElementById('rcnt').textContent=`Камера: ${cams.length} | Режим: Рельеф 3D — Тау + Спутник`;}
 }
-function speak(text,voiceType){
-if(!('speechSynthesis' in window)) return;
-if(document.getElementById('swVoice') && !document.getElementById('swVoice').classList.contains('on')) return;
-window.speechSynthesis.cancel();
-let u=new SpeechSynthesisUtterance(text);
-u.lang='kk-KZ'; u.rate=0.95; u.volume=1;
-let voices=window.speechSynthesis.getVoices();
-if(voiceType==='girl'){
-let v=voices.find(v=>v.name.toLowerCase().includes('female')||v.name.toLowerCase().includes('zira')||v.name.toLowerCase().includes('aigul')||v.name.includes('Google')&&v.lang.startsWith('kk') )||voices.find(v=>v.lang.startsWith('ru')&&v.name.toLowerCase().includes('female'))||voices[0];
-if(v) u.voice=v; u.pitch=1.3;
+function toggleParam(el){el.classList.toggle('active');}
+function openAparu(){
+let center=map.getCenter();
+openAparuCoord(center.lat,center.lng);
+}
+function openAparuCoord(lat,lon){
+let yandex=`https://yandex.kz/maps/?pt=${lon},${lat}&z=16&l=map`;
+let gis=`https://2gis.kz/search/${lat},${lon}`;
+if(confirm(`📍 ${lat.toFixed(5)}, ${lon.toFixed(5)}\n\nАпару қайда?\nOK = Яндекс Карта\nCancel = 2ГИС`)){
+window.open(yandex,'_blank');
 }else{
-let v=voices.find(v=>v.name.toLowerCase().includes('male')||v.name.toLowerCase().includes('david')||v.name.toLowerCase().includes('guy'))||voices[0];
-if(v) u.voice=v; u.pitch=0.8;
+window.open(gis,'_blank');
 }
-window.speechSynthesis.speak(u);
 }
-function testVoice(t){ setVoice(t); speak(t==='girl'?`Сәлем! Қыз дауысы! Алда камера бар! 800 метр! 60-пен жүр!`:`Сәлем бауырым! Ұл дауысы! Камера бар! 1 километр! Жайла!`, t); beep(); }
-function beep(){
-if(document.getElementById('swSound') && !document.getElementById('swSound').classList.contains('on')) return;
-try{
-let ctx=new (window.AudioContext||window.webkitAudioContext)();
-let o=ctx.createOscillator(); let g=ctx.createGain();
-o.type='sine'; o.frequency.value=currentVoice==='girl'?900:500;
-o.connect(g); g.connect(ctx.destination);
-g.gain.setValueAtTime(0.8,ctx.currentTime);
-o.start(); o.stop(ctx.currentTime+0.4);
-setTimeout(()=>{let o2=ctx.createOscillator();o2.frequency.value=currentVoice==='girl'?1200:700;o2.connect(g);o2.start();o2.stop(ctx.currentTime+0.3);},250);
-}catch(e){let a=new Audio('https://actions.google.com/sounds/v1/alarms/beep_short.ogg');a.play();}
-try{navigator.vibrate([300,100,300,100,300]);}catch(e){}
-}
-function drawCams(){camLayer.clearLayers();cams.forEach((c,i)=>{let icon=L.divIcon({html:`<div style="width:28px;height:28px;background:#ff0000;border:2px solid #fff;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:14px;box-shadow:0 2px 8px #ff0000">📸</div>`,iconSize:[28,28]});L.marker([c.lat,c.lon],{icon:icon}).addTo(camLayer).bindPopup(`<b>📸 ${c.type}</b><br>${c.speed} км/сағ<br>${c.lat.toFixed(4)}`);});updateCamList();}
-function updateCamList(){let l=document.getElementById('camList');l.innerHTML='';cams.slice(0,80).forEach(c=>{l.innerHTML+=`<div style="display:flex;justify-content:space-between;padding:3px 0;border-bottom:1px solid #222;font-size:8px"><span>📸 ${c.type} ${c.speed}</span><span>${c.lat.toFixed(2)}</span></div>`});if(cams.length>80)l.innerHTML+=`<div style="text-align:center;color:#888;font-size:8px">+ ${cams.length-80} камера тағы...</div>`;document.getElementById('rcnt').textContent=`Камера: ${cams.length} | ONLINE | Дауыс: ${currentVoice==='girl'?'Қыз 👩':'Ұл 👨'}`;}
-async function loadAllKZ(){
-try{
-let q=`[out:json][timeout:30];node["highway"="speed_camera"](40.5,46,56,87);out 3000;`;
-let r=await fetch('https://overpass-api.de/api/interpreter?data='+encodeURIComponent(q));
-let data=await r.json();
-data.elements.forEach(el=>{
-if(!cams.find(c=>Math.abs(c.lat-el.lat)<0.0005&&Math.abs(c.lon-el.lon)<0.0005)){
-cams.push({lat:el.lat,lon:el.lon,type:'Камера OSM',speed:parseInt(el.tags?.maxspeed)||60});
-}
-});
-drawCams();
-}catch(e){console.log('OSM баяу');}
-}
-function loadDemoKZ(){
-cams=[
-{lat:43.2567,lon:76.9286,type:'Алматы Райымбек 60',speed:60},{lat:51.1694,lon:71.4491,type:'Астана Туран Сергек 60',speed:60},
-{lat:42.3417,lon:69.5901,type:'Шымкент Байтурсынов 60',speed:60},{lat:43.3,lon:77.0,type:'Автобан Алматы-Капшагай 110',speed:110},
-{lat:51.0,lon:71.3,type:'Автобан Астана-Щучинск 140',speed:140},{lat:42.8,lon:71.3,type:'Трасса Шымкент-Тараз 90',speed:90},
-{lat:42.5,lon:70.0,type:'Ленгер ауылы 40 Школа',speed:40},{lat:42.2,lon:69.8,type:'Сарыагаш 60',speed:60},
-{lat:44.8,lon:65.5,type:'Кызылорда трасса 90',speed:90},{lat:50.4,lon:80.2,type:'Семей трасса 90',speed:90},
-];drawCams();
-}
-function enableCamAlert(){camAlertOn=true;gps();testCamFull();alert('📸🔊 КОНТРКАМ + ДЫБЫС ҚОСЫЛДЫ!\nҚыз/Ұл дауысы - 1км ескертеді!');}
-function testCamFull(){
-let b=document.getElementById('camAlert');b.style.display='block';
-let d=850;let speed=60;
-b.textContent=`📸 КАМЕРА БАР! ${d}м — ${speed} км/сағ — ЖАЙЛА! ⚠️`;
-beep();
-speak(currentVoice==='girl'?`Назар аударыңыз! Алда камера бар! ${d} метр! Жылдамдық ${speed}! Жайлаңыз!`:`Бауырым! Камера бар! ${d} метр қалды! ${speed}-пен жүр! Жайла!`,currentVoice);
-setTimeout(()=>b.style.display='none',5000);
-}
-function gps(){if(!navigator.geolocation)return;navigator.geolocation.getCurrentPosition(p=>{let lat=p.coords.latitude,lng=p.coords.longitude;if(userMarker)map.removeLayer(userMarker);userMarker=L.marker([lat,lng],{icon:L.divIcon({html:'<div style="width:18px;height:18px;background:#00ff88;border:3px solid #fff;border-radius:50%"></div>'})}).addTo(map);map.setView([lat,lng],15);checkCams(lat,lng);});if(watchId)navigator.geolocation.clearWatch(watchId);watchId=navigator.geolocation.watchPosition(pos=>{checkCams(pos.coords.latitude,pos.coords.longitude);},null,{enableHighAccuracy:true});}
-function checkCams(lat,lng){if(!camAlertOn)return;cams.forEach(c=>{let d=getDist(lat,lng,c.lat,c.lon);if(d<1000&&d>0&&d%200<20){let b=document.getElementById('camAlert');b.style.display='block';b.textContent=`📸 КАМЕРА БАР! ${d.toFixed(0)}м — ${c.speed} км/сағ — ЖАЙЛА! ${c.type}`;beep();speak(currentVoice==='girl'?`Камера бар! ${d.toFixed(0)} метр! ${c.speed}пен жүр!`:`Бауырым камера бар! ${d.toFixed(0)} метр! ${c.speed}!`,currentVoice);}});}
-function getDist(lat1,lon1,lat2,lon2){let R=6371000,dLat=(lat2-lat1)*Math.PI/180,dLon=(lon2-lon1)*Math.PI/180;let a=Math.sin(dLat/2)**2+Math.cos(lat1*Math.PI/180)*Math.cos(lat2*Math.PI/180)*Math.sin(dLon/2)**2;return R*2*Math.atan2(Math.sqrt(a),Math.sqrt(1-a));}
-function addCam(){window.addCamMode=true;alert('Картаны бас!');}
-function addCamAt(lat,lon){let s=prompt('Лимит?','60');if(!s)return;let t=prompt('Түрі?','Сергек');cams.push({lat:lat,lon:lon,type:t,speed:parseInt(s)});drawCams();}
+function setVoice(t){currentVoice=t;document.getElementById('voiceGirl').classList.toggle('active',t==='girl');document.getElementById('voiceBoy').classList.toggle('active',t==='boy');localStorage.setItem('geo_voice',t);speak(t==='girl'?'Қыз дауысы таңдалды!':'Ұл дауысы таңдалды!',t);}
+function speak(text,vt){if(!('speechSynthesis' in window))return;window.speechSynthesis.cancel();let u=new SpeechSynthesisUtterance(text);u.lang='kk-KZ';u.rate=0.95;let vs=window.speechSynthesis.getVoices();if(vt==='girl'){u.pitch=1.3;u.rate=1.0;}else{u.pitch=0.7;u.rate=0.9;}window.speechSynthesis.speak(u);}
+function testVoice(t){setVoice(t);speak(t==='girl'?`Сәлем! Қыз дауысы! Алда камера бар! 800 метр!`:`Бауырым! Ұл дауысы! Камера бар! 1 километр! Жайла!`,t);beep();}
+function beep(){try{let ctx=new (window.AudioContext||window.webkitAudioContext)();let o=ctx.createOscillator();let g=ctx.createGain();o.frequency.value=currentVoice==='girl'?900:500;o.connect(g);g.connect(ctx.destination);o.start();o.stop(ctx.currentTime+0.4);setTimeout(()=>{let o2=ctx.createOscillator();o2.frequency.value=currentVoice==='girl'?1200:700;o2.connect(g);o2.start();o2.stop(ctx.currentTime+0.3);},200);}catch(e){}try{navigator.vibrate([300,100,300]);}catch(e){}}
+function drawCams(){camLayer.clearLayers();cams.forEach(c=>{let icon=L.divIcon({html:`<div style="width:28px;height:28px;background:#d93025;border:2px solid #fff;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:14px;box-shadow:0 2px 8px rgba(0,0,0,0.3)">📸</div>`,iconSize:[28,28]});L.marker([c.lat,c.lon],{icon:icon}).addTo(camLayer).bindPopup(`<b>📸 ${c.type}</b><br>${c.speed} км/сағ<br><button onclick="openAparuCoord(${c.lat},${c.lon})" style="background:#1a73e8;color:#fff;border:none;padding:6px;border-radius:8px;width:100%;margin-top:4px">↗️ Апару Яндекс/2ГИС</button>`);});let l=document.getElementById('camList');if(l){l.innerHTML='';cams.slice(0,60).forEach(c=>{l.innerHTML+=`<div style="display:flex;justify-content:space-between;padding:3px 0;border-bottom:1px solid #e8eaed;font-size:8px"><span>📸 ${c.type}</span><span>${c.lat.toFixed(2)}</span></div>`});}}
+async function loadAllKZ(){try{let q=`[out:json][timeout:30];node["highway"="speed_camera"](40.5,46,56,87);out 3000;`;let r=await fetch('https://overpass-api.de/api/interpreter?data='+encodeURIComponent(q));let d=await r.json();d.elements.forEach(el=>{if(!cams.find(c=>Math.abs(c.lat-el.lat)<0.0005&&Math.abs(c.lon-el.lon)<0.0005))cams.push({lat:el.lat,lon:el.lon,type:'Камера OSM',speed:parseInt(el.tags?.maxspeed)||60});});drawCams();}catch(e){}}
+function loadDemoKZ(){cams=[{lat:43.2567,lon:76.9286,type:'Алматы 60',speed:60},{lat:51.1694,lon:71.4491,type:'Астана 60',speed:60},{lat:42.3417,lon:69.5901,type:'Шымкент 60',speed:60},{lat:43.3,lon:77.0,type:'Автобан 110',speed:110},{lat:51.0,lon:71.3,type:'Автобан 140',speed:140},{lat:42.8,lon:71.3,type:'Трасса 90',speed:90},{lat:42.5,lon:70.0,type:'Ленгер 40',speed:40}];drawCams();}
+function gps(){if(!navigator.geolocation)return;navigator.geolocation.getCurrentPosition(p=>{let lat=p.coords.latitude,lng=p.coords.longitude;if(userMarker)map.removeLayer(userMarker);userMarker=L.marker([lat,lng],{icon:L.divIcon({html:'<div style="width:18px;height:18px;background:#1a73e8;border:3px solid #fff;border-radius:50%"></div>'})}).addTo(map);map.setView([lat,lng],15);checkCams(lat,lng);});if(watchId)navigator.geolocation.clearWatch(watchId);watchId=navigator.geolocation.watchPosition(pos=>checkCams(pos.coords.latitude,pos.coords.longitude),null,{enableHighAccuracy:true});}
+function checkCams(lat,lng){if(!camAlertOn)return;cams.forEach(c=>{let d=getDist(lat,lng,c.lat,c.lon);if(d<1000&&d>0){let b=document.getElementById('camAlert');b.style.display='block';b.textContent=`📸 КАМЕРА БАР! ${d.toFixed(0)}м — ${c.speed} — ЖАЙЛА!`;beep();speak(currentVoice==='girl'?`Камера бар! ${d.toFixed(0)} метр!`:`Бауырым камера бар! ${d.toFixed(0)}!`,currentVoice);}});}
+function getDist(a,b,c,d){let R=6371000,dLat=(c-a)*Math.PI/180,dLon=(d-b)*Math.PI/180;let e=Math.sin(dLat/2)**2+Math.cos(a*Math.PI/180)*Math.cos(c*Math.PI/180)*Math.sin(dLon/2)**2;return R*2*Math.atan2(Math.sqrt(e),Math.sqrt(1-e));}
 function startDraw(){drawMode=!drawMode;roadPts=[];alert(drawMode?'✏️ Картаны бас':'Тоқтады');}
 function saveRoad(){alert('✅ Сақталды!');drawMode=false;roadPts=[];}
 function calcCoord(){let lat=parseFloat(document.getElementById('baseLat').value),lon=parseFloat(document.getElementById('baseLon').value),az=parseFloat(document.getElementById('azim').value),d=parseFloat(document.getElementById('dist').value);if(isNaN(lat)||isNaN(lon)||isNaN(az)||isNaN(d)){alert('Толтыр!');return;}let R=6371000,brng=az*Math.PI/180,lat1=lat*Math.PI/180,lon1=lon*Math.PI/180;let lat2=Math.asin(Math.sin(lat1)*Math.cos(d/R)+Math.cos(lat1)*Math.sin(d/R)*Math.cos(brng));let lon2=lon1+Math.atan2(Math.sin(brng)*Math.sin(d/R)*Math.cos(lat1),Math.cos(d/R)-Math.sin(lat1)*Math.sin(lat2));lat2=lat2*180/Math.PI;lon2=lon2*180/Math.PI;L.marker([lat2,lon2]).addTo(map).bindPopup('Жаңа').openPopup();map.setView([lat2,lon2],15);}
-function searchRoute(){alert('Маршрут');}
+function addCam(){window.addCamMode=true;alert('Картаны бас!');}
+function addCamAt(lat,lon){let s=prompt('Лимит?','60');if(!s)return;let t=prompt('Түрі?','Сергек');cams.push({lat:lat,lon:lon,type:t,speed:parseInt(s)});drawCams();}
 window.onload=()=>{initMap();let v=localStorage.getItem('geo_voice');if(v)currentVoice=v;setTimeout(()=>{if(window.speechSynthesis)window.speechSynthesis.getVoices();},500);};
 </script></body></html>
