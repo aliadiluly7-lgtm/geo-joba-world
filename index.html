@@ -1,106 +1,149 @@
 <!DOCTYPE html>
 <html lang="kk">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<meta name="theme-color" content="#0b1220">
-<title>GEO JOBA WORLD v29 WORLD FIRST - TIGA</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
+<meta name="author" content="aliadiluly7-lgtm - Әли Әділұлы">
+<meta name="copyright" content="© 2026 GEO JOBA WORLD - aliadiluly7-lgtm">
+<title>GEO JOBA WORLD v29 - Әлемде жоқ геодезия платформасы</title>
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <script src="https://unpkg.com/dxf-parser@1.1.2/dist/dxf-parser.js"></script>
 <style>
-:root{--bg:#0b1220;--card:rgba(255,255,255,.07);--line:rgba(255,255,255,.12);--g:linear-gradient(135deg,#7c3aed,#06b6d4);--tx:#eef2ff;--mu:#94a3b8;--ok:#22c55e}
-*{box-sizing:border-box;margin:0}html,body{height:100%;background:var(--bg);color:var(--tx);font:15px system-ui;overflow:hidden}
-input,textarea,select{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:10px 12px;outline:0;width:100%;color:var(--tx)}
-.btn{background:var(--g);border:0;border-radius:12px;padding:10px 16px;font-weight:700;cursor:pointer;color:#fff}
-.btn.s{background:var(--card);border:1px solid var(--line)}
-.glass{background:var(--card);border:1px solid var(--line);backdrop-filter:blur(14px);border-radius:18px}
-#auth{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;background:radial-gradient(circle at 20% 10%,#4c1d95,transparent 50%),radial-gradient(circle at 80% 90%,#0e7490,transparent 50%),var(--bg);z-index:9999;padding:20px}
-#auth .glass{padding:24px;width:100%;max-width:380px;display:grid;gap:12px}
-#app{display:none;height:100%;flex-direction:column}
-#views{flex:1;position:relative;min-height:0}
-.view{position:absolute;inset:0;display:none;overflow:auto}
-.view.on{display:block}
-nav{display:flex;border-top:1px solid var(--line);background:#0d1528}
-nav button{flex:1;background:0;border:0;padding:10px 0;color:var(--mu);font-size:11px}
-nav button b{display:block;font-size:20px}
-nav button.on{color:#fff}
-.hero{padding:28px 16px;text-align:center;background:linear-gradient(180deg,#312e81,transparent)}
-#av{width:110px;height:110px;border-radius:50%;object-fit:cover;border:3px solid #fff3;background:var(--g);cursor:pointer}
-.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:2px;padding:2px}
-.grid div{position:relative;aspect-ratio:1;background:#000}
-.grid img,.grid video{width:100%;height:100%;object-fit:cover}
-.grid i{position:absolute;top:4px;right:4px;background:#000a;border-radius:50%;width:24px;height:24px;text-align:center;line-height:24px;cursor:pointer}
-.row{display:flex;gap:12px;padding:12px 16px;border-bottom:1px solid var(--line);cursor:pointer;align-items:center}
-.ava{width:46px;height:46px;border-radius:50%;background:var(--g);display:flex;align-items:center;justify-content:center;font-weight:700;flex:none}
-.badge{background:var(--ok);color:#000;border-radius:10px;padding:1px 7px;font-size:12px}
-#chat{position:absolute;inset:0;background:#0b141a;display:none;flex-direction:column;z-index:5}
-#chat header,.bar{display:flex;gap:10px;align-items:center;padding:10px;background:#1f2c34}
-#msgs{flex:1;overflow:auto;padding:10px;display:flex;flex-direction:column;gap:4px;background:#0b141a}
-.bub{max-width:78%;padding:8px 10px;border-radius:12px;font-size:14px}
-.me{align-self:flex-end;background:#005c4b}.you{align-self:flex-start;background:#202c33}
-#map{width:100%;height:100%}
-.tools{position:absolute;top:10px;left:10px;z-index:400;display:flex;flex-direction:column;gap:5px}
-.tools button{background:#fff;color:#000;border:0;border-radius:8px;padding:6px 9px;font-size:11px;box-shadow:0 2px 6px rgba(0,0,0,.4)}
-.elev{position:absolute;bottom:70px;left:10px;right:10px;height:90px;background:rgba(13,21,40,.95);border:1px solid var(--line);border-radius:12px;padding:8px;z-index:450}
-.cadWrap{position:relative;background:#000;border-radius:12px;overflow:hidden;height:380px}
-#cadCanvas{width:100%;height:100%;display:block}
-.nardy{width:100%;max-width:540px;margin:10px auto;background:#f0d9b5;border:8px solid #8b5a2b;border-radius:14px;aspect-ratio:1.7;display:grid;grid-template-columns:repeat(12,1fr);grid-template-rows:repeat(2,1fr);gap:2px;padding:6px}
-.point{border:1px solid #b58863;display:flex;align-items:center;justify-content:center;font-size:10px;cursor:pointer}
+*{margin:0;padding:0;box-sizing:border-box}body{font-family:system-ui;background:#0f1115;color:#fff;overflow:hidden}
+#map{position:absolute;inset:0;z-index:1}
+.topbar{position:fixed;top:0;left:0;right:0;z-index:900;background:rgba(15,17,21,.92);backdrop-filter:blur(10px);padding:10px 12px;display:flex;gap:8px;align-items:center;overflow-x:auto}
+.topbar b{white-space:nowrap;font-size:14px}
+.btn{background:#1e232e;color:#fff;border:0;border-radius:10px;padding:8px 12px;font-weight:700;font-size:13px;cursor:pointer;white-space:nowrap}
+.btn.active{background:#00b34a}
+.panels{position:fixed;left:10px;top:58px;z-index:800;display:flex;flex-direction:column;gap:8px;max-width:320px}
+.panel{background:rgba(20,24,33,.94);border-radius:14px;padding:10px;display:none;max-height:70vh;overflow:auto}
+.panel.show{display:block}
+input{width:100%;padding:8px;border-radius:8px;border:0;background:#2a3142;color:#fff;margin:4px 0}
+.copy{font-size:11px;color:#888;text-align:center;padding:6px}
 </style>
 </head>
 <body>
-<div id="auth"><div class="glass"><h1>GEO JOBA WORLD v29 WORLD FIRST</h1><small>Алла Тағала қабыл етсін - Профильден бастау - SMS - 100M жүрек - Online+Offline+Tiga</small><input id="phone" value="+7"><button class="btn" onclick="sendSMS()">SMS жіберу</button><input id="smscode" placeholder="123456"><button class="btn s" onclick="verifySMS()">Кіру</button><div id="smsInfo"></div></div></div>
-<div id="app">
-<div id="views">
-<div class="view on" id="v-profile"><div class="hero"><img id="av" src="https://i.pravatar.cc/200?img=12" onclick="document.getElementById('avaInp').click()"><input type="file" id="avaInp" accept="image/*" hidden><h2 id="pname" contenteditable="true">Әділұлы Әли - Шымкент</h2><p contenteditable="true" style="color:var(--mu)">Геодезист | Google Earth + Тигапункт + CAD FastView + 2GIS пробка | 10 соток 4мкр</p><div style="margin-top:10px;display:flex;gap:6px;justify-content:center"><span class="badge">SMS ✅</span><span class="badge" id="streak">🔥 0</span><span class="badge">Tiga 🔺</span></div><div style="margin-top:12px;display:flex;gap:4px"><input id="wlat" value="42.3417"><input id="wlon" value="69.5901"><button class="btn s" onclick="convertSK42()">→ SK-42</button></div><div id="sk42out"></div></div><div style="padding:12px"><h3>📸 Галерея - шексіз</h3><input type="file" id="galInp" multiple accept="image/*,video/*"><div class="grid" id="gallery"></div></div></div>
-<div class="view" id="v-chat"><div style="padding:12px"><h3>💬 Чат - WhatsApp + 🔥 От + Голосовой + Видео + Meta AI</h3></div><div id="list"></div><div id="chat"><header><button class="btn s" onclick="closeChat()">←</button><div class="ava" id="cava">M</div><div style="flex:1"><b id="cname">Meta AI</b></div><button class="btn s" onclick="startVideoCall()">📹</button><button class="btn s" onclick="startVoice()">🎙️</button></header><div id="msgs"></div><div class="bar"><input id="minp" placeholder="Жаз..."><button class="btn" onclick="sendMsg()">▶️</button></div><div style="display:flex;gap:6px;padding:6px"><video id="localV" autoplay muted playsinline style="width:49%;background:#000;border-radius:8px;height:120px"></video><video id="remoteV" autoplay playsinline style="width:49%;background:#222;border-radius:8px;height:120px"></video></div></div></div>
-<div class="view" id="v-map"><div id="map"></div><div class="tools"><button onclick="locateMe()">📍 Мені тап</button><button onclick="toggle('cam')">🎥 Камера</button><button onclick="toggle('geo')">📐 Геодезия</button><button onclick="toggle('relief')">⛰️ Рельеф</button><button onclick="toggle('traffic')">🚦 Пробка</button><button onclick="toggle('tiga')">🔺 Тигапункт</button><button onclick="toggle('elev')">📈 Биіктік</button><button onclick="routeMode()">🧭 В путь</button><button onclick="toggleSat()">🛰️ Earth</button><button onclick="loadRealTiga()">🌍 OSM Tiga</button></div><div class="elev" id="elevBox" style="display:none"><canvas id="elevCanvas" style="width:100%;height:100%"></canvas></div></div>
-<div class="view" id="v-cad" style="padding:10px"><h3>📐 CAD - DWG FastView FULL</h3><input type="file" id="fin" accept=".dwg,.dxf" multiple><div id="filelist"></div><div class="cadWrap"><canvas id="cadCanvas"></canvas></div><div style="display:flex;gap:6px;margin-top:8px;flex-wrap:wrap"><button class="btn s" onclick="cadFit()">Fit</button><button class="btn s" onclick="cadMeasure()">Өлшеу</button><button class="btn s" onclick="cadAzimuth()">Азимут</button><button class="btn s" onclick="cadLayout()">Layouts</button><button class="btn s" onclick="cadDims()">Размеры</button></div></div>
-<div class="view" id="v-game" style="padding:12px"><h3>🎲 Game - 6-лық Нарды</h3><div class="nardy" id="nardy"></div><div style="display:flex;gap:10px;justify-content:center"><div id="d1" style="width:40px;height:40px;background:#fff;color:#000;border-radius:8px;display:flex;align-items:center;justify-content:center;font-weight:700">1</div><div id="d2" style="width:40px;height:40px;background:#fff;color:#000;border-radius:8px;display:flex;align-items:center;justify-content:center;font-weight:700">6</div><button class="btn" onclick="rollDice()">Таста</button><button class="btn s" onclick="initNardy()">Жаңа</button></div></div>
+<div id="map"></div>
+
+<div class="topbar">
+  <b>🌍 GEO JOBA WORLD</b>
+  <button class="btn active" onclick="setLayer('osm')">🗺 OSM</button>
+  <button class="btn" onclick="setLayer('sat')">🛰 Google</button>
+  <button class="btn" onclick="setLayer('2gis')">🚦 2GIS Пробка</button>
+  <button class="btn" onclick="togglePanel('tiga')">🔺 Тига</button>
+  <button class="btn" onclick="togglePanel('cad')">📐 CAD</button>
+  <button class="btn" onclick="togglePanel('sms')">💬 SMS</button>
+  <button class="btn" onclick="togglePanel('narda')">🎲 Нарды</button>
 </div>
-<nav><button class="on" id="b-profile" onclick="show('profile')"><b>👤</b>Профиль</button><button id="b-chat" onclick="show('chat')"><b>💬</b>Чат</button><button id="b-map" onclick="show('map')"><b>🌍</b>Карта</button><button id="b-cad" onclick="show('cad')"><b>📐</b>CAD</button><button id="b-game" onclick="show('game')"><b>🎲</b>Game</button></nav>
+
+<div class="panels">
+  <div id="p-tiga" class="panel">
+    <b>🔺 Тигапункт іздеу</b>
+    <input id="tigaName" placeholder="Аты: Мысалы Шымкент">
+    <input id="tigaX" type="number" placeholder="X / Lat">
+    <input id="tigaY" type="number" placeholder="Y / Lon">
+    <button class="btn" style="width:100%;background:#00b34a" onclick="addTiga()">+ Тига қосу</button>
+    <div id="tigaList" style="margin-top:8px;font-size:12px"></div>
+  </div>
+  <div id="p-cad" class="panel">
+    <b>📐 CAD / DXF FastView</b>
+    <input type="file" id="dxfFile" accept=".dxf">
+    <div id="cadInfo" style="font-size:12px;color:#aaa;margin-top:6px">DXF жүкте - картада көрінеді</div>
+  </div>
+  <div id="p-sms" class="panel">
+    <b>💬 WhatsApp / SMS Чат</b>
+    <input id="smsText" placeholder="Хабарлама...">
+    <button class="btn" style="width:100%" onclick="shareWhatsApp()">WhatsApp-қа жіберу</button>
+  </div>
+  <div id="p-narda" class="panel">
+    <b>🎲 Нарды - демалыс</b>
+    <div style="font-size:12px">Геодезистер ойнайды - ұпай: <span id="nardaScore">0</span></div>
+    <button class="btn" onclick="rollNarda()">🎲 Таста</button>
+  </div>
 </div>
+
+<!-- ҚОРҒАУ + ШӘЙ ПҰЛ - БІР БЛОК - БАСҚА КОМАНДАЛАР САҚТАЛҒАН -->
+<div id="donatBtn" style="position:fixed;right:14px;bottom:88px;z-index:9999;background:linear-gradient(135deg,#00b34a,#008f3a);color:#fff;padding:12px 16px;border-radius:999px;font-weight:900;box-shadow:0 8px 24px rgba(0,0,0,.35);cursor:pointer;display:flex;align-items:center;gap:8px;">🍵 Шәй пұл</div>
+
+<div id="donatBox" style="display:none;position:fixed;inset:0;z-index:10000;background:rgba(0,0,0,.6);align-items:center;justify-content:center;padding:16px">
+  <div style="background:#fff;border-radius:20px;padding:20px;max-width:360px;width:100%;text-align:center;color:#000">
+    <div style="font-size:28px">🍵</div>
+    <div style="font-weight:900;font-size:20px;margin:8px 0">GEO JOBA WORLD</div>
+    <div style="color:#666;font-size:13px">Автор: Әли Әділұлы | Shymkent<br>© aliadiluly7-lgtm 2026</div>
+    <div style="margin:16px 0;background:#f6f6f6;border-radius:12px;padding:12px">
+      <div style="font-size:12px;color:#888">Kaspi Gold</div>
+      <div style="font-weight:900;font-size:22px">87066604117</div>
+    </div>
+    <button id="copyKaspi" style="width:100%;background:#000;color:#fff;border:0;border-radius:12px;padding:12px;font-weight:800">📋 Номерді көшіру</button>
+    <a href="https://pay.kaspi.kz/pay/87066604117" target="_blank" style="display:block;margin-top:10px;background:#00b34a;color:#fff;text-decoration:none;border-radius:12px;padding:12px;font-weight:800">💳 Kaspi Pay ашу</a>
+    <button id="closeDonat" style="margin-top:10px;background:0;border:0;color:#888">Жабу</button>
+  </div>
+</div>
+
+<div style="position:fixed;bottom:0;left:0;right:0;z-index:800;background:rgba(0,0,0,.7);text-align:center;padding:6px 10px;font-size:10px;color:#888">© 2026 GEO JOBA WORLD - Авторы: Әли Әділұлы - aliadiluly7-lgtm - Kaspi: 87066604117 - Барлық құқық қорғалған</div>
+
 <script>
-function sendSMS(){let c=Math.floor(100000+Math.random()*900000);localStorage.setItem('sms_code',c);document.getElementById('smsInfo').textContent='SMS: '+c;setTimeout(()=>{document.getElementById('smscode').value=c;},1000)}
-function verifySMS(){if(document.getElementById('smscode').value===localStorage.getItem('sms_code')){localStorage.setItem('auth','1');document.getElementById('auth').style.display='none';document.getElementById('app').style.display='flex';setTimeout(()=>map.invalidateSize(),400);}}
-if(localStorage.getItem('auth')){document.getElementById('auth').style.display='none';document.getElementById('app').style.display='flex';}
-function show(n){document.querySelectorAll('.view').forEach(v=>v.classList.remove('on'));document.querySelectorAll('nav button').forEach(b=>b.classList.remove('on'));document.getElementById('v-'+n).classList.add('on');document.getElementById('b-'+n).classList.add('on');if(n==='map')setTimeout(()=>map.invalidateSize(),300)}
-document.getElementById('avaInp').addEventListener('change',e=>{let f=e.target.files[0];if(!f)return;let r=new FileReader();r.onload=ev=>document.getElementById('av').src=ev.target.result;r.readAsDataURL(f)});
-document.getElementById('galInp').addEventListener('change',e=>{for(let f of e.target.files){let r=new FileReader();r.onload=ev=>{let isV=f.type.startsWith('video');let html=isV?`<video src="${ev.target.result}" controls></video>`:`<img src="${ev.target.result}">`;let d=document.createElement('div');d.innerHTML=html+`<i onclick="this.parentElement.remove()">✕</i>`;document.getElementById('gallery').appendChild(d)};r.readAsDataURL(f)}});
-let streak=Number(localStorage.getItem('streak')||0);document.getElementById('streak').textContent='🔥 '+streak;function incStreak(){streak++;localStorage.setItem('streak',streak);document.getElementById('streak').textContent='🔥 '+streak;}
-let chats=[{id:'meta',name:'Meta AI - GEO',ava:'🤖',last:'Платформа ішінде - геодезия, тигапункт',fire:0},{id:'ali',name:'Әли',ava:'A',last:'10 соток - тигапункт көрдің бе?',fire:5}];
-function renderList(){let el=document.getElementById('list');el.innerHTML='';chats.forEach(c=>{let d=document.createElement('div');d.className='row';d.innerHTML=`<div class="ava">${c.ava}</div><div class="m"><b>${c.name} 🔥 ${c.fire}</b><small>${c.last}</small></div>`;d.onclick=()=>openChat(c);el.appendChild(d)});}renderList();
-let cur=null;function openChat(c){cur=c;document.getElementById('chat').style.display='flex';document.getElementById('cname').textContent=c.name;document.getElementById('msgs').innerHTML=`<div class="bub you">Сәлем ${c.name}!</div>`;}
-function closeChat(){document.getElementById('chat').style.display='none';}
-function sendMsg(){let inp=document.getElementById('minp');let txt=inp.value.trim();if(!txt)return;let box=document.getElementById('msgs');let d=document.createElement('div');d.className='bub me';d.textContent=txt;box.appendChild(d);inp.value='';if(cur&&cur.id==='meta'){setTimeout(()=>{let r=document.createElement('div');r.className='bub you';r.textContent=`🤖 Meta AI: "${txt}" - азимут 123°, h=512м`;box.appendChild(r);box.scrollTop=box.scrollHeight;},500);}box.scrollTop=box.scrollHeight;incStreak();}
-let map=L.map('map',{zoomControl:false}).setView([42.3417,69.5901],12);
-let osm=L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{maxZoom:19}).addTo(map);
-let sat=L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',{maxZoom:19});
-let topo=L.tileLayer('https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png',{maxZoom:17});
-L.control.layers({"OSM":osm,"Спутник Earth":sat,"Topo":topo}).addTo(map);
-L.control.zoom({position:'bottomright'}).addTo(map);
-let camL=L.layerGroup().addTo(map),geoL=L.layerGroup().addTo(map),reliefL=L.layerGroup(),trafficL=L.layerGroup().addTo(map),tigaL=L.layerGroup().addTo(map),routeL=L.layerGroup().addTo(map);
-[[42.3417,69.5901,"Орталық"],[42.325,69.585,"4 мкр"]].forEach(c=>L.marker([c[0],c[1]],{icon:L.divIcon({html:'🎥'})}).addTo(camL));
-L.polyline([[42.3417,69.59],[42.33,69.585]],{color:'#ff0000',weight:10}).bindPopup('Пробка қалың қызыл').addTo(trafficL);
-L.polyline([[42.33,69.585],[42.32,69.59]],{color:'#22c55e',weight:6}).bindPopup('Пробка жоқ жасыл').addTo(trafficL);
-const tigaPoints=[{name:"Шымкент h=512м",lat:42.3417,lng:69.5901,klass:1,h:512},{name:"4 мкр",lat:42.325,lng:69.585,klass:2,h:498},{name:"Түркістан",lat:43.297,lng:68.251,klass:1,h:310},{name:"Көктөбе",lat:43.231,lng:76.954,klass:1,h:1100},{name:"Астана",lat:51.18,lng:71.445,klass:1,h:347},{name:"Тараз",lat:42.9,lng:71.37,klass:2,h:410},{name:"Север",lat:42.36,lng:69.6,klass:1,h:520},{name:"Қызылорда",lat:44.85,lng:65.5,klass:1,h:128},{name:"Ақтау",lat:43.64,lng:51.18,klass:2,h:10},{name:"Өскемен",lat:49.97,lng:82.61,klass:1,h:280}];
-function addTiga(p){let ic=L.divIcon({html:`<div style="background:${p.klass==1?'#ff0000':'#ff9800'};color:#fff;border-radius:50%;width:32px;height:32px;display:flex;align-items:center;justify-content:center;border:2px solid #fff;font-weight:800">▲${p.klass}</div>`,iconSize:[32,32]});L.marker([p.lat,p.lng],{icon:ic}).bindPopup(`<b>🔺 ${p.name}</b><br>h=${p.h}м<br>${p.lat},${p.lng}<br><button onclick="map.setView([${p.lat},${p.lng}],17)">17</button>`).addTo(tigaL);}tigaPoints.forEach(addTiga);
-async function loadRealTiga(){try{const q=`[out:json][timeout:25]; area["name"="Қазақстан"]->.kz; (node["man_made"="survey_point"](area.kz);); out 200;`;const r=await fetch('https://overpass-api.de/api/interpreter?data='+encodeURIComponent(q));const d=await r.json();d.elements.forEach(el=>{if(el.lat)L.marker([el.lat,el.lon],{icon:L.divIcon({html:'<div style="background:#d32f2f;color:#fff;width:22px;height:22px;border-radius:50%;display:flex;align-items:center;justify-content:center">▲</div>'})}).bindPopup('OSM Тигапункт').addTo(tigaL);});alert(`✅ ${d.elements.length} жүктелді`);}catch(e){alert('Offline - 10 дайын');}}
-function locateMe(){map.locate({setView:true,maxZoom:16});}
-function toggle(t){if(t==='cam')map.hasLayer(camL)?map.removeLayer(camL):map.addLayer(camL);if(t==='geo')map.hasLayer(geoL)?map.removeLayer(geoL):map.addLayer(geoL);if(t==='relief'){if(map.hasLayer(reliefL)){map.removeLayer(reliefL);}else{map.addLayer(reliefL);}}if(t==='traffic')map.hasLayer(trafficL)?map.removeLayer(trafficL):map.addLayer(trafficL);if(t==='tiga')map.hasLayer(tigaL)?map.removeLayer(tigaL):map.addLayer(tigaL);if(t==='elev'){let b=document.getElementById('elevBox');b.style.display=b.style.display==='none'?'block':'none';}}
-let isSat=false;function toggleSat(){if(!isSat){map.removeLayer(osm);sat.addTo(map);}else{map.removeLayer(sat);osm.addTo(map);}isSat=!isSat;}
-function routeMode(){let from=prompt('Қайдан? lat,lng');let to=prompt('Қайда? lat,lng');if(!from||!to)return;let [f1,f2]=from.split(',').map(Number);let [t1,t2]=to.split(',').map(Number);fetch(`https://router.project-osrm.org/route/v1/driving/${f2},${f1};${t2},${t1}?overview=full&geometries=geojson`).then(r=>r.json()).then(d=>{let coords=d.routes[0].geometry.coordinates.map(c=>[c[1],c[0]]);L.polyline(coords,{color:'#7c3aed',weight:6}).addTo(routeL);map.fitBounds(coords);alert(`🧭 ${ (d.routes[0].distance/1000).toFixed(1)}км - В путь - Offline`);})}
-let canvas=document.getElementById('cadCanvas');let ctx=canvas.getContext('2d');let ents=[];
-function drawCad(){canvas.width=canvas.clientWidth*2;canvas.height=canvas.clientHeight*2;ctx.setTransform(2,0,0,2,0,0);ctx.fillStyle='#111';ctx.fillRect(0,0,canvas.clientWidth,canvas.clientHeight);ctx.save();ctx.translate(100,100);ctx.scale(0.5,0.5);ents.forEach(e=>{ctx.strokeStyle='#fff';if(e.t==='LINE'){ctx.beginPath();ctx.moveTo(e.x1,e.y1);ctx.lineTo(e.x2,e.y2);ctx.stroke();}if(e.t==='TEXT'){ctx.fillStyle='#0f0';ctx.fillText(e.txt,e.x,e.y);}});ctx.restore();}
-function cadFit(){drawCad();}function cadMeasure(){alert('Өлшеу');}function cadAzimuth(){alert('Азимут');}function cadLayout(){alert('Layouts');}function cadDims(){ents.push({t:'LINE',x1:10,y1:10,x2:200,y2:10});ents.push({t:'TEXT',x:20,y:30,txt:'Баня 6x8м'});drawCad();}
-document.getElementById('fin')?.addEventListener('change',async e=>{for(let f of e.target.files){document.getElementById('filelist').innerHTML+=`<div>📄 ${f.name}</div>`;if(f.name.endsWith('.dxf')){let txt=await f.text();try{let parser=new DxfParser();let dxf=parser.parseSync(txt);ents=[];dxf.entities.forEach(en=>{if(en.type==='LINE')ents.push({t:'LINE',x1:en.vertices[0].x,y1:en.vertices[0].y,x2:en.vertices[1].x,y2:en.vertices[1].y});});drawCad();}catch{}}else{ents.push({t:'TEXT',x:50,y:50,txt:f.name});drawCad();}}});
-function initNardy(){let b=document.getElementById('nardy');b.innerHTML='';for(let i=0;i<24;i++){let d=document.createElement('div');d.className='point';d.style.background=i%2===0?'#f0d9b5':'#b58863';d.textContent=i+1;d.onclick=()=>d.style.background='#ffeb3b';b.appendChild(d);}}function rollDice(){document.getElementById('d1').textContent=Math.ceil(Math.random()*6);document.getElementById('d2').textContent=Math.ceil(Math.random()*6);}initNardy();
-async function startVideoCall(){let lv=document.getElementById('localV');try{let s=await navigator.mediaDevices.getUserMedia({video:true,audio:true});lv.srcObject=s;}catch(e){alert(e.message);}}
-function startVoice(){navigator.mediaDevices.getUserMedia({audio:true}).then(s=>{let mr=new MediaRecorder(s);let ch=[];mr.ondataavailable=e=>ch.push(e.data);mr.onstop=()=>{let blob=new Blob(ch,{type:'audio/webm'});let a=document.createElement('audio');a.controls=true;a.src=URL.createObjectURL(blob);document.getElementById('msgs').appendChild(a);};mr.start();setTimeout(()=>mr.stop(),3000);});}
-function convertSK42(){let lat=Number(document.getElementById('wlat').value);let lon=Number(document.getElementById('wlon').value);document.getElementById('sk42out').textContent=`SK-42: ${(lat-0.001).toFixed(6)}, ${(lon+0.001).toFixed(6)}`;}
-if('serviceWorker' in navigator){navigator.serviceWorker.register('./sw.js');}
-setTimeout(()=>{map.invalidateSize();},600);
+// КАРТА НЕГІЗІ
+const map=L.map('map').setView([42.3,69.6],11);
+let osm=L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{maxZoom:20}).addTo(map);
+let sat=L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',{maxZoom:20});
+let gisTraffic=L.tileLayer('https://tile2.maps.2gis.com/v1/{z}/{x}/{y}.png',{maxZoom:20}); // 2GIS пробка стилі
+let cur=osm;
+function setLayer(t){
+  map.eachLayer(l=>{if(l._url) map.removeLayer(l)});
+  document.querySelectorAll('.topbar .btn').forEach(b=>b.classList.remove('active'));
+  if(t==='osm'){osm.addTo(map);cur=osm}
+  if(t==='sat'){sat.addTo(map);cur=sat}
+  if(t==='2gis'){osm.addTo(map);gisTraffic.addTo(map);cur=gisTraffic}
+  event.target.classList.add('active');
+}
+function togglePanel(n){const el=document.getElementById('p-'+n);el.classList.toggle('show')}
+
+// ТИГАПУНКТ
+let tigas=[];
+function addTiga(){
+  const x=parseFloat(document.getElementById('tigaX').value), y=parseFloat(document.getElementById('tigaY').value), name=document.getElementById('tigaName').value||'Тига';
+  if(!x||!y) return alert('X Y енгіз');
+  const m=L.marker([x,y]).addTo(map).bindPopup(`🔺 ${name}<br>${x}, ${y}`);
+  tigas.push({name,x,y}); localStorage.setItem('gjw_tiga',JSON.stringify(tigas));
+  document.getElementById('tigaList').innerHTML+=`<div>🔺 ${name}: ${x}, ${y}</div>`;
+}
+(function(){try{let s=JSON.parse(localStorage.getItem('gjw_tiga')||'[]'); s.forEach(t=>{L.marker([t.x,t.y]).addTo(map).bindPopup(`🔺 ${t.name}`)});}catch{}})();
+
+// CAD DXF
+document.getElementById('dxfFile').addEventListener('change',async e=>{
+  const f=e.target.files[0]; if(!f) return;
+  const txt=await f.text(); const parser=new DxfParser(); const dxf=parser.parseSync(txt);
+  document.getElementById('cadInfo').innerText=`Табылды: ${dxf.entities.length} объект`;
+  dxf.entities.forEach(en=>{
+    if(en.vertices){let pts=en.vertices.map(v=>[v.y,v.x]); L.polyline(pts,{color:'#ff0'}).addTo(map)}
+  });
+});
+
+// SMS
+function shareWhatsApp(){
+  const t=document.getElementById('smsText').value||'GEO JOBA WORLD: '+location.href;
+  window.open('https://wa.me/?text='+encodeURIComponent(t),'_blank');
+}
+
+// НАРДЫ
+function rollNarda(){let a=Math.floor(Math.random()*6)+1,b=Math.floor(Math.random()*6)+1; document.getElementById('nardaScore').innerText=a+':'+b;}
+
+// ШӘЙ ПҰЛ + ҚОРҒАУ
+const b=document.getElementById('donatBtn'),box=document.getElementById('donatBox');
+b.onclick=()=>box.style.display='flex';
+document.getElementById('closeDonat').onclick=()=>box.style.display='none';
+box.onclick=e=>{if(e.target===box)box.style.display='none'};
+document.getElementById('copyKaspi').onclick=()=>{
+  navigator.clipboard.writeText('87066604117');
+  document.getElementById('copyKaspi').innerText='✅ Көшірілді! Рахмет!';
+  setTimeout(()=>document.getElementById('copyKaspi').innerText='📋 Номерді көшіру',2000);
+};
+console.log("© GEO JOBA WORLD - aliadiluly7-lgtm - Protected - Kaspi 87066604117");
+
+// ОФФЛАЙН - SW ТІРКЕУ
+if('serviceWorker' in navigator){navigator.serviceWorker.register('./sw.js')}
 </script>
 </body>
 </html>
