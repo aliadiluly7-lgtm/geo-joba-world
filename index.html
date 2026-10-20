@@ -1,149 +1,39 @@
-<!DOCTYPE html>
-<html lang="kk">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
-<meta name="author" content="aliadiluly7-lgtm - Әли Әділұлы">
-<meta name="copyright" content="© 2026 GEO JOBA WORLD - aliadiluly7-lgtm">
-<title>GEO JOBA WORLD v29 - Әлемде жоқ геодезия платформасы</title>
-<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
-<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-<script src="https://unpkg.com/dxf-parser@1.1.2/dist/dxf-parser.js"></script>
-<style>
-*{margin:0;padding:0;box-sizing:border-box}body{font-family:system-ui;background:#0f1115;color:#fff;overflow:hidden}
-#map{position:absolute;inset:0;z-index:1}
-.topbar{position:fixed;top:0;left:0;right:0;z-index:900;background:rgba(15,17,21,.92);backdrop-filter:blur(10px);padding:10px 12px;display:flex;gap:8px;align-items:center;overflow-x:auto}
-.topbar b{white-space:nowrap;font-size:14px}
-.btn{background:#1e232e;color:#fff;border:0;border-radius:10px;padding:8px 12px;font-weight:700;font-size:13px;cursor:pointer;white-space:nowrap}
-.btn.active{background:#00b34a}
-.panels{position:fixed;left:10px;top:58px;z-index:800;display:flex;flex-direction:column;gap:8px;max-width:320px}
-.panel{background:rgba(20,24,33,.94);border-radius:14px;padding:10px;display:none;max-height:70vh;overflow:auto}
-.panel.show{display:block}
-input{width:100%;padding:8px;border-radius:8px;border:0;background:#2a3142;color:#fff;margin:4px 0}
-.copy{font-size:11px;color:#888;text-align:center;padding:6px}
-</style>
-</head>
-<body>
-<div id="map"></div>
+Сәлем Claude! Сен Senior Full-Stack Developer-сің. Менің дайын платформам бар: https://aliadiluly7-lgtm.github.io/geo-joba-world/ - GEO JOBA WORLD v29 - геодезия картасы.
 
-<div class="topbar">
-  <b>🌍 GEO JOBA WORLD</b>
-  <button class="btn active" onclick="setLayer('osm')">🗺 OSM</button>
-  <button class="btn" onclick="setLayer('sat')">🛰 Google</button>
-  <button class="btn" onclick="setLayer('2gis')">🚦 2GIS Пробка</button>
-  <button class="btn" onclick="togglePanel('tiga')">🔺 Тига</button>
-  <button class="btn" onclick="togglePanel('cad')">📐 CAD</button>
-  <button class="btn" onclick="togglePanel('sms')">💬 SMS</button>
-  <button class="btn" onclick="togglePanel('narda')">🎲 Нарды</button>
-</div>
+Осы платформаны бұзбай, үстіне кәсіби деңгейде толықтыр. GitHub Pages-те тұр, бір файл index.html + sw.js.
 
-<div class="panels">
-  <div id="p-tiga" class="panel">
-    <b>🔺 Тигапункт іздеу</b>
-    <input id="tigaName" placeholder="Аты: Мысалы Шымкент">
-    <input id="tigaX" type="number" placeholder="X / Lat">
-    <input id="tigaY" type="number" placeholder="Y / Lon">
-    <button class="btn" style="width:100%;background:#00b34a" onclick="addTiga()">+ Тига қосу</button>
-    <div id="tigaList" style="margin-top:8px;font-size:12px"></div>
-  </div>
-  <div id="p-cad" class="panel">
-    <b>📐 CAD / DXF FastView</b>
-    <input type="file" id="dxfFile" accept=".dxf">
-    <div id="cadInfo" style="font-size:12px;color:#aaa;margin-top:6px">DXF жүкте - картада көрінеді</div>
-  </div>
-  <div id="p-sms" class="panel">
-    <b>💬 WhatsApp / SMS Чат</b>
-    <input id="smsText" placeholder="Хабарлама...">
-    <button class="btn" style="width:100%" onclick="shareWhatsApp()">WhatsApp-қа жіберу</button>
-  </div>
-  <div id="p-narda" class="panel">
-    <b>🎲 Нарды - демалыс</b>
-    <div style="font-size:12px">Геодезистер ойнайды - ұпай: <span id="nardaScore">0</span></div>
-    <button class="btn" onclick="rollNarda()">🎲 Таста</button>
-  </div>
-</div>
+МАҒАН КЕРЕК - ТОЛЫҚ ЖАҢА АРХИТЕКТУРА, БІРАҚ ДИЗАЙНЫ ОСЫ КАРТАДАЙ ҚАЛСЫН:
 
-<!-- ҚОРҒАУ + ШӘЙ ПҰЛ - БІР БЛОК - БАСҚА КОМАНДАЛАР САҚТАЛҒАН -->
-<div id="donatBtn" style="position:fixed;right:14px;bottom:88px;z-index:9999;background:linear-gradient(135deg,#00b34a,#008f3a);color:#fff;padding:12px 16px;border-radius:999px;font-weight:900;box-shadow:0 8px 24px rgba(0,0,0,.35);cursor:pointer;display:flex;align-items:center;gap:8px;">🍵 Шәй пұл</div>
+1. АВТОРИЗАЦИЯ - SMS:
+- Кіргенде бірінші Login Screen: Номер жазу +870... -> Firebase Phone Auth арқылы SMS код келеді -> кодты енгізіп кіреді.
+- Код: Firebase Auth emulator, кейін нақты номерге ауыстырамыз. Демо үшін 111111 кодымен кірсін.
+- Kaspi Gold: 87066604117 - донат батырмасы сақталады.
 
-<div id="donatBox" style="display:none;position:fixed;inset:0;z-index:10000;background:rgba(0,0,0,.6);align-items:center;justify-content:center;padding:16px">
-  <div style="background:#fff;border-radius:20px;padding:20px;max-width:360px;width:100%;text-align:center;color:#000">
-    <div style="font-size:28px">🍵</div>
-    <div style="font-weight:900;font-size:20px;margin:8px 0">GEO JOBA WORLD</div>
-    <div style="color:#666;font-size:13px">Автор: Әли Әділұлы | Shymkent<br>© aliadiluly7-lgtm 2026</div>
-    <div style="margin:16px 0;background:#f6f6f6;border-radius:12px;padding:12px">
-      <div style="font-size:12px;color:#888">Kaspi Gold</div>
-      <div style="font-weight:900;font-size:22px">87066604117</div>
-    </div>
-    <button id="copyKaspi" style="width:100%;background:#000;color:#fff;border:0;border-radius:12px;padding:12px;font-weight:800">📋 Номерді көшіру</button>
-    <a href="https://pay.kaspi.kz/pay/87066604117" target="_blank" style="display:block;margin-top:10px;background:#00b34a;color:#fff;text-decoration:none;border-radius:12px;padding:12px;font-weight:800">💳 Kaspi Pay ашу</a>
-    <button id="closeDonat" style="margin-top:10px;background:0;border:0;color:#888">Жабу</button>
-  </div>
-</div>
+2. ПРОФИЛЬ СИСТЕМАСЫ - WhatsApp стилі:
+- Әр адам өз профилін жасайды: 1 басты аватар сурет (дөңгелек), астында Аты, Мамандығы (геодезист), Описание.
+- Аватар астында - Instagram сияқты лента: қалағанша сурет/видео қоса береді, grid болып тұрады.
+- Суреттерді localStorage + Firebase Storage-қа сақтау.
 
-<div style="position:fixed;bottom:0;left:0;right:0;z-index:800;background:rgba(0,0,0,.7);text-align:center;padding:6px 10px;font-size:10px;color:#888">© 2026 GEO JOBA WORLD - Авторы: Әли Әділұлы - aliadiluly7-lgtm - Kaspi: 87066604117 - Барлық құқық қорғалған</div>
+3. ЧАТ СИСТЕМАСЫ - КӘСІБИ WHATSAPP + TIKTOK ОТЫ:
+- Төменде WhatsApp сияқты 3 таб: Карта | Чаттар | Профиль
+- Чаттар: Барлық қолданушылар тізімі, бір-біріне жаза алады (Firestore real-time).
+- TikTok от жүйесі: Егер 2 адам 5 күн қатарынан сөйлессе 🔥 от жанады. Күнде сөйлессе от саны 1,2,3... көбейе береді. Сөйлеспесе өшеді.
+- Чат ішінде: Текст, Голосовой сообщение (MediaRecorder API), Видеозвонок (WebRTC peer-to-peer, simple-peer), Сурет/Видео жіберу.
+- Чат ішіне Meta AI қос: @metaai деп жазса - Meta AI жауап береді. Бұл чат бот ретінде, геодезия сұрақтарына көмектеседі.
 
-<script>
-// КАРТА НЕГІЗІ
-const map=L.map('map').setView([42.3,69.6],11);
-let osm=L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{maxZoom:20}).addTo(map);
-let sat=L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',{maxZoom:20});
-let gisTraffic=L.tileLayer('https://tile2.maps.2gis.com/v1/{z}/{x}/{y}.png',{maxZoom:20}); // 2GIS пробка стилі
-let cur=osm;
-function setLayer(t){
-  map.eachLayer(l=>{if(l._url) map.removeLayer(l)});
-  document.querySelectorAll('.topbar .btn').forEach(b=>b.classList.remove('active'));
-  if(t==='osm'){osm.addTo(map);cur=osm}
-  if(t==='sat'){sat.addTo(map);cur=sat}
-  if(t==='2gis'){osm.addTo(map);gisTraffic.addTo(map);cur=gisTraffic}
-  event.target.classList.add('active');
-}
-function togglePanel(n){const el=document.getElementById('p-'+n);el.classList.toggle('show')}
+4. КАРТА - БҰРЫНҒЫДАЙ САҚТАЛСЫН + ЖЕТІЛДІР:
+- OSM, Google Satellite, 2GIS Пробка қабаттары
+- Тригапункт (тригопункт) жүйесі: Офлайнда да, онлайнда да жұмыс істейді. Координатасын қосып, картада 🔺 болып тұрады. IndexedDB-ға сақталады.
+- Офлайн режим: PWA sw.js жетілдір - карта тайлдары офлайнда да көрінеді (caching).
 
-// ТИГАПУНКТ
-let tigas=[];
-function addTiga(){
-  const x=parseFloat(document.getElementById('tigaX').value), y=parseFloat(document.getElementById('tigaY').value), name=document.getElementById('tigaName').value||'Тига';
-  if(!x||!y) return alert('X Y енгіз');
-  const m=L.marker([x,y]).addTo(map).bindPopup(`🔺 ${name}<br>${x}, ${y}`);
-  tigas.push({name,x,y}); localStorage.setItem('gjw_tiga',JSON.stringify(tigas));
-  document.getElementById('tigaList').innerHTML+=`<div>🔺 ${name}: ${x}, ${y}</div>`;
-}
-(function(){try{let s=JSON.parse(localStorage.getItem('gjw_tiga')||'[]'); s.forEach(t=>{L.marker([t.x,t.y]).addTo(map).bindPopup(`🔺 ${t.name}`)});}catch{}})();
+5. CAD КОМАНДАСЫ:
+- Артық керек емес. Тек DWG FastView сияқты қарапайым: DWG/DXF файл жүктейді, карта үстінде көреді, масштабтайды. dxf-parser қолдан.
 
-// CAD DXF
-document.getElementById('dxfFile').addEventListener('change',async e=>{
-  const f=e.target.files[0]; if(!f) return;
-  const txt=await f.text(); const parser=new DxfParser(); const dxf=parser.parseSync(txt);
-  document.getElementById('cadInfo').innerText=`Табылды: ${dxf.entities.length} объект`;
-  dxf.entities.forEach(en=>{
-    if(en.vertices){let pts=en.vertices.map(v=>[v.y,v.x]); L.polyline(pts,{color:'#ff0'}).addTo(map)}
-  });
-});
+6. ДИЗАЙН ТАЛАБЫ:
+- Минимализм, қараңғы тема, геодезистерге арналған кәсіби WhatsApp сияқты.
+- Артық нарды, ойындар керек емес - өшір.
+- Барлығы бір index.html файлында болсын, Firebase config-ты жоғарыда бөлек қой.
 
-// SMS
-function shareWhatsApp(){
-  const t=document.getElementById('smsText').value||'GEO JOBA WORLD: '+location.href;
-  window.open('https://wa.me/?text='+encodeURIComponent(t),'_blank');
-}
+МАҒАН ДАЙЫН БІР ФАЙЛДЫҚ КОД БЕР - index.html толық. Firebase үшін TODO деп қалдыр, мен кейін кілттерді саламын. Офлайн жұмыс істеуі міндетті!
 
-// НАРДЫ
-function rollNarda(){let a=Math.floor(Math.random()*6)+1,b=Math.floor(Math.random()*6)+1; document.getElementById('nardaScore').innerText=a+':'+b;}
-
-// ШӘЙ ПҰЛ + ҚОРҒАУ
-const b=document.getElementById('donatBtn'),box=document.getElementById('donatBox');
-b.onclick=()=>box.style.display='flex';
-document.getElementById('closeDonat').onclick=()=>box.style.display='none';
-box.onclick=e=>{if(e.target===box)box.style.display='none'};
-document.getElementById('copyKaspi').onclick=()=>{
-  navigator.clipboard.writeText('87066604117');
-  document.getElementById('copyKaspi').innerText='✅ Көшірілді! Рахмет!';
-  setTimeout(()=>document.getElementById('copyKaspi').innerText='📋 Номерді көшіру',2000);
-};
-console.log("© GEO JOBA WORLD - aliadiluly7-lgtm - Protected - Kaspi 87066604117");
-
-// ОФФЛАЙН - SW ТІРКЕУ
-if('serviceWorker' in navigator){navigator.serviceWorker.register('./sw.js')}
-</script>
-</body>
-</html>
+Автор: Әли Әділұлы, Shymkent, Kaspi 87066604117. Қорғау: © aliadiluly7-lgtm
