@@ -1,87 +1,59 @@
 <!DOCTYPE html>
 <html lang="kk">
 <head>
-<meta charset="UTF-8">
+<meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>GEO JOBA v27.1 STABLE</title>
-<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
+<title>GEO JOBA WORLD - TIGA</title>
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <style>
-*{margin:0;padding:0;box-sizing:border-box}
-body{font-family:system-ui;background:#efeae2;height:100vh;display:flex;flex-direction:column}
-.top{height:50px;background:#075E54;color:#fff;display:flex;align-items:center;padding:0 12px;gap:8px}
-.page{flex:1;display:none;position:relative}
-.page.on{display:block}
+:root{--bg:#0b1220}
+*{box-sizing:border-box;margin:0}html,body{height:100%;background:var(--bg);font:14px system-ui;overflow:hidden}
 #map{width:100%;height:100%}
-.tools{position:absolute;top:70px;left:10px;z-index:500;display:flex;flex-direction:column;gap:5px}
-.tools button{background:#fff;border:1px solid #ccc;border-radius:8px;padding:7px 10px;font-size:12px}
-.nav{height:60px;background:#fff;display:flex;border-top:1px solid #ddd}
-.nav button{flex:1;border:none;background:none;color:#888}
-.nav button.on{color:#075E54;font-weight:700}
+.top{position:absolute;top:0;left:0;right:0;z-index:500;background:linear-gradient(90deg,#312e81,#0e7490);color:#fff;padding:10px 12px;font-weight:700}
+.btn{position:absolute;z-index:600;background:#fff;color:#000;border:0;border-radius:8px;padding:7px 10px;font-size:12px;cursor:pointer}
+#btnTiga{top:55px;left:10px}
+#btnSat{top:55px;left:170px;background:#0b1220;color:#fff;border:1px solid #fff}
+#info{position:absolute;bottom:10px;left:10px;right:10px;z-index:600;background:rgba(0,0,0,.75);color:#0f0;padding:6px 10px;border-radius:8px;font:11px monospace}
 </style>
 </head>
 <body>
-<div class="top"><b>GEO JOBA v27.1 STABLE</b><span style="background:#25D366;padding:2px 8px;border-radius:10px;font-size:10px">КАМЕРА+ГЕОДЕЗИЯ+РЕЛЬЕФ+CAD ALL - ҚАТЕСІЗ</span></div>
-
-<div class="page on" id="page-map">
+<div class="top">🌍 GEO JOBA WORLD v28 - TIGA - Google Earth + Қазақстан Тигапункт</div>
 <div id="map"></div>
-<div class="tools">
-<button onclick="locateMe()">📍 Мені тап</button>
-<button onclick="toggle('cam')">🎥 Камера 5</button>
-<button onclick="toggle('geo')">📐 Геодезия</button>
-<button onclick="toggle('relief')">⛰️ Рельеф</button>
-<button onclick="clearM()">🧹 Тазала</button>
-</div>
-</div>
-
-<div class="page" id="page-cad" style="background:#f5f5f5;padding:10px;overflow:auto">
-<h3>📐 CAD ALL - БҮКІЛ DWG - R14-2024</h3>
-<p style="font-size:12px;color:#666">Жумыс от Алибек.dwg / Проект АЛИБЕК.dwg / Баня планировка.dwg / АС 4мкр.dwg - тізімде сақталады - DXF толық ашылады - DWG PRO-да</p>
-<input type="file" id="fin" multiple accept=".dwg,.dxf" style="margin:10px 0">
-<div id="list"></div>
-<canvas id="c" style="width:100%;height:400px;background:#000;border-radius:10px;margin-top:10px"></canvas>
-<div id="info" style="font-family:monospace;font-size:12px;margin-top:6px">X:0 Y:0 | ҚАТЕСІЗ</div>
-</div>
-
-<div class="page" id="page-chat" style="background:#fff;padding:10px">💬 Чат - геодезист - камера талқылау - стабильный</div>
-<div class="page" id="page-profile" style="background:#f0f0f0;padding:10px">👤 Әділұлы Әли - Шымкент - © 2026 v27.1 STABLE - ешнәрсе ұмытпадым</div>
-
-<div class="nav">
-<button class="on" id="b-map" onclick="show('map')">🌍 Карта</button>
-<button id="b-chat" onclick="show('chat')">💬 Чат</button>
-<button id="b-cad" onclick="show('cad')">📐 CAD</button>
-<button id="b-profile" onclick="show('profile')">👤 Профиль</button>
-</div>
-
+<button class="btn" id="btnTiga" onclick="loadRealTiga()">🔺 Тигапункт жүктеу (Қазақстан)</button>
+<button class="btn" id="btnSat" onclick="toggleSat()">🛰️ Google Earth Спутник</button>
+<div id="info">Дайын: 10 тигапункт - Спутникке ауыс - Google Earth сияқты</div>
 <script>
-function show(n){document.querySelectorAll('.page').forEach(p=>p.classList.remove('on'));document.querySelectorAll('.nav button').forEach(b=>b.classList.remove('on'));document.getElementById('page-'+n).classList.add('on');document.getElementById('b-'+n).classList.add('on');if(n==='map')setTimeout(()=>map.invalidateSize(),200)}
-let map=L.map('map').setView([42.3417,69.5901],12);
+let map=L.map('map').setView([48,68],5);
 let osm=L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{maxZoom:19}).addTo(map);
 let sat=L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',{maxZoom:19});
-let topo=L.tileLayer('https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png',{maxZoom:17});
-let hybrid=L.layerGroup([L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}'),L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{opacity:0.45})]);
-L.control.layers({"🗺️ OSM":osm,"🛰️ Спутник":sat,"🌍 Гибрид":hybrid,"⛰️ Рельеф Topo":topo}).addTo(map);
-
-let camL=L.layerGroup().addTo(map);
-[[42.3417,69.5901,"Орталық"],[42.325,69.585,"4 мкр"],[42.36,69.60,"Север"],[42.31,69.62,"Нурсат"],[42.30,69.55,"Тассай"]].forEach(c=>{L.marker([c[0],c[1]],{icon:L.divIcon({html:'🎥',iconSize:[24,24]})}).bindPopup('🎥 МЛН камера - '+c[2]+'<br>LIVE').addTo(camL)});
-
-let geoL=L.layerGroup().addTo(map);
-[[42.328,69.588,"10 соток - 4 мкр"],[42.335,69.592,"Баня"],[42.322,69.590,"АС 4мкр"],[42.34,69.60,"Репер 512м"]].forEach(p=>{L.marker([p[0],p[1]],{icon:L.divIcon({html:'📐',iconSize:[22,22]})}).bindPopup('📐 '+p[2]).addTo(geoL)});
-L.polygon([[42.328,69.588],[42.328,69.589],[42.327,69.588]],{color:'#00BCD4',fillOpacity:0.2}).bindPopup('10 соток - 1000м²').addTo(geoL);
-
-let reliefL=L.layerGroup();
-L.polyline([[42.34,69.58],[42.34,69.61]],{color:'#8B4513',dashArray:'5,5'}).bindPopup('⛰️ 500м').addTo(reliefL);
-L.polyline([[42.33,69.58],[42.33,69.61]],{color:'#8B4513',dashArray:'5,5'}).bindPopup('⛰️ 510м - 512м биіктік').addTo(reliefL);
-
-let mainM=L.marker([42.3417,69.5901],{draggable:true}).addTo(map).bindPopup('Шымкент - GEO JOBA');
-function locateMe(){map.locate({setView:true,maxZoom:16})}
-map.on('locationfound',e=>{L.marker(e.latlng).addTo(map).bindPopup('📍 Сіз').openPopup()});
-function toggle(t){if(t==='cam'){map.hasLayer(camL)?map.removeLayer(camL):map.addLayer(camL)} if(t==='geo'){map.hasLayer(geoL)?map.removeLayer(geoL):map.addLayer(geoL)} if(t==='relief'){if(map.hasLayer(reliefL)){map.removeLayer(reliefL)}else{map.addLayer(reliefL);map.addLayer(topo)}}}
-function clearM(){map.setView([42.3417,69.5901],12)}
-
-let canvas=document.getElementById('c');let ctx=canvas.getContext('2d');function resize(){canvas.width=canvas.clientWidth*2;canvas.height=canvas.clientHeight*2;ctx.setTransform(2,0,0,2,0,0);ctx.fillStyle='#000';ctx.fillRect(0,0,canvas.clientWidth,canvas.clientHeight);ctx.fillStyle='#0f0';ctx.fillText('CAD - DWG тізім - DXF ашу - стабильный',20,20)};resize();
-document.getElementById('fin').addEventListener('change',e=>{let l=document.getElementById('list');for(let f of e.target.files){l.innerHTML+=`<div style="background:#fff;padding:8px;border-radius:8px;margin-bottom:6px">📄 ${f.name} - ${(f.size/1024).toFixed(1)}KB - БҮКІЛ ВЕРСИЯ - сақталды</div>`}resize()});
-setTimeout(()=>map.invalidateSize(),400);
+let isSat=false;
+function toggleSat(){if(!isSat){map.removeLayer(osm);sat.addTo(map);}else{map.removeLayer(sat);osm.addTo(map);}isSat=!isSat;}
+const tigaLayer=L.layerGroup().addTo(map);
+const pts=[
+{name:"Тигапункт 1-класс - Шымкент Орталық h=512м",lat:42.3417,lng:69.5901,klass:1,h:512},
+{name:"Тигапункт 4 мкр",lat:42.325,lng:69.585,klass:2,h:498},
+{name:"Түркістан",lat:43.297,lng:68.251,klass:1,h:310},
+{name:"Алматы Көктөбе",lat:43.231,lng:76.954,klass:1,h:1100},
+{name:"Астана",lat:51.18,lng:71.445,klass:1,h:347},
+{name:"Тараз",lat:42.9,lng:71.37,klass:2,h:410},
+{name:"Шымкент Север",lat:42.36,lng:69.6,klass:1,h:520},
+{name:"Қызылорда",lat:44.85,lng:65.5,klass:1,h:128},
+{name:"Ақтау",lat:43.64,lng:51.18,klass:2,h:10},
+{name:"Өскемен",lat:49.97,lng:82.61,klass:1,h:280},
+];
+function addTiga(p){const ic=L.divIcon({html:`<div style="background:${p.klass==1?'#f00':'#ff9800'};color:#fff;border-radius:50%;width:28px;height:28px;display:flex;align-items:center;justify-content:center;border:2px solid #fff;font-weight:800">▲${p.klass}</div>`,iconSize:[28,28]});L.marker([p.lat,p.lng],{icon:ic}).bindPopup(`<b>🔺 ${p.name}</b><br>h=${p.h}м<br>${p.lat.toFixed(5)},${p.lng.toFixed(5)}<br><button onclick="map.setView([${p.lat},${p.lng}],17)">🔍 17</button>`).addTo(tigaLayer);}
+pts.forEach(addTiga);
+async function loadRealTiga(){
+document.getElementById('info').textContent='🇰🇿 OSM тигапункт жүктелуде...';
+try{
+const q=`[out:json][timeout:25]; area["name"="Қазақстан"]->.kz; (node["man_made"="survey_point"](area.kz);); out 200;`;
+const r=await fetch('https://overpass-api.de/api/interpreter?data='+encodeURIComponent(q));
+const d=await r.json();
+d.elements.forEach(el=>{if(el.lat)L.marker([el.lat,el.lon],{icon:L.divIcon({html:'<div style="background:#d32f2f;color:#fff;width:22px;height:22px;border-radius:50%;display:flex;align-items:center;justify-content:center">▲</div>'})}).bindPopup(`OSM Тигапункт<br>${el.lat.toFixed(5)},${el.lon.toFixed(5)}`).addTo(tigaLayer);});
+document.getElementById('info').textContent=`✅ ${d.elements.length} OSM тигапункт жүктелді`;
+}catch(e){document.getElementById('info').textContent='⚠️ Интернет жоқ - 10 дайын нүкте көрсетілді';}
+}
 </script>
 </body>
 </html>
