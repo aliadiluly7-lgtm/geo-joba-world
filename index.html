@@ -1,39 +1,270 @@
-Сәлем Claude! Сен Senior Full-Stack Developer-сің. Менің дайын платформам бар: https://aliadiluly7-lgtm.github.io/geo-joba-world/ - GEO JOBA WORLD v29 - геодезия картасы.
+<!DOCTYPE html>
+<html lang="kk">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#111b21">
+<meta name="author" content="Әли Әділұлы - aliadiluly7-lgtm">
+<title>GEO JOBA WORLD v30</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css">
+<script>
+/* ===== FIREBASE CONFIG — TODO: өз кілттеріңді осында қой ===== */
+const FB={apiKey:"TODO",authDomain:"TODO",projectId:"TODO",storageBucket:"TODO",messagingSenderId:"TODO",appId:"TODO"};
+const AI_ENDPOINT="TODO"; // TODO: @metaai үшін өз прокси URL (POST {q} -> {a})
+const DEMO_CODE="111111";
+</script>
+<style>
+:root{--bg:#0b141a;--p:#111b21;--p2:#202c33;--t:#e9edef;--m:#8696a0;--a:#00a884;--me:#005c4b;--b:#222d34}
+*{box-sizing:border-box;margin:0;-webkit-tap-highlight-color:transparent}
+html,body{height:100%;background:var(--bg);color:var(--t);font:15px system-ui,sans-serif;overflow:hidden}
+button,input,textarea{font:inherit;color:inherit}
+button{background:var(--a);border:0;border-radius:8px;padding:9px 14px;color:#fff;cursor:pointer}
+button.g{background:var(--p2)}
+input,textarea{background:var(--p2);border:0;border-radius:8px;padding:10px;width:100%;outline:0}
+#auth{position:fixed;inset:0;z-index:50;background:var(--bg);display:flex;flex-direction:column;justify-content:center;gap:12px;padding:28px;max-width:420px;margin:auto}
+#auth h1{font-size:22px;color:var(--a)} #auth p{color:var(--m);font-size:13px}
+#app{display:none;height:100%;flex-direction:column}
+header{background:var(--p);padding:12px 16px;display:flex;align-items:center;gap:10px;padding-top:max(12px,env(safe-area-inset-top))}
+header b{flex:1;font-size:18px} #net{font-size:12px;color:var(--m)}
+main{flex:1;position:relative;overflow:hidden}
+.tab{position:absolute;inset:0;display:none;overflow:auto}.tab.on{display:block}
+#map{height:100%;width:100%;background:#0e1519}
+.leaflet-container{font:inherit}
+.fab{position:absolute;z-index:500;right:10px;display:flex;flex-direction:column;gap:6px}
+.fab button{background:var(--p);box-shadow:0 2px 8px #0008;padding:9px 11px}
+nav{display:flex;background:var(--p);padding-bottom:env(safe-area-inset-bottom);border-top:1px solid var(--b)}
+nav button{flex:1;background:0;color:var(--m);border-radius:0;padding:11px 0;font-size:12px}
+nav button.on{color:var(--a)} nav span{display:block;font-size:20px}
+.row{display:flex;align-items:center;gap:12px;padding:12px 16px;border-bottom:1px solid var(--b);cursor:pointer}
+.av{width:46px;height:46px;border-radius:50%;background:var(--p2) center/cover;flex:none;display:grid;place-items:center;font-size:20px}
+.row small{color:var(--m)} .row .f{flex:1;min-width:0}
+#chat{position:fixed;inset:0;z-index:60;background:var(--bg);display:none;flex-direction:column}
+#msgs{flex:1;overflow:auto;padding:10px;display:flex;flex-direction:column;gap:5px}
+.m{max-width:80%;padding:7px 10px;border-radius:9px;background:var(--p2);align-self:flex-start;word-wrap:break-word}
+.m.me{background:var(--me);align-self:flex-end}.m img,.m video{max-width:100%;border-radius:6px}
+.m time{display:block;font-size:10px;color:var(--m);text-align:right}
+#bar{display:flex;gap:6px;padding:8px;background:var(--p);align-items:center}
+#bar button{padding:9px 11px}
+.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:2px}
+.grid div{aspect-ratio:1;background:var(--p2) center/cover;position:relative}
+.grid video{width:100%;height:100%;object-fit:cover}
+#prof{padding:20px;text-align:center}
+#prof .big{width:110px;height:110px;margin:auto;font-size:44px}
+#prof input,#prof textarea{margin-top:8px;text-align:center}
+#call{position:fixed;inset:0;z-index:70;background:#000;display:none}
+#call video{position:absolute;width:100%;height:100%;object-fit:cover}#call #lv{width:110px;height:150px;right:10px;top:10px;z-index:2;border-radius:8px}
+#call button{position:absolute;bottom:30px;left:50%;transform:translateX(-50%);background:#d33;z-index:3}
+#cad{position:absolute;z-index:500;left:10px;top:10px;background:var(--p);padding:8px;border-radius:8px;display:none;gap:6px}
+.pin{font-size:22px;filter:drop-shadow(0 1px 2px #000)}
+</style>
+</head>
+<body>
 
-Осы платформаны бұзбай, үстіне кәсіби деңгейде толықтыр. GitHub Pages-те тұр, бір файл index.html + sw.js.
+<div id="auth">
+  <h1>🌍 GEO JOBA WORLD</h1><p>Геодезистерге арналған платформа</p>
+  <div id="s1"><input id="ph" type="tel" value="+7" placeholder="+7 7xx xxx xx xx"><br><br><button style="width:100%" onclick="sendCode()">SMS код жіберу</button></div>
+  <div id="s2" style="display:none"><input id="cd" inputmode="numeric" maxlength="6" placeholder="6 санды код"><br><br><button style="width:100%" onclick="verify()">Кіру</button><p id="hint"></p></div>
+  <p id="err" style="color:#f66"></p><div id="rc"></div>
+  <p>Автор: Әли Әділұлы · Shymkent · © aliadiluly7-lgtm</p>
+</div>
 
-МАҒАН КЕРЕК - ТОЛЫҚ ЖАҢА АРХИТЕКТУРА, БІРАҚ ДИЗАЙНЫ ОСЫ КАРТАДАЙ ҚАЛСЫН:
+<div id="app">
+  <header><b>GEO JOBA WORLD</b><span id="net"></span><button class="g" onclick="donate.showModal()">☕</button></header>
+  <main>
+    <section class="tab on" id="t-map" style="overflow:hidden">
+      <div id="map"></div>
+      <div class="fab">
+        <button onclick="setBase(0)">🗺</button><button onclick="setBase(1)">🛰</button><button onclick="setBase(2)">🚦</button>
+        <button onclick="addTiga()">🔺+</button><button onclick="cacheView()">⬇️</button>
+        <button onclick="cadf.click()">📐</button><input id="cadf" type="file" accept=".dxf,.dwg" hidden>
+      </div>
+      <div id="cad"><button class="g" onclick="cadZoom()">🔍 CAD</button><button class="g" onclick="clearCad()">✖</button></div>
+    </section>
+    <section class="tab" id="t-chat"><div id="list"></div></section>
+    <section class="tab" id="t-prof"><div id="prof">
+      <div class="av big" id="pav" onclick="avf.click()">📷</div><input id="avf" type="file" accept="image/*" hidden>
+      <input id="pname" placeholder="Аты"><input id="pjob" placeholder="Мамандығы (геодезист)"><textarea id="pbio" rows="3" placeholder="Описание"></textarea>
+      <br><br><button onclick="saveProf()">Сақтау</button> <button class="g" onclick="mf.click()">＋ Сурет/Видео</button> <button class="g" onclick="logout()">Шығу</button>
+      <input id="mf" type="file" accept="image/*,video/*" multiple hidden>
+    </div><div class="grid" id="gal"></div></section>
+  </main>
+  <nav><button class="on" data-t="map"><span>🗺</span>Карта</button><button data-t="chat"><span>💬</span>Чаттар</button><button data-t="prof"><span>👤</span>Профиль</button></nav>
+</div>
 
-1. АВТОРИЗАЦИЯ - SMS:
-- Кіргенде бірінші Login Screen: Номер жазу +870... -> Firebase Phone Auth арқылы SMS код келеді -> кодты енгізіп кіреді.
-- Код: Firebase Auth emulator, кейін нақты номерге ауыстырамыз. Демо үшін 111111 кодымен кірсін.
-- Kaspi Gold: 87066604117 - донат батырмасы сақталады.
+<div id="chat">
+  <header><button class="g" onclick="closeChat()">←</button><div class="av" id="cav" style="width:36px;height:36px"></div><b id="cname"></b><span id="cfire"></span><button class="g" onclick="startCall(true)">📹</button></header>
+  <div id="msgs"></div>
+  <div id="bar"><button class="g" onclick="cf.click()">📎</button><input id="cf" type="file" accept="image/*,video/*" hidden>
+    <input id="mi" placeholder="Хабар... (@metaai)"><button id="rec" class="g">🎤</button><button onclick="sendText()">➤</button></div>
+</div>
+<div id="call"><video id="rv" autoplay playsinline></video><video id="lv" autoplay playsinline muted></video><button onclick="endCall()">Аяқтау</button></div>
 
-2. ПРОФИЛЬ СИСТЕМАСЫ - WhatsApp стилі:
-- Әр адам өз профилін жасайды: 1 басты аватар сурет (дөңгелек), астында Аты, Мамандығы (геодезист), Описание.
-- Аватар астында - Instagram сияқты лента: қалағанша сурет/видео қоса береді, grid болып тұрады.
-- Суреттерді localStorage + Firebase Storage-қа сақтау.
+<dialog id="donate" style="background:var(--p);color:var(--t);border:0;border-radius:12px;padding:20px">
+  <b>Kaspi Gold</b><p style="margin:8px 0"><b>87066604117</b></p>
+  <button onclick="navigator.clipboard.writeText('87066604117')">📋 Көшіру</button>
+  <a href="https://pay.kaspi.kz/pay/87066604117" target="_blank"><button class="g">💳 Kaspi Pay</button></a>
+  <button class="g" onclick="donate.close()">Жабу</button>
+</dialog>
 
-3. ЧАТ СИСТЕМАСЫ - КӘСІБИ WHATSAPP + TIKTOK ОТЫ:
-- Төменде WhatsApp сияқты 3 таб: Карта | Чаттар | Профиль
-- Чаттар: Барлық қолданушылар тізімі, бір-біріне жаза алады (Firestore real-time).
-- TikTok от жүйесі: Егер 2 адам 5 күн қатарынан сөйлессе 🔥 от жанады. Күнде сөйлессе от саны 1,2,3... көбейе береді. Сөйлеспесе өшеді.
-- Чат ішінде: Текст, Голосовой сообщение (MediaRecorder API), Видеозвонок (WebRTC peer-to-peer, simple-peer), Сурет/Видео жіберу.
-- Чат ішіне Meta AI қос: @metaai деп жазса - Meta AI жауап береді. Бұл чат бот ретінде, геодезия сұрақтарына көмектеседі.
+<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/dxf-parser@1.1.2/dist/dxf-parser.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/simple-peer@9.11.1/simplepeer.min.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-storage-compat.js"></script>
+<script>
+const $=id=>document.getElementById(id),LS=(k,v)=>v===undefined?JSON.parse(localStorage.getItem(k)||'null'):localStorage.setItem(k,JSON.stringify(v));
+const LIVE=FB.apiKey!=="TODO"&&typeof firebase!=="undefined";
+let fa,fs,fst,me=null,peer=null,conf=null;
+if(LIVE){firebase.initializeApp(FB);fa=firebase.auth();fs=firebase.firestore();fst=firebase.storage();fs.enablePersistence({synchronizeTabs:true}).catch(()=>{})}
+if('serviceWorker' in navigator)navigator.serviceWorker.register('sw.js');
+const net=()=>$('net').textContent=navigator.onLine?'● online':'○ offline';addEventListener('online',net);addEventListener('offline',net);net();
 
-4. КАРТА - БҰРЫНҒЫДАЙ САҚТАЛСЫН + ЖЕТІЛДІР:
-- OSM, Google Satellite, 2GIS Пробка қабаттары
-- Тригапункт (тригопункт) жүйесі: Офлайнда да, онлайнда да жұмыс істейді. Координатасын қосып, картада 🔺 болып тұрады. IndexedDB-ға сақталады.
-- Офлайн режим: PWA sw.js жетілдір - карта тайлдары офлайнда да көрінеді (caching).
+/* ===== AUTH ===== */
+function err(t){$('err').textContent=t||''}
+async function sendCode(){
+  const p=$('ph').value.replace(/[^\d+]/g,'');if(p.length<10)return err('Номер қате');err();
+  if(LIVE){try{window.rv=window.rv||new firebase.auth.RecaptchaVerifier('rc',{size:'invisible'});conf=await fa.signInWithPhoneNumber(p,window.rv)}catch(e){return err(e.message)}}
+  $('hint').textContent=LIVE?'SMS жіберілді':'Демо режим: код '+DEMO_CODE;$('s1').style.display='none';$('s2').style.display='block';
+}
+async function verify(){
+  const c=$('cd').value.trim(),p=$('ph').value.replace(/\D/g,'');err();
+  try{
+    if(LIVE&&conf){const r=await conf.confirm(c);login({uid:r.user.uid,phone:p})}
+    else if(c===DEMO_CODE)login({uid:p,phone:p});else err('Код қате');
+  }catch(e){err('Код қате')}
+}
+async function login(u){LS('gj_me',u);await boot(u)}
+function logout(){localStorage.removeItem('gj_me');if(LIVE)fa.signOut();location.reload()}
+async function boot(u){
+  me=(await DB.getUser(u.uid))||{uid:u.uid,phone:u.phone,name:'+'+u.phone,job:'Геодезист',bio:'',avatar:'',gallery:[]};
+  await DB.saveUser(me);$('auth').style.display='none';$('app').style.display='flex';initMap();loadTiga();renderProf();DB.users(renderList);
+}
 
-5. CAD КОМАНДАСЫ:
-- Артық керек емес. Тек DWG FastView сияқты қарапайым: DWG/DXF файл жүктейді, карта үстінде көреді, масштабтайды. dxf-parser қолдан.
+/* ===== DATA LAYER (Firestore / localStorage demo) ===== */
+const bus=new BroadcastChannel('gj');const subs={};bus.onmessage=e=>subs[e.data]&&subs[e.data]();
+const DB={
+  async getUser(id){if(LIVE){try{const d=await fs.collection('users').doc(id).get();return d.exists?d.data():null}catch(e){}}return(LS('gj_users')||{})[id]||null},
+  async saveUser(u){const a=LS('gj_users')||{};a[u.uid]=u;LS('gj_users',a);if(LIVE)try{await fs.collection('users').doc(u.uid).set(u)}catch(e){};bus.postMessage('users')},
+  users(cb){const l=()=>cb(Object.values(LS('gj_users')||{}));subs.users=l;l();if(LIVE)fs.collection('users').onSnapshot(s=>{const a={};s.forEach(d=>a[d.id]=d.data());LS('gj_users',{...(LS('gj_users')||{}),...a});l()})},
+  listen(cid,cb){const l=()=>cb(LS('m_'+cid)||[],LS('s_'+cid)||{streak:0});subs[cid]=l;l();
+    if(LIVE){const r=fs.collection('chats').doc(cid);this.un&&this.un();const u1=r.collection('msgs').orderBy('t').onSnapshot(s=>{LS('m_'+cid,s.docs.map(d=>d.data()));l()}),u2=r.onSnapshot(d=>{if(d.exists){LS('s_'+cid,d.data());l()}});this.un=()=>{u1();u2()}}},
+  async send(cid,m){const a=LS('m_'+cid)||[];a.push(m);LS('m_'+cid,a);bump(cid,m);bus.postMessage(cid);
+    if(LIVE)try{const r=fs.collection('chats').doc(cid);await r.collection('msgs').add(m);await r.set(LS('s_'+cid))}catch(e){}}
+};
+const day=(d=new Date())=>d.toISOString().slice(0,10),yday=()=>day(new Date(Date.now()-864e5));
+function streakOf(s){return s&&(s.day===day()||s.day===yday())?s.streak||0:0}
+function bump(cid,m){ // 🔥: екеуі де күнде жазса +1, жазбаса өшеді
+  if(m.from==='metaai')return;let s=LS('s_'+cid)||{streak:0,day:'',uids:[],counted:false};
+  if(s.day!==day()){s.streak=(s.day===yday()&&s.counted)?s.streak:0;s.day=day();s.uids=[];s.counted=false}
+  if(!s.uids.includes(m.from))s.uids.push(m.from);
+  if(s.uids.length>1&&!s.counted){s.streak++;s.counted=true}LS('s_'+cid,s)}
+async function upload(file,path){
+  if(LIVE&&navigator.onLine)try{const r=fst.ref(path+Date.now());await r.put(file);return await r.getDownloadURL()}catch(e){}
+  return shrink(file)}
+function shrink(f){return new Promise(res=>{const r=new FileReader();r.onload=()=>{if(!f.type.startsWith('image/'))return res(r.result);
+  const i=new Image();i.onload=()=>{const k=Math.min(1,800/Math.max(i.width,i.height)),c=document.createElement('canvas');c.width=i.width*k;c.height=i.height*k;c.getContext('2d').drawImage(i,0,0,c.width,c.height);res(c.toDataURL('image/jpeg',.78))};i.src=r.result};r.readAsDataURL(f)})}
 
-6. ДИЗАЙН ТАЛАБЫ:
-- Минимализм, қараңғы тема, геодезистерге арналған кәсіби WhatsApp сияқты.
-- Артық нарды, ойындар керек емес - өшір.
-- Барлығы бір index.html файлында болсын, Firebase config-ты жоғарыда бөлек қой.
+/* ===== PROFILE ===== */
+function bg(el,u){el.style.backgroundImage=u?`url(${u})`:'';el.textContent=u?'':'📷'}
+function renderProf(){bg($('pav'),me.avatar);$('pname').value=me.name;$('pjob').value=me.job;$('pbio').value=me.bio;
+  $('gal').innerHTML='';(me.gallery||[]).forEach(g=>{const d=document.createElement('div');if(g.type==='v'){d.innerHTML=`<video src="${g.url}" controls></video>`}else d.style.backgroundImage=`url(${g.url})`;$('gal').append(d)})}
+async function saveProf(){me.name=$('pname').value||me.name;me.job=$('pjob').value;me.bio=$('pbio').value;await DB.saveUser(me);alert('Сақталды ✓')}
+$('avf').onchange=async e=>{me.avatar=await upload(e.target.files[0],'avatars/'+me.uid+'/');await DB.saveUser(me);renderProf()};
+$('mf').onchange=async e=>{for(const f of e.target.files){me.gallery=me.gallery||[];me.gallery.unshift({type:f.type.startsWith('video')?'v':'i',url:await upload(f,'gallery/'+me.uid+'/')})}
+  try{await DB.saveUser(me)}catch(x){alert('Жад толды')}renderProf()};
 
-МАҒАН ДАЙЫН БІР ФАЙЛДЫҚ КОД БЕР - index.html толық. Firebase үшін TODO деп қалдыр, мен кейін кілттерді саламын. Офлайн жұмыс істеуі міндетті!
+/* ===== TABS + CHAT LIST ===== */
+document.querySelectorAll('nav button').forEach(b=>b.onclick=()=>{document.querySelectorAll('nav button,.tab').forEach(x=>x.classList.remove('on'));b.classList.add('on');$('t-'+b.dataset.t).classList.add('on');if(b.dataset.t==='map')setTimeout(()=>map.invalidateSize(),50)});
+const cidOf=o=>[me.uid,o].sort().join('_');
+function renderList(us){const L=$('list');L.innerHTML='';
+  const all=[{uid:'metaai',name:'Meta AI',job:'Геодезия көмекшісі',avatar:''},...us.filter(u=>u.uid!==me.uid)];
+  all.forEach(u=>{const s=LS('s_'+cidOf(u.uid)),n=streakOf(s),r=document.createElement('div');r.className='row';
+    r.innerHTML=`<div class="av" style="background-image:url(${u.avatar||''})">${u.avatar?'':u.uid==='metaai'?'🤖':'👤'}</div><div class="f"><b>${esc(u.name)}</b><br><small>${esc(u.job||'')}</small></div><span>${n>=5?'🔥'+n:n?n+'/5':''}</span>`;
+    r.onclick=()=>openChat(u);L.append(r)})}
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 
-Автор: Әли Әділұлы, Shymkent, Kaspi 87066604117. Қорғау: © aliadiluly7-lgtm
+/* ===== CHAT ===== */
+let cur=null,curId=null;
+function openChat(u){cur=u;curId=cidOf(u.uid);$('cname').textContent=u.name;bg($('cav'),u.avatar);$('chat').style.display='flex';
+  DB.listen(curId,(ms,s)=>{const n=streakOf(s);$('cfire').textContent=n>=5?'🔥'+n:n?n+'/5':'';const M=$('msgs');M.innerHTML='';ms.forEach(m=>{const d=document.createElement('div');d.className='m'+(m.from===me.uid?' me':'');
+    d.innerHTML=(m.k==='i'?`<img src="${m.v}">`:m.k==='v'?`<video src="${m.v}" controls></video>`:m.k==='a'?`<audio src="${m.v}" controls></audio>`:esc(m.v))+`<time>${new Date(m.t).toTimeString().slice(0,5)}</time>`;M.append(d)});M.scrollTop=1e9});
+  if(u.uid!=='metaai')listenCall()}
+function closeChat(){$('chat').style.display='none';DB.un&&DB.un();renderList(Object.values(LS('gj_users')||{}))}
+function push(k,v,from=me.uid){return DB.send(curId,{from,k,v,t:Date.now()})}
+async function sendText(){const t=$('mi').value.trim();if(!t)return;$('mi').value='';await push('t',t);
+  if(/@metaai/i.test(t)||cur.uid==='metaai'){const a=await askAI(t.replace(/@metaai/ig,'').trim());push('t','🤖 '+a,'metaai')}}
+$('mi').onkeydown=e=>e.key==='Enter'&&sendText();
+$('cf').onchange=async e=>{const f=e.target.files[0];if(f)push(f.type.startsWith('video')?'v':'i',await upload(f,'chat/'+curId+'/'))};
+async function askAI(q){ // TODO: AI_ENDPOINT орнат; әйтпесе локалды геодезия жауаптары
+  if(AI_ENDPOINT!=="TODO"&&navigator.onLine)try{const r=await fetch(AI_ENDPOINT,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({q,system:'Сен геодезия көмекшісісің. Қазақша жауап бер.'})});return(await r.json()).a}catch(e){}
+  const K=[[/тахеометр/i,'Тахеометр: бұрыш пен қашықтықты өлшейді. Станцияны орнатып, бағдарлағаннан кейін нүктелерді түсіреді.'],[/нивелир|биіктік/i,'Нивелир: екі нүктенің биіктік айырымы. Артқа-алға қарау арқылы hₐ−hᵦ есептеледі.'],[/gnss|gps|rtk/i,'RTK: базалық станция түзетуімен 1-2 см дәлдік. Fix күйін күтіңіз.'],[/координат|ск-?42|wgs/i,'WGS84 ↔ СК-42/МСК өту үшін 7 параметрлі Гельмерт түрлендіруі керек.']];
+  const h=K.find(k=>k[0].test(q));return h?h[1]:'Қазір офлайн/AI қосылмаған. AI_ENDPOINT орнатыңыз; тахеометр, нивелир, GNSS, координат туралы сұраңыз.'}
+
+/* voice */
+let mr,ch=[];$('rec').onclick=async()=>{
+  if(mr&&mr.state==='recording'){mr.stop();return}
+  try{const s=await navigator.mediaDevices.getUserMedia({audio:true});mr=new MediaRecorder(s);ch=[];mr.ondataavailable=e=>ch.push(e.data);
+    mr.onstop=async()=>{s.getTracks().forEach(t=>t.stop());$('rec').textContent='🎤';push('a',await upload(new Blob(ch,{type:mr.mimeType}),'voice/'+curId+'/'))};mr.start();$('rec').textContent='⏹'}catch(e){alert('Микрофон рұқсаты жоқ')}};
+
+/* ===== VIDEO CALL (simple-peer + Firestore signaling) ===== */
+let stream,unCall;
+async function media(){stream=await navigator.mediaDevices.getUserMedia({video:true,audio:true});$('lv').srcObject=stream;$('call').style.display='block'}
+async function startCall(init){
+  if(!LIVE)return alert('Видеозвонок үшін Firebase кілттері керек (TODO)');
+  await media();peer=new SimplePeer({initiator:init,stream,trickle:false});const ref=fs.collection('calls').doc(curId);
+  peer.on('signal',d=>ref.set({[init?'offer':'answer']:JSON.stringify(d),from:me.uid}));
+  peer.on('stream',s=>$('rv').srcObject=s);peer.on('close',endCall);
+  if(init)unCall=ref.onSnapshot(d=>{const x=d.data();x&&x.answer&&peer&&peer.signal(JSON.parse(x.answer))})}
+function listenCall(){if(!LIVE)return;unCall&&unCall();fs.collection('calls').doc(curId).onSnapshot(async d=>{const x=d.data();
+  if(x&&x.offer&&x.from!==me.uid&&!peer&&!x.answer&&confirm('📹 Кіріс қоңырау. Жауап беру?')){await startCall(false);peer.signal(JSON.parse(x.offer))}})}
+function endCall(){peer&&peer.destroy();peer=null;stream&&stream.getTracks().forEach(t=>t.stop());$('call').style.display='none';if(LIVE&&curId)fs.collection('calls').doc(curId).delete().catch(()=>{})}
+
+/* ===== MAP ===== */
+let map,layers,tigaLayer,cadLayer,baseNow=0;
+const BASES=[['https://tile.openstreetmap.org/{z}/{x}/{y}.png','© OSM'],['https://mt1.google.com/vt/lyrs=s&x={x}&y={y}&z={z}','© Google'],['https://tile2.maps.2gis.com/tiles?x={x}&y={y}&z={z}&v=1','© 2GIS']]; // TODO: 2GIS пробка URL тексер
+function initMap(){if(map)return;map=L.map('map',{zoomControl:false}).setView([42.3417,69.5901],12);
+  layers=BASES.map(b=>L.tileLayer(b[0],{attribution:b[1],maxZoom:19,crossOrigin:true}));layers[0].addTo(map);
+  tigaLayer=L.layerGroup().addTo(map);cadLayer=L.layerGroup().addTo(map);L.control.scale().addTo(map)}
+function setBase(i){layers.forEach(l=>map.removeLayer(l));layers[i].addTo(map).bringToBack();baseNow=i}
+async function cacheView(){ // көрінетін аймақты зумның +2 деңгейіне дейін офлайнға сақтау
+  const c=await caches.open('gjw-tiles'),b=map.getBounds(),z0=map.getZoom(),urls=[];
+  for(let z=z0;z<=Math.min(z0+2,18);z++){const a=map.project(b.getNorthWest(),z).divideBy(256).floor(),e=map.project(b.getSouthEast(),z).divideBy(256).floor();
+    for(let x=a.x;x<=e.x;x++)for(let y=a.y;y<=e.y;y++)urls.push(BASES[baseNow][0].replace('{z}',z).replace('{x}',x).replace('{y}',y))}
+  if(urls.length>400)return alert('Аймақ үлкен ('+urls.length+'). Жақындатыңыз.');let ok=0;
+  for(const u of urls){try{await c.put(u,await fetch(u,{mode:'no-cors'}));ok++}catch(e){}}alert('Сақталды: '+ok+'/'+urls.length+' тайл')}
+
+/* ===== ТРИГАПУНКТ (IndexedDB) ===== */
+let idb;const open=indexedDB.open('gjw',1);open.onupgradeneeded=()=>open.result.createObjectStore('tiga',{keyPath:'id',autoIncrement:true});open.onsuccess=()=>{idb=open.result};
+const tx=m=>idb.transaction('tiga',m).objectStore('tiga');
+function loadTiga(){const go=()=>tx('readonly').getAll().onsuccess=e=>{tigaLayer.clearLayers();e.target.result.forEach(drawTiga)};idb?go():open.addEventListener('success',go)}
+function drawTiga(p){L.marker([p.lat,p.lon],{icon:L.divIcon({className:'',html:'<div class="pin">🔺</div>',iconSize:[24,24]})}).addTo(tigaLayer)
+  .bindPopup(`<b>${esc(p.name)}</b><br>${p.lat.toFixed(6)}, ${p.lon.toFixed(6)}<br>H: ${esc(p.h||'-')}<br><a href="#" onclick="delTiga(${p.id});return false">🗑 өшіру</a>`)}
+function addTiga(){const n=prompt('Пункт атауы:');if(!n)return;const c=map.getCenter(),s=prompt('Координата lat, lon (бос = карта орталығы):',c.lat.toFixed(6)+', '+c.lng.toFixed(6));if(!s)return;
+  const [lat,lon]=s.split(/[,\s]+/).map(Number);if(isNaN(lat)||isNaN(lon))return alert('Қате координата');const h=prompt('Биіктік (м, міндетті емес):')||'';
+  tx('readwrite').add({name:n,lat,lon,h}).onsuccess=loadTiga;map.setView([lat,lon],Math.max(map.getZoom(),15))}
+function delTiga(id){tx('readwrite').delete(id).onsuccess=loadTiga}
+
+/* ===== CAD (DXF) ===== */
+$('cadf').onchange=async e=>{const f=e.target.files[0];if(!f)return;
+  if(/\.dwg$/i.test(f.name))return alert('DWG екілік формат — браузерде оқылмайды. AutoCAD/LibreCAD-та DXF ретінде сақтап жүктеңіз.');
+  try{const d=new DxfParser().parseSync(await f.text());drawDxf(d)}catch(x){alert('DXF оқылмады: '+x.message)}e.target.value=''};
+function drawDxf(d){clearCad();const c=map.getCenter(),k=111320,pts=[];
+  const geo=v=>(Math.abs(v.x)<=180&&Math.abs(v.y)<=90)?[v.y,v.x]:[c.lat+v.y/k,c.lng+v.x/(k*Math.cos(c.lat*Math.PI/180))]; // lon/lat болмаса — метр, карта орталығынан
+  const st={color:'#ffd54f',weight:1.5};
+  (d.entities||[]).forEach(en=>{let g;
+    if(en.type==='LINE')g=L.polyline(en.vertices.map(geo),st);
+    else if(en.type==='LWPOLYLINE'||en.type==='POLYLINE')g=(en.shape?L.polygon:L.polyline)(en.vertices.map(geo),{...st,fill:false});
+    else if(en.type==='CIRCLE'){const p=geo(en.center);g=L.circle(p,{...st,radius:en.radius*(Math.abs(en.center.x)<=180?1e5:1),fill:false})}
+    else if(en.type==='POINT')g=L.circleMarker(geo(en.position),{radius:3,color:'#ffd54f'});
+    if(g){g.addTo(cadLayer);pts.push(...(g.getLatLngs?[].concat(...[g.getLatLngs()].flat(2)):[g.getLatLng()]))}});
+  $('cad').style.display='flex';cadZoom()}
+function cadZoom(){const b=L.featureGroup(cadLayer.getLayers()).getBounds();b.isValid()&&map.fitBounds(b,{padding:[20,20]})}
+function clearCad(){cadLayer&&cadLayer.clearLayers();$('cad').style.display='none'}
+
+/* ===== START ===== */
+(async()=>{const u=LS('gj_me');if(u)await boot(u)})();
+</script>
+</body>
+</html>
